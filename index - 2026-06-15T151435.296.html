@@ -1,0 +1,2260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inspections</title>
+  
+  <!-- Premium Hospitaly/Restaurant Brand Tailwind CSS Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: [
+              'Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto',
+              'sans-serif'
+            ],
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Minimalist Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;650;700&display=swap');
+
+    /* Premium Hospitality Brand aesthetic */
+    body {
+      background-color: #FAF8F5; /* Warm stone/cream tone */
+      color: #1E293B;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    input, select, textarea {
+      background-color: #F3ECE3; /* Much warmer input background */
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    input:focus, select:focus, textarea:focus {
+      background-color: #ffffff;
+      outline: none;
+      box-shadow: 0 0 0 2px #EA580C; /* Burnt orange accent focus ring */
+    }
+    /* Spinner override with brand warm orange */
+    .spinner {
+      border: 2px solid #E2E8F0;
+      border-top: 2px solid #EA580C;
+      border-radius: 50%;
+      width: 1.5rem;
+      height: 1.5rem;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center p-0 md:p-6 lg:p-8">
+
+  <!-- Main Container: Fully responsive from mobile to max-7xl desktop -->
+  <div class="w-full max-w-7xl h-screen md:h-[88vh] lg:h-[92vh] flex flex-col md:flex-row relative bg-[#FCFAF7] shadow-2xl md:rounded-[2.5rem] overflow-hidden border border-[#1E3A8A]/10">
+    
+    <!-- Desktop Sleek Left-Hand Side Navigation Rail (Hidden on Mobile) -->
+    <aside class="hidden md:flex md:flex-col md:w-64 bg-[#1E3A8A] p-6 space-y-8 shrink-0 justify-between text-white shadow-xl">
+      <div class="space-y-8">
+        <div class="px-2">
+          <h2 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
+            <span class="p-1.5 bg-[#EA580C] text-white rounded-xl shadow-md shadow-orange-950/30 flex items-center justify-center">
+              <i data-lucide="shield-check" class="w-5 h-5"></i>
+            </span>
+            <span class="font-sans leading-none">Inspections</span>
+          </h2>
+          <p class="text-[10px] text-orange-200/70 font-bold tracking-widest uppercase mt-3">Hospitality Portal</p>
+        </div>
+        
+        <nav class="space-y-1.5">
+          <button data-action="route" data-route="home" id="nav-desk-btn-home" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-white bg-[#EA580C] font-bold shadow-md shadow-orange-950/25 transition">
+            <i data-lucide="home" class="w-4.5 h-4.5"></i>
+            <span class="text-xs">Home</span>
+          </button>
+          
+          <button data-action="route" data-route="store-select" id="nav-desk-btn-store-select" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold">
+            <i data-lucide="plus-circle" class="w-4.5 h-4.5"></i>
+            <span class="text-xs">Inspect Store</span>
+          </button>
+          
+          <button data-action="route" data-route="overview" id="nav-desk-btn-overview" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold">
+            <i data-lucide="search" class="w-4.5 h-4.5"></i>
+            <span class="text-xs">Overview</span>
+          </button>
+          
+          <button data-action="route" data-route="settings" id="nav-desk-btn-settings" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold">
+            <i data-lucide="sliders" class="w-4.5 h-4.5"></i>
+            <span class="text-xs">Settings</span>
+          </button>
+        </nav>
+      </div>
+      
+      <div class="px-2">
+        <div class="flex items-center gap-1.5 text-[9px] font-mono text-orange-200/60">
+          <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-md shadow-green-500/50"></span>
+          <span>Firestore Connected</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Panel (Responsive with custom header/margins) -->
+    <div class="flex-1 flex flex-col relative h-full overflow-hidden bg-[#FCFAF7]">
+      
+      <!-- Sophisticated Header -->
+      <header class="bg-white/90 backdrop-blur-md px-6 py-5 border-b border-neutral-100 flex items-center justify-between shrink-0">
+        <div>
+          <h1 class="text-2xl font-bold tracking-tight text-neutral-900" id="header-title">Inspections</h1>
+          <p class="text-xs text-neutral-500 font-normal mt-0.5" id="header-subtitle">Standard Portal</p>
+        </div>
+        <!-- Back / Home Button -->
+        <button data-action="go-home" class="p-2 rounded-full hover:bg-neutral-100 transition active:scale-95" id="header-home-btn" title="Home">
+          <i data-lucide="home" class="w-5 h-5 text-neutral-800"></i>
+        </button>
+      </header>
+
+      <!-- MAIN VIEWS WRAPPER -->
+      <main class="flex-1 overflow-y-auto px-6 py-6 pb-24" id="main-content">
+      
+      <!-- VIEW: HOME (Default) -->
+      <div id="view-home" class="view-panel space-y-8">
+        <div class="py-6 text-center space-y-2">
+          <p class="text-sm font-extrabold text-[#EA580C] uppercase tracking-widest">Workspace</p>
+          <h2 class="text-3xl font-extrabold text-[#1E3A8A] tracking-tight">Main Operations</h2>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Store Inspection -->
+          <button data-action="route" data-route="store-select" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40">
+            <div class="space-y-1">
+              <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <i data-lucide="plus-circle" class="w-5 h-5 text-[#EA580C]"></i>
+                Store Inspection
+              </span>
+              <p class="text-xs text-neutral-500">Conduct a facility or equipment physical run.</p>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
+          </button>
+
+          <!-- Overview Dashboard -->
+          <button data-action="route" data-route="overview" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40">
+            <div class="space-y-1">
+              <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <i data-lucide="search" class="w-5 h-5 text-[#EA580C]"></i>
+                Overview
+              </span>
+              <p class="text-xs text-neutral-500">Filter, browse records, view ratings, and inspect photos.</p>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
+          </button>
+
+          <!-- Settings -->
+          <button data-action="route" data-route="settings" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40">
+            <div class="space-y-1">
+              <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <i data-lucide="sliders" class="w-5 h-5 text-[#EA580C]"></i>
+                Settings
+              </span>
+              <p class="text-xs text-neutral-500">Manage stores list, categories, and equipment items.</p>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
+          </button>
+        </div>
+
+        <div class="pt-6 border-t border-orange-100/30 text-center text-[10px] font-bold font-mono text-orange-600 tracking-wider uppercase">
+          Live Connection Active with Firestore DB
+        </div>
+      </div>
+
+      <!-- VIEW: STORE SELECT -->
+      <div id="view-store-select" class="view-panel space-y-6 hidden">
+        <div class="space-y-1">
+          <h2 class="text-2xl font-bold tracking-tight">Location & Checklist</h2>
+          <p class="text-xs text-neutral-500">Pick a store name and select focus category.</p>
+        </div>
+
+        <div class="space-y-6">
+          <!-- Store Selection -->
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Select Store</label>
+            <select id="select-store-input" class="w-full text-sm font-medium text-neutral-800 bg-neutral-50/80 border border-transparent rounded-2xl px-4 py-3.5 appearance-none focus:bg-white cursor-pointer">
+              <!-- Dynamically Populated -->
+            </select>
+          </div>
+
+          <!-- Checkout Mode Selection -->
+          <div class="space-y-3">
+            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Checklist Mode</label>
+            <div class="grid grid-cols-1 gap-2.5">
+              <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
+                <input type="radio" name="select-mode-radio" value="facility" checked class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] tracking-wide accent-[#EA580C]">
+                <div class="space-y-0.5">
+                  <span class="block text-sm font-bold text-[#1E3A8A]">Facility</span>
+                  <p class="text-[11px] text-neutral-500">Validate exterior grounds, restrooms, kitchen zones.</p>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
+                <input type="radio" name="select-mode-radio" value="equipment" class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] tracking-wide accent-[#EA580C]">
+                <div class="space-y-0.5">
+                  <span class="block text-sm font-bold text-[#1E3A8A]">Equipment</span>
+                  <p class="text-[11px] text-neutral-500">Validate machinery, appliances, fryers, brewers inside.</p>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
+                <input type="radio" name="select-mode-radio" value="both" class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] tracking-wide accent-[#EA580C]">
+                <div class="space-y-0.5">
+                  <span class="block text-sm font-bold text-[#1E3A8A]">Both</span>
+                  <p class="text-[11px] text-neutral-500">Sequential checklist beginning with Facility, ending with Equipment.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <button data-action="begin-inspection" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold text-sm py-4 rounded-2xl shadow-md shadow-orange-950/20 transition active:scale-95 flex items-center justify-center gap-1.5 mt-2">
+            <span>Start Checklist</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW: FACILITY INSPECTION -->
+      <div id="view-facility" class="view-panel space-y-6 hidden">
+        <div class="flex items-center justify-between pb-2 border-b border-orange-100/40">
+          <div>
+            <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Active Audit</span>
+            <h2 class="text-xl font-extrabold text-[#1E3A8A]">Facility Checklist</h2>
+          </div>
+          <button data-action="cancel-inspection" class="text-neutral-500 hover:text-[#991B1B] text-xs font-semibold px-2 py-1 transition flex items-center gap-1">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Cancel
+          </button>
+        </div>
+
+        <!-- Render list dynamically -->
+        <div id="facility-items-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+        <!-- Option to transition from Facility to Equipment if mode is 'both' -->
+        <div id="facility-next-step-container" class="pt-4 hidden">
+          <button data-action="go-to-equipment" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-orange-950/15 transition active:scale-95 flex items-center justify-center gap-1.5 focus:outline-none">
+            <span>Proceed to Equipment Checklist</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW: EQUIPMENT INSPECTION -->
+      <div id="view-equipment" class="view-panel space-y-6 hidden">
+        <div class="flex items-center justify-between pb-2 border-b border-orange-100/40">
+          <div>
+            <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Active Audit</span>
+            <h2 class="text-xl font-extrabold text-[#1E3A8A]">Equipment Checklist</h2>
+          </div>
+          <button data-action="cancel-inspection" class="text-neutral-500 hover:text-[#991B1B] text-xs font-semibold px-2 py-1 transition flex items-center gap-1">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Cancel
+          </button>
+        </div>
+
+        <!-- Render list dynamically -->
+        <div id="equipment-items-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+        <!-- Transition to overview button -->
+        <div id="equipment-finish-container" class="pt-4">
+          <button data-action="finish-checklist" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-orange-950/15 transition active:scale-95 flex items-center justify-center gap-1.5 focus:outline-none">
+            <span>All Done! View Dashboard Overview</span>
+            <i data-lucide="check" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW: OVERVIEW DASHBOARD -->
+      <div id="view-overview" class="view-panel space-y-6 hidden">
+        <div class="space-y-1">
+          <h2 class="text-2xl font-bold tracking-tight text-[#1E3A8A]">Inspections Record</h2>
+          <p class="text-xs text-neutral-500">Browse and filter historic checklists in the field.</p>
+        </div>
+
+        <!-- Global Stats Header Card -->
+        <div class="bg-gradient-to-br from-orange-50/60 to-stone-100/40 border border-orange-100/40 p-4.5 rounded-3xl space-y-3 shadow-md shadow-orange-950/2 flex flex-col justify-between shrink-0">
+          <div class="flex justify-between items-center">
+            <span class="text-[10px] font-extrabold text-[#EA580C] uppercase tracking-widest">Live Check-In Status</span>
+            <span class="text-[11px] font-bold text-[#1E3A8A] bg-white/95 px-3 py-1 rounded-full border border-orange-100/45 shadow-2xs" id="stats-complete-text">
+              Total Stores Complete: 0 / 0
+            </span>
+          </div>
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center text-xs text-neutral-500">
+              <span class="font-bold text-slate-700">Completion rate</span>
+              <span class="font-extrabold text-[#EA580C] font-mono" id="stats-complete-percent">0%</span>
+            </div>
+            <div class="w-full bg-stone-200/50 h-2.5 rounded-full overflow-hidden border border-orange-100/10">
+              <div id="stats-progress-bar" class="bg-gradient-to-r from-orange-500 to-[#EA580C] h-full transition-all duration-500 rounded-full" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Store Fleet Heatmap Overview -->
+        <div id="overview-fleet-card" class="bg-white border border-orange-100/60 p-5 rounded-3xl space-y-4 shadow-md shadow-orange-950/2 select-none">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-100 pb-3">
+             <div>
+              <h3 class="text-xs font-extrabold text-[#1E3A8A] uppercase tracking-widest flex items-center gap-1.5">
+                <i data-lucide="map-pin" class="w-4 h-4 text-[#EA580C]"></i> Store Fleet Heatmap
+              </h3>
+              <p class="text-[10px] text-neutral-400 font-medium">Click tile to quickly toggle filter for single store reports</p>
+            </div>
+            <!-- Indicator legends -->
+            <div class="flex flex-wrap items-center gap-2 text-[9px] font-bold">
+              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-stone-50 border border-stone-200 text-neutral-500 rounded"><span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span> Empty/0 Rated</span>
+              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-red-50 border border-red-200 text-[#991B1B] rounded"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> &gt;10% Bad</span>
+              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-amber-50 border border-amber-200 text-amber-600 rounded"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> &gt;20% Acceptable</span>
+              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-green-50 border border-green-200 text-green-600 rounded"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Good/Healthy</span>
+            </div>
+          </div>
+          <div id="overview-fleet-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            <!-- Dynamically populated store tiles -->
+          </div>
+        </div>
+
+        <!-- 1-Click Quick Filters -->
+        <div class="flex flex-wrap items-center gap-1.5 py-1">
+          <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mr-1">Quick Toggle:</span>
+          <button data-action="toggle-quick-filter" data-val="" id="quick-filter-all" class="text-[11px] font-bold px-3.5 py-1.5 rounded-full bg-[#1E3A8A] text-white border border-transparent transition shadow-xs">
+            All
+          </button>
+          <button data-action="toggle-quick-filter" data-val="Acceptable" id="quick-filter-acceptable" class="text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-orange-100/40 hover:bg-orange-50/20 transition">
+            All Acceptable
+          </button>
+          <button data-action="toggle-quick-filter" data-val="Bad" id="quick-filter-bad" class="text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-orange-100/40 hover:bg-orange-50/20 transition">
+            All Bad
+          </button>
+        </div>
+
+        <!-- Dashboard Filter Grid Controls -->
+        <div class="bg-stone-50/80 border border-orange-100/30 p-4 rounded-3xl space-y-3.5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#1E3A8A] uppercase tracking-wider">Search Filters</span>
+            <button data-action="reset-filters" class="text-xs text-[#EA580C] font-semibold hover:underline">Reset Filters</button>
+          </div>
+
+          <div class="space-y-2.5">
+            <!-- Filter Store -->
+            <div>
+              <select id="filter-store-select" class="w-full bg-white text-xs font-medium text-neutral-800 border border-orange-100/40 rounded-xl px-3 py-2.5 appearance-none focus:ring-1 focus:ring-[#EA580C] cursor-pointer">
+                <option value="">All Store Locations</option>
+              </select>
+            </div>
+
+            <!-- Filter Categories/Items dropdown match -->
+            <div class="relative">
+              <select id="filter-category-select" class="w-full bg-white text-xs font-medium text-neutral-800 border border-orange-100/40 rounded-xl px-3 py-2.5 appearance-none focus:ring-1 focus:ring-[#EA580C] cursor-pointer">
+                <option value="">All Item Names</option>
+              </select>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-neutral-400">
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </div>
+            </div>
+
+            <!-- Filter Status Tags -->
+            <div class="grid grid-cols-4 gap-1.5">
+              <button data-action="set-filter-tag" data-val="" id="filter-tag-all" class="text-xs font-semibold py-2 rounded-xl bg-neutral-900 text-white transition">All</button>
+              <button data-action="set-filter-tag" data-val="Good" id="filter-tag-good" class="text-xs font-semibold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition">Good</button>
+              <button data-action="set-filter-tag" data-val="Acceptable" id="filter-tag-acceptable" class="text-xs font-semibold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition">Acceptable</button>
+              <button data-action="set-filter-tag" data-val="Bad" id="filter-tag-bad" class="text-xs font-semibold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition">Bad</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Count -->
+        <div class="flex items-center justify-between text-xs px-1 text-neutral-500 font-medium">
+          <span id="overview-count-label">Showing 0 matching instances</span>
+          <button data-action="refresh-overview" class="text-[#EA580C] hover:text-[#C2410C] font-bold flex items-center gap-1 transition">
+            <i data-lucide="refresh-cw" class="w-3 h-3"></i> Sync Data
+          </button>
+        </div>
+
+        <!-- Injected Cards List -->
+        <div id="overview-cards-list" class="space-y-4"></div>
+      </div>
+
+      <!-- VIEW: SETTINGS -->
+      <div id="view-settings" class="view-panel space-y-6 hidden">
+        <div class="space-y-1">
+          <h2 class="text-2xl font-bold tracking-tight text-[#1E3A8A]">Database Settings</h2>
+          <p class="text-xs text-neutral-500 font-normal mt-0.5">Edit live configurations dynamically in real-time.</p>
+        </div>
+
+        <!-- Navigation Tabs inside settings -->
+        <div class="flex bg-stone-200/50 border border-orange-100/20 p-1 rounded-2xl gap-0.5 whitespace-nowrap overflow-x-auto">
+          <button data-action="set-settings-tab" data-tab="stores" id="tab-stores" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition bg-white text-[#EA580C] shadow-xs">Stores</button>
+          <button data-action="set-settings-tab" data-tab="facilities" id="tab-facilities" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-500 hover:text-[#1E3A8A]">Facilities</button>
+          <button data-action="set-settings-tab" data-tab="equipment" id="tab-equipment" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-500 hover:text-[#1E3A8A]">Equipment</button>
+        </div>
+
+        <!-- Add Element Control Interface -->
+        <div class="bg-stone-50/80 border border-orange-100/30 p-4 rounded-3xl space-y-2.5 shadow-sm">
+          <h3 id="settings-add-title" class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Add New Store Location</h3>
+          <div class="flex flex-col gap-1.5">
+            <div class="flex gap-2">
+              <input type="text" id="settings-add-input" placeholder="e.g. 16031 Beebe Capps" class="flex-1 bg-white border border-orange-100/30 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-[#EA580C]">
+              <button data-action="submit-settings-add" class="bg-[#EA580C] hover:bg-[#C2410C] text-white rounded-xl px-4 text-xs font-bold transition active:scale-95 flex items-center justify-center">
+                Add
+              </button>
+            </div>
+            <p id="settings-add-hint" class="text-[10px] text-neutral-400 mt-1">Format: [Store Number] [Store Name]</p>
+          </div>
+        </div>
+
+        <!-- Current items managed list -->
+        <div class="space-y-1.5" id="settings-managed-items-list">
+          <!-- Dynamically populated list items with delete triggers -->
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Global Upload / Load State Overlay with premium minimal blur -->
+    <div id="global-overlay" class="fixed inset-0 bg-neutral-950/20 backdrop-blur-xs z-50 flex items-center justify-center hidden">
+      <div class="bg-white p-6 rounded-3xl shadow-xl flex flex-col items-center gap-3.5 text-center max-w-xs mx-4">
+        <div class="spinner"></div>
+        <div class="space-y-1">
+          <h4 class="font-bold text-sm text-neutral-900" id="overlay-title">Uploading media</h4>
+          <p class="text-xs text-neutral-500" id="overlay-subtitle">Uploading image to cloud repository...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clickable Magnified Image LightboxModal -->
+    <div id="lightbox-modal" class="fixed inset-0 bg-neutral-950/90 z-50 flex flex-col items-center justify-center p-6 hidden">
+      <div class="relative w-full max-w-lg flex flex-col items-center gap-4">
+        <button data-action="close-lightbox" class="absolute -top-12 right-0 bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <img id="lightbox-image" class="max-h-[70vh] rounded-2xl shadow-2xl object-contain w-full" src="" alt="Lightboxed image">
+        <p id="lightbox-caption" class="text-xs text-neutral-300 bg-white/10 px-4 py-2.5 rounded-full text-center tracking-medium max-w-[85%] leading-relaxed"></p>
+      </div>
+    </div>
+
+    <!-- IOS Global Bottom Sticky Fixed Navigation Hub -->
+    <nav class="md:hidden flex h-16 items-center justify-around absolute bottom-0 left-0 right-0 z-30 bg-[#1E3A8A] border-t border-white/5 px-2">
+      <button data-action="route" data-route="home" class="flex flex-col items-center gap-1 text-orange-400 font-bold transition" id="nav-btn-home">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px]">Home</span>
+      </button>
+
+      <button data-action="route" data-route="store-select" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition" id="nav-btn-store-select">
+        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+        <span class="text-[10px]">Inspect</span>
+      </button>
+
+      <button data-action="route" data-route="overview" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition" id="nav-btn-overview">
+        <i data-lucide="search" class="w-5 h-5"></i>
+        <span class="text-[10px]">Overview</span>
+      </button>
+
+      <button data-action="route" data-route="settings" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition" id="nav-btn-settings">
+        <i data-lucide="sliders" class="w-5 h-5"></i>
+        <span class="text-[10px]">Settings</span>
+      </button>
+    </nav>
+  </div></div>
+
+  <!-- Toast Feed notifications -->
+  <div id="toast-feed" class="fixed top-4 right-4 left-4 md:left-auto md:w-80 flex flex-col gap-2 z-50 pointer-events-none"></div>
+
+  <!-- CORE SCRIPTS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    // Standard live Firebase Connection (as configured)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDNHaXUqUn32rLaCMcdA7WNcm0LemJ206c",
+      authDomain: "bkacquisition-checklist.firebaseapp.com",
+      projectId: "bkacquisition-checklist",
+      storageBucket: "bkacquisition-checklist.firebasestorage.app",
+      messagingSenderId: "504136933551",
+      appId: "1:504136933551:web:093e7f44fed49709b9f45a"
+    };
+
+    let app, db;
+    let draggedItemId = null;
+    let draggedCollection = null;
+    try {
+      app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+    } catch (e) {
+      console.error("Firebase Initialization failed", e);
+    }
+
+    // --- GLOBAL SYSTEM STATE OBJECT ---
+    window.state = {
+      stores: [],
+      facilityCategories: [],
+      equipmentList: [],
+      inspections: [],
+      
+      // Inspection state
+      selectedStore: '',
+      selectedMode: 'facility', // 'facility', 'equipment', 'both'
+      currentView: 'home',
+      activeDocId: '', // Live collaborative sync ID
+
+      // Ratings responses mapped in-memory during flow
+      // key: category/equipment name => { rating: 'Good'|'Acceptable'|'Bad', comment: '', photos: [{ url, tag: 'Good'..., caption: '' }], quantity?: 1 }
+      facilityAnswers: {},
+      equipmentAnswers: {},
+      activeEquipmentIndex: 0,
+      
+      // Settings managed state
+      settingsTab: 'stores', // 'stores', 'facilities', 'equipment'
+      
+      // Fast filters cache
+      filterStore: '',
+      filterCategory: '',
+      filterTag: '', // 'Good', 'Acceptable', 'Bad' or ''
+    };
+
+    // --- TOAST ALERTS ---
+    function sendNotification(message, type = 'info') {
+      const container = document.getElementById('toast-feed');
+      const toast = document.createElement('div');
+      
+      let bgStyle = "bg-neutral-900 border-neutral-800 text-white";
+      let icon = "info";
+      
+      if (type === 'success') {
+        bgStyle = "bg-white border-neutral-100 text-green-600 shadow-xl";
+        icon = "check-circle";
+      } else if (type === 'error') {
+        bgStyle = "bg-rose-900 border-rose-800 text-white shadow-xl";
+        icon = "alert-circle";
+      }
+      
+      toast.className = `flex items-center gap-3 px-4 py-3 border.5 rounded-2xl text-xs font-semibold pointer-events-auto transform transition duration-300 translate-y-3 opacity-0 shadow-lg ${bgStyle}`;
+      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i><span class="flex-1">${message}</span>`;
+      
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.remove('translate-y-3', 'opacity-0');
+        if (window.lucide) lucide.createIcons();
+      }, 30);
+      
+      setTimeout(() => {
+        toast.classList.add('translate-y-3', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+    window.sendNotification = sendNotification;
+
+    // --- OVERLAY TRIGGERS ---
+    function presentOverlay(title, subtitle) {
+      document.getElementById('overlay-title').innerText = title;
+      document.getElementById('overlay-subtitle').innerText = subtitle;
+      document.getElementById('global-overlay').classList.remove('hidden');
+    }
+    function dismissOverlay() {
+      document.getElementById('global-overlay').classList.add('hidden');
+    }
+
+    // --- FIRESTORE DATA ACQUISITION & WRITES ---
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function loadCollectionsFromCloud() {
+      // Fetch fresh configurations
+      try {
+        const storesSnap = await getDocs(collection(db, "stores"));
+        window.state.stores = storesSnap.docs.map(doc => ({ id: doc.id, name: doc.data().name })).sort((a,b) => a.name.localeCompare(b.name));
+        
+        const facilitySnap = await getDocs(collection(db, "facilityCategories"));
+        const rawFacilities = facilitySnap.docs.map(doc => {
+          const d = doc.data();
+          return { id: doc.id, name: d.name, order: typeof d.order === 'number' ? d.order : null };
+        });
+        rawFacilities.sort((a, b) => {
+          if (a.order !== null && b.order !== null) return a.order - b.order;
+          if (a.order !== null) return -1;
+          if (b.order !== null) return 1;
+          return a.name.localeCompare(b.name);
+        });
+        rawFacilities.forEach((item, index) => {
+          item.order = index;
+        });
+        window.state.facilityCategories = rawFacilities;
+        
+        const equipmentSnap = await getDocs(collection(db, "equipmentList"));
+        const rawEquipment = equipmentSnap.docs.map(doc => {
+          const d = doc.data();
+          return { id: doc.id, name: d.name, order: typeof d.order === 'number' ? d.order : null };
+        });
+        rawEquipment.sort((a, b) => {
+          if (a.order !== null && b.order !== null) return a.order - b.order;
+          if (a.order !== null) return -1;
+          if (b.order !== null) return 1;
+          return a.name.localeCompare(b.name);
+        });
+        rawEquipment.forEach((item, index) => {
+          item.order = index;
+        });
+        window.state.equipmentList = rawEquipment;
+
+        // Re-render related UI Components
+        renderStoreSelections();
+        renderSettingsItems();
+        renderOverviewStoreFilters();
+        renderOverviewItemFilters();
+      } catch (err) {
+        console.error("Firestore read error:", err);
+        sendNotification("Database configuration failed to load. Check settings.", "error");
+      }
+    }
+
+    async function loadInspectionsHistory() {
+      try {
+        const inspectionsSnap = await getDocs(collection(db, "inspections"));
+        const temp = [];
+        inspectionsSnap.forEach((doc) => {
+          temp.push({ id: doc.id, ...doc.data() });
+        });
+        // Sort descending by timestamp
+        window.state.inspections = temp.sort((a, b) => b.timestamp - a.timestamp);
+        
+        // Count completed stores
+        const completedStoresCount = new Set(window.state.inspections.map(i => i.store)).size;
+        const totalStoresCount = window.state.stores.length || 1;
+        const completionPercent = Math.min(100, Math.round((completedStoresCount / totalStoresCount) * 100));
+        
+        const completeTextEl = document.getElementById('stats-complete-text');
+        const completePercentEl = document.getElementById('stats-complete-percent');
+        const progressBarEl = document.getElementById('stats-progress-bar');
+        
+        if (completeTextEl) {
+          completeTextEl.innerText = `Total Stores Complete: ${completedStoresCount} / ${totalStoresCount}`;
+        }
+        if (completePercentEl) {
+          completePercentEl.innerText = `${completionPercent}%`;
+        }
+        if (progressBarEl) {
+          progressBarEl.style.width = `${completionPercent}%`;
+        }
+
+        renderOverviewCardsList();
+      } catch (err) {
+        console.error("Failed downloading inspections", err);
+        sendNotification("Error synchronizing database records.", "error");
+      }
+    }
+
+    // --- REALTIME AUTO-SAVE / CLOUD SYNC LOGIC ---
+    let saveTimeout = null;
+    let activeInspectionSubscription = null;
+
+    async function pushChecklistUpdate() {
+      if (!window.state.activeDocId) return;
+      const docRef = doc(db, "inspections", window.state.activeDocId);
+      try {
+        await updateDoc(docRef, {
+          facility: window.state.facilityAnswers,
+          equipment: window.state.equipmentAnswers,
+          timestamp: Date.now()
+        });
+      } catch (err) {
+        console.error("Failed saving to Firestore:", err);
+      }
+    }
+
+    function triggerCloudSave() {
+      if (saveTimeout) clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(async () => {
+        await pushChecklistUpdate();
+      }, 500);
+    }
+
+    async function saveImmediately() {
+      if (saveTimeout) clearTimeout(saveTimeout);
+      await pushChecklistUpdate();
+    }
+
+    // --- UI RENDERERS ---
+
+    // 1. Populate Selection View
+    function renderStoreSelections() {
+      const select = document.getElementById('select-store-input');
+      select.innerHTML = '';
+      
+      if (window.state.stores.length === 0) {
+        select.innerHTML = `<option value="">No stores set up. Edit under Settings tab.</option>`;
+        return;
+      }
+
+      // Default option
+      const defaultOpt = document.createElement('option');
+      defaultOpt.value = "";
+      defaultOpt.innerText = "Choose Store location...";
+      defaultOpt.disabled = true;
+      defaultOpt.selected = !window.state.selectedStore;
+      select.appendChild(defaultOpt);
+
+      const sortedStores = [...window.state.stores].sort((a, b) => a.name.localeCompare(b.name));
+      sortedStores.forEach(store => {
+        const opt = document.createElement('option');
+        opt.value = store.name;
+        opt.innerText = store.name;
+        opt.selected = (store.name === window.state.selectedStore);
+        select.appendChild(opt);
+      });
+    }
+
+    // Populate stores in Dashboard filters dropdown (Alphabetical Order)
+    function renderOverviewStoreFilters() {
+      const select = document.getElementById('filter-store-select');
+      select.innerHTML = '<option value="">All Store Locations</option>';
+      
+      const sortedStores = [...window.state.stores].sort((a, b) => a.name.localeCompare(b.name));
+      sortedStores.forEach(store => {
+        const opt = document.createElement('option');
+        opt.value = store.name;
+        opt.innerText = store.name;
+        select.appendChild(opt);
+      });
+    }
+
+    // Populate items/categories in Dashboard filters dropdown (alphabetical order)
+    function renderOverviewItemFilters() {
+      const select = document.getElementById('filter-category-select');
+      if (!select) return;
+      select.innerHTML = '<option value="">All Item Names</option>';
+      
+      // Get all unique names from facility categories and equipment lists
+      const itemNamesSet = new Set();
+      window.state.facilityCategories.forEach(c => {
+        if (c.name) itemNamesSet.add(c.name.trim());
+      });
+      window.state.equipmentList.forEach(e => {
+        if (e.name) itemNamesSet.add(e.name.trim());
+      });
+      
+      const sortedNames = Array.from(itemNamesSet).sort((a, b) => a.localeCompare(b));
+      sortedNames.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.innerText = name;
+        opt.selected = (name === window.state.filterCategory);
+        select.appendChild(opt);
+      });
+    }
+
+    // 2. Render Settings tab list of options and management triggers
+    function renderSettingsItems() {
+      const container = document.getElementById('settings-managed-items-list');
+      container.innerHTML = '';
+
+      let list = [];
+      let targetCollection = '';
+      const inputAddLabel = document.getElementById('settings-add-title');
+      const settingsInput = document.getElementById('settings-add-input');
+      const settingsHint = document.getElementById('settings-add-hint');
+
+      if (window.state.settingsTab === 'stores') {
+        list = window.state.stores;
+        targetCollection = 'stores';
+        inputAddLabel.innerText = "Add New Store Location";
+        if (settingsInput) settingsInput.placeholder = "e.g. 16031 Beebe Capps";
+        if (settingsHint) {
+          settingsHint.innerText = "Format: [Store Number] [Store Name]";
+          settingsHint.classList.remove('hidden');
+        }
+      } else if (window.state.settingsTab === 'facilities') {
+        list = window.state.facilityCategories;
+        targetCollection = 'facilityCategories';
+        inputAddLabel.innerText = "Add New Category";
+        if (settingsInput) settingsInput.placeholder = "Type name here...";
+        if (settingsHint) settingsHint.classList.add('hidden');
+      } else {
+        list = window.state.equipmentList;
+        targetCollection = 'equipmentList';
+        inputAddLabel.innerText = "Add New Equipment Item";
+        if (settingsInput) settingsInput.placeholder = "Type name here...";
+        if (settingsHint) settingsHint.classList.add('hidden');
+      }
+
+      const activeTabBtn = document.getElementById(`tab-${window.state.settingsTab}`);
+      // Clear tab style
+      ['tab-stores', 'tab-facilities', 'tab-equipment'].forEach(btnId => {
+        const el = document.getElementById(btnId);
+        if (el) {
+          el.className = "flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition text-neutral-500 hover:text-neutral-900";
+        }
+      });
+      if (activeTabBtn) {
+        activeTabBtn.className = "flex-1 py-2 px-3 text-xs font-bold rounded-xl transition bg-white text-neutral-900 shadow-sm";
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-xs text-neutral-400 font-medium">List database collection empty.</div>`;
+        return;
+      }
+
+      list.forEach(item => {
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between p-4 bg-neutral-50 rounded-2xl hover:bg-neutral-100/70 transition border-2 border-transparent select-none";
+        
+        if (targetCollection === 'stores') {
+          const isEditing = (window.state.editingStoreId === item.id);
+          if (isEditing) {
+            row.innerHTML = `
+              <div class="flex items-center gap-2 flex-1 mr-4">
+                <input type="text" id="edit-store-input-${item.id}" value="${escapeHtml(item.name)}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-xs font-bold focus:ring-1 focus:ring-[#EA580C]">
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button data-action="save-store-edit" data-id="${item.id}" class="text-xs text-green-600 hover:text-green-700 transition p-1.5 bg-green-50 rounded-lg hover:bg-green-100" title="Save">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                </button>
+                <button data-action="cancel-store-edit" class="text-xs text-neutral-400 hover:text-neutral-600 transition p-1.5 bg-neutral-100 rounded-lg hover:bg-neutral-200" title="Cancel">
+                  <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+              </div>
+            `;
+          } else {
+            row.innerHTML = `
+              <span class="text-xs font-bold text-neutral-800 flex-1 mr-4">${escapeHtml(item.name)}</span>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button data-action="start-store-edit" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-[#EA580C] transition p-1" title="Edit Store Name">
+                  <i data-lucide="edit-2" class="w-4 h-4"></i>
+                </button>
+                <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-600 transition p-1" title="Delete">
+                  <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+              </div>
+            `;
+          }
+        } else {
+          // Facilities and Equipment lists with Drag Handle + Order / Chevron Shifting buttons
+          row.innerHTML = `
+            <div class="flex items-center gap-2 flex-1 mr-4">
+              <i data-lucide="grip-vertical" class="w-4 h-4 text-neutral-300 shrink-0 cursor-grab active:cursor-grabbing hover:text-neutral-500 transition"></i>
+              <span class="text-xs font-bold text-neutral-800">${escapeHtml(item.name)}</span>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <button data-action="reorder-item-up" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-900 transition p-1" title="Move Up">
+                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+              </button>
+              <button data-action="reorder-item-down" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-900 transition p-1" title="Move Down">
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </button>
+              <div class="w-px h-4 bg-neutral-200 mx-1.5"></div>
+              <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-600 transition p-1" title="Delete">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+          `;
+
+          // Add drag and drop listeners
+          row.setAttribute('draggable', 'true');
+          row.classList.add('cursor-grab', 'active:cursor-grabbing');
+
+          row.addEventListener('dragstart', (e) => {
+            draggedItemId = item.id;
+            draggedCollection = targetCollection;
+            row.style.opacity = '0.5';
+            row.style.backgroundColor = '#eff6ff'; // Soft blue highlight
+            row.style.borderColor = '#3b82f6';
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', item.id);
+          });
+
+          row.addEventListener('dragend', () => {
+            row.style.opacity = '';
+            row.style.backgroundColor = '';
+            row.style.borderColor = '';
+            // Make sure all sibling styles are cleaned up
+            Array.from(container.children).forEach(child => {
+              child.style.borderTopColor = 'transparent';
+              child.style.borderBottomColor = 'transparent';
+            });
+          });
+
+          row.addEventListener('dragover', (e) => {
+            if (draggedCollection !== targetCollection) return;
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            const rect = row.getBoundingClientRect();
+            const relativeY = e.clientY - rect.top;
+            const isTopHalf = relativeY < (rect.height / 2);
+
+            Array.from(container.children).forEach(child => {
+              if (child !== row) {
+                child.style.borderTopColor = 'transparent';
+                child.style.borderBottomColor = 'transparent';
+              }
+            });
+
+            if (isTopHalf) {
+              row.style.borderTopColor = '#3b82f6';
+              row.style.borderBottomColor = 'transparent';
+            } else {
+              row.style.borderBottomColor = '#3b82f6';
+              row.style.borderTopColor = 'transparent';
+            }
+          });
+
+          row.addEventListener('dragleave', () => {
+            row.style.borderTopColor = 'transparent';
+            row.style.borderBottomColor = 'transparent';
+          });
+
+          row.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            row.style.borderTopColor = 'transparent';
+            row.style.borderBottomColor = 'transparent';
+
+            if (draggedCollection !== targetCollection || draggedItemId === item.id) return;
+
+            let currentList = [];
+            if (targetCollection === 'facilityCategories') {
+              currentList = [...window.state.facilityCategories];
+            } else if (targetCollection === 'equipmentList') {
+              currentList = [...window.state.equipmentList];
+            }
+
+            const fromIdx = currentList.findIndex(x => x.id === draggedItemId);
+            const toIdx = currentList.findIndex(x => x.id === item.id);
+            if (fromIdx === -1 || toIdx === -1) return;
+
+            const rect = row.getBoundingClientRect();
+            const relativeY = e.clientY - rect.top;
+            const isTopHalf = relativeY < (rect.height / 2);
+
+            const [draggedObj] = currentList.splice(fromIdx, 1);
+            let insertIdx = toIdx;
+            if (!isTopHalf) {
+              if (fromIdx < toIdx) {
+                insertIdx = toIdx;
+              } else {
+                insertIdx = toIdx + 1;
+              }
+            } else {
+              if (fromIdx < toIdx) {
+                insertIdx = toIdx - 1;
+              } else {
+                insertIdx = toIdx;
+              }
+            }
+
+            currentList.splice(insertIdx, 0, draggedObj);
+
+            presentOverlay("Saving Drag Order", "Saving custom arrangement to Firestore database...");
+            try {
+              const promises = currentList.map((listItem, idx) => {
+                return updateDoc(doc(db, targetCollection, listItem.id), { order: idx });
+              });
+              await Promise.all(promises);
+              dismissOverlay();
+              sendNotification("Custom drag-and-drop order saved!", "success");
+              await loadCollectionsFromCloud();
+            } catch (err) {
+              console.error("Failed persisting drag order", err);
+              dismissOverlay();
+              sendNotification("Unable to save order in Firebase.", "error");
+            }
+          });
+        }
+        
+        container.appendChild(row);
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // 3. Render Facility Inspections Scroll view
+    function renderFacilityChecklist() {
+      const container = document.getElementById('facility-items-list');
+      container.innerHTML = '';
+
+      if (window.state.facilityCategories.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-neutral-400 space-y-3">
+            <p class="text-xs font-medium">Setup your Facility categories to begin.</p>
+            <button data-action="route" data-route="settings" class="text-xs bg-black text-white px-4 py-2 rounded-xl">Go to Settings</button>
+          </div>
+        `;
+        return;
+      }
+
+      window.state.facilityCategories.forEach((catObj) => {
+        const cat = catObj.name;
+        if (!window.state.facilityAnswers[cat]) {
+          window.state.facilityAnswers[cat] = { rating: '', comment: '', photos: [] };
+        }
+        const ans = window.state.facilityAnswers[cat];
+
+        // Comments are optional to provide a seamless UX
+        let commentFormHTML = '';
+        if (ans.rating === 'Acceptable') {
+          commentFormHTML = `
+            <div class="space-y-1.5 pt-1">
+              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${cat} as Good?</label>
+              <textarea data-action="update-comment" data-item="${cat}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional observation details...">${ans.comment}</textarea>
+            </div>
+          `;
+        } else if (ans.rating === 'Bad') {
+          commentFormHTML = `
+            <div class="space-y-1.5 pt-1">
+              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${cat} as Acceptable?</label>
+              <textarea data-action="update-comment" data-item="${cat}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional physical hazard details...">${ans.comment}</textarea>
+            </div>
+          `;
+        } else {
+          commentFormHTML = `
+            <div class="space-y-1.5 pt-1">
+              <label class="block text-[11px] font-bold text-neutral-400">Additional observation note (Optional)</label>
+              <textarea data-action="update-comment" data-item="${cat}" class="w-full text-xs bg-[#F3ECE3] rounded-xl p-2 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional comments...">${ans.comment}</textarea>
+            </div>
+          `;
+        }
+
+        // Photos gallery subview
+        let photosHTML = '';
+        if (ans.photos && ans.photos.length > 0) {
+          photosHTML = `
+            <div class="grid grid-cols-2 gap-3 pt-3">
+              ${ans.photos.map((photo, pIdx) => {
+                let borderCol = "border-green-600 ring-green-600";
+                if (photo.tag === 'Acceptable') borderCol = "border-amber-500 ring-amber-500";
+                if (photo.tag === 'Bad') borderCol = "border-red-600 ring-red-600";
+
+                return `
+                  <div class="bg-neutral-50 p-2.5 rounded-2xl relative border-2 ${borderCol} flex flex-col gap-2 shadow-sm">
+                    <!-- Delete photo button -->
+                    <button data-action="delete-photo" data-item="${cat}" data-idx="${pIdx}" class="absolute -top-2 -right-2 bg-neutral-900 border border-neutral-850 text-white rounded-full p-1 shadow hover:bg-red-600 transition z-10 w-6 h-6 flex items-center justify-center">
+                      <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                    
+                    <img src="${photo.url}" class="w-full h-24 object-cover rounded-xl cursor-zoom-in" data-action="open-lightbox" data-url="${photo.url}" data-caption="${photo.caption || ''}" alt="Thumbnail">
+                    
+                    <!-- Tag selection dropdown -->
+                    <div class="space-y-1">
+                      <select data-action="update-photo-tag" data-item="${cat}" data-idx="${pIdx}" class="w-full text-[10px] py-1 px-1.5 font-bold bg-white rounded-lg border border-neutral-100">
+                        <option value="Good" ${photo.tag === 'Good' ? 'selected' : ''}>Good</option>
+                        <option value="Acceptable" ${photo.tag === 'Acceptable' ? 'selected' : ''}>Acceptable</option>
+                        <option value="Bad" ${photo.tag === 'Bad' ? 'selected' : ''}>Bad</option>
+                      </select>
+                    </div>
+
+                    <!-- Caption input -->
+                    <input type="text" data-action="update-photo-caption" data-item="${cat}" data-idx="${pIdx}" placeholder="Caption note" value="${photo.caption || ''}" class="w-full text-[10px] bg-white border border-neutral-100 rounded-lg px-2 py-1">
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `;
+        }
+
+        const card = document.createElement('div');
+        card.className = "bg-white p-3.5 rounded-2xl border border-orange-100/65 shadow-md shadow-orange-950/5 space-y-2";
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <h3 class="text-sm font-bold text-slate-800 flex-1 pr-4 leading-tight">${cat}</h3>
+            <span class="text-[10px] font-bold text-orange-600 font-mono">${ans.photos ? ans.photos.length : 0}/6 Photos</span>
+          </div>
+
+          <!-- Triple choice rating buttons -->
+          <div class="grid grid-cols-3 gap-2">
+            <button data-action="set-rating" data-item="${cat}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Good' ? 'bg-green-100 border-green-300 text-green-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              Good
+            </button>
+            <button data-action="set-rating" data-item="${cat}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              Acceptable
+            </button>
+            <button data-action="set-rating" data-item="${cat}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              Bad
+            </button>
+          </div>
+
+          <!-- Comment input details -->
+          ${commentFormHTML}
+
+          <!-- File upload always shown to trigger FIFO replacement when > 6 photos -->
+          <div class="space-y-2">
+            <label class="w-full flex items-center justify-center gap-2 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-2.5 rounded-2xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
+              <i data-lucide="camera" class="w-4 h-4 text-neutral-600"></i>
+              <span class="text-xs text-neutral-700 font-semibold font-sans">Upload Photo</span>
+              <input type="file" accept="image/*" capture="environment" class="hidden" data-action="upload-photo" data-item="${cat}">
+            </label>
+            ${photosHTML}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // Show proceeding container only for split workflows
+      const nextContainer = document.getElementById('facility-next-step-container');
+      if (nextContainer) {
+        if (window.state.selectedMode === 'both') {
+          nextContainer.classList.remove('hidden');
+        } else {
+          nextContainer.classList.add('hidden');
+        }
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // 4. Render Equipment Inspections Scroll view
+    function renderEquipmentChecklist() {
+      const container = document.getElementById('equipment-items-list');
+      container.innerHTML = '';
+
+      if (window.state.equipmentList.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-neutral-400 space-y-3">
+            <p class="text-xs font-medium">Please define Equipment items in Settings first.</p>
+            <button data-action="route" data-route="settings" class="text-xs bg-black text-white px-4 py-2 rounded-xl">Go to Settings</button>
+          </div>
+        `;
+        return;
+      }
+
+      window.state.equipmentList.forEach((eqObj) => {
+        const eq = eqObj.name;
+        if (!window.state.equipmentAnswers[eq]) {
+          window.state.equipmentAnswers[eq] = { quantity: 1, rating: '', comment: '', photos: [] };
+        }
+        const ans = window.state.equipmentAnswers[eq];
+
+        // Comment section logic is optional
+        let commentFormHTML = '';
+        if (ans.rating === 'Acceptable') {
+          commentFormHTML = `
+            <div class="space-y-1.5 pt-1">
+              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${eq} as Good?</label>
+              <textarea data-action="update-comment" data-item="${eq}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional observation details...">${ans.comment}</textarea>
+            </div>
+          `;
+        } else if (ans.rating === 'Bad') {
+          commentFormHTML = `
+            <div class="space-y-1.5 pt-1">
+              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${eq} as Acceptable?</label>
+              <textarea data-action="update-comment" data-item="${eq}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional physical hazard details...">${ans.comment}</textarea>
+            </div>
+          `;
+        } else {
+          commentFormHTML = `
+            <div class="space-y-1.5 pt-1">
+              <label class="block text-[11px] font-bold text-neutral-400">Additional observation note (Optional)</label>
+              <textarea data-action="update-comment" data-item="${eq}" class="w-full text-xs bg-[#F3ECE3] rounded-xl p-2 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional comments...">${ans.comment}</textarea>
+            </div>
+          `;
+        }
+
+        // Photo upload list output structure
+        let photosHTML = '';
+        if (ans.photos && ans.photos.length > 0) {
+          photosHTML = `
+            <div class="grid grid-cols-2 gap-3 pt-3">
+              ${ans.photos.map((photo, pIdx) => {
+                let borderCol = "border-green-600 ring-green-600";
+                if (photo.tag === 'Acceptable') borderCol = "border-amber-500 ring-amber-500";
+                if (photo.tag === 'Bad') borderCol = "border-red-600 ring-red-600";
+
+                return `
+                  <div class="bg-neutral-50 p-2.5 rounded-2xl relative border-2 ${borderCol} flex flex-col gap-2 shadow-sm">
+                    <!-- Delete photo button -->
+                    <button data-action="delete-photo-equipment" data-item="${eq}" data-idx="${pIdx}" class="absolute -top-2 -right-2 bg-neutral-900 border border-neutral-850 text-white rounded-full p-1 shadow hover:bg-red-600 transition z-10 w-6 h-6 flex items-center justify-center">
+                      <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                    
+                    <img src="${photo.url}" class="w-full h-24 object-cover rounded-xl cursor-zoom-in" data-action="open-lightbox" data-url="${photo.url}" data-caption="${photo.caption || ''}" alt="Thumbnail">
+                    
+                    <!-- Tag select -->
+                    <div class="space-y-1">
+                      <select data-action="update-photo-tag-equipment" data-item="${eq}" data-idx="${pIdx}" class="w-full text-[10px] py-1 px-1.5 font-bold bg-white rounded-lg border border-neutral-100">
+                        <option value="Good" ${photo.tag === 'Good' ? 'selected' : ''}>Good</option>
+                        <option value="Acceptable" ${photo.tag === 'Acceptable' ? 'selected' : ''}>Acceptable</option>
+                        <option value="Bad" ${photo.tag === 'Bad' ? 'selected' : ''}>Bad</option>
+                      </select>
+                    </div>
+
+                    <!-- Caption input info -->
+                    <input type="text" data-action="update-photo-caption-equipment" data-item="${eq}" data-idx="${pIdx}" placeholder="Caption note" value="${photo.caption || ''}" class="w-full text-[10px] bg-white border border-neutral-100 rounded-lg px-2 py-1">
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `;
+        }
+
+        const card = document.createElement('div');
+        card.className = "bg-white p-3.5 rounded-2xl border border-orange-100/65 shadow-md shadow-orange-950/5 space-y-2";
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <h3 class="text-sm font-bold text-slate-800 flex-1 pr-3 leading-tight">${eq}</h3>
+            <span class="text-[10px] font-bold text-orange-600 font-mono">${ans.photos ? ans.photos.length : 0}/3 Photos</span>
+          </div>
+
+          <!-- Quantity input selection -->
+          <div class="grid grid-cols-2 gap-2 items-center">
+            <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider">Unit Quantity (Count)</span>
+            <select data-action="update-equipment-quantity" data-item="${eq}" class="w-full text-xs font-bold bg-neutral-50 px-3 py-1.5 rounded-xl cursor-pointer">
+              ${[1,2,3,4,5,6,7,8,9,10].map(n => `<option value="${n}" ${ans.quantity == n ? 'selected' : ''}>${n}</option>`).join('')}
+            </select>
+          </div>
+
+          <!-- Rating assessment choice buttons -->
+          <div class="grid grid-cols-3 gap-2">
+            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Good' ? 'bg-green-100 border-green-300 text-green-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              Good
+            </button>
+            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              Acceptable
+            </button>
+            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              Bad
+            </button>
+          </div>
+
+          ${commentFormHTML}
+
+          <!-- Photo uploads zone -->
+          <div class="space-y-2">
+            <label class="w-full flex items-center justify-center gap-2 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-2.5 rounded-2xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
+              <i data-lucide="camera" class="w-4 h-4 text-neutral-600"></i>
+              <span class="text-xs text-neutral-700 font-semibold font-sans">Upload Photo</span>
+              <input type="file" accept="image/*" capture="environment" class="hidden" data-action="upload-photo-equipment" data-item="${eq}">
+            </label>
+            ${photosHTML}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // Update finish helper container if mode is both or single equipment
+      const finishContainer = document.getElementById('equipment-finish-container');
+      if (finishContainer) {
+        finishContainer.classList.remove('hidden');
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // Helper to calculate store health status and completion percentages for Fleet Grid
+    function getStoreStatus(storeName) {
+      // Find latest inspection
+      const insp = window.state.inspections.find(i => i.store === storeName);
+      if (!insp) {
+        return {
+          percent: 0,
+          ratedCount: 0,
+          expectedCount: (window.state.facilityCategories.length || 0) + (window.state.equipmentList.length || 0) || 1,
+          badCount: 0,
+          acceptableCount: 0,
+          goodCount: 0,
+          healthClass: 'bg-white border-neutral-200 text-neutral-400'
+        };
+      }
+
+      let ratedCount = 0;
+      let badCount = 0;
+      let acceptableCount = 0;
+      let goodCount = 0;
+
+      if (insp.facility) {
+        Object.values(insp.facility).forEach(ans => {
+          if (ans && ans.rating) {
+            ratedCount++;
+            if (ans.rating === 'Bad') badCount++;
+            else if (ans.rating === 'Acceptable') acceptableCount++;
+            else if (ans.rating === 'Good') goodCount++;
+          }
+        });
+      }
+
+      if (insp.equipment) {
+        Object.values(insp.equipment).forEach(ans => {
+          if (ans && ans.rating) {
+            ratedCount++;
+            if (ans.rating === 'Bad') badCount++;
+            else if (ans.rating === 'Acceptable') acceptableCount++;
+            else if (ans.rating === 'Good') goodCount++;
+          }
+        });
+      }
+
+      let expectedCount = 0;
+      if (insp.mode === 'facility') {
+        expectedCount = window.state.facilityCategories.length;
+      } else if (insp.mode === 'equipment') {
+        expectedCount = window.state.equipmentList.length;
+      } else {
+        expectedCount = window.state.facilityCategories.length + window.state.equipmentList.length;
+      }
+      if (expectedCount === 0) expectedCount = 1;
+
+      const percent = Math.min(100, Math.round((ratedCount / expectedCount) * 100));
+
+      let healthClass = 'bg-white border-neutral-200';
+      if (ratedCount > 0) {
+        const badPercent = (badCount / ratedCount) * 100;
+        const acceptablePercent = (acceptableCount / ratedCount) * 100;
+
+        if (badPercent > 10) {
+          healthClass = 'bg-red-50/80 border-red-300 hover:bg-red-100/30';
+        } else if (acceptablePercent > 20) {
+          healthClass = 'bg-amber-50/80 border-amber-300 hover:bg-amber-100/30';
+        } else {
+          healthClass = 'bg-green-50/80 border-green-300 hover:bg-green-100/30';
+        }
+      }
+
+      return {
+        percent,
+        ratedCount,
+        expectedCount,
+        badCount,
+        acceptableCount,
+        goodCount,
+        healthClass
+      };
+    }
+
+    // Render Store Fleet Heatmap status grid
+    function renderOverviewFleetGrid() {
+      const grid = document.getElementById('overview-fleet-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      if (!window.state.stores || window.state.stores.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-4 text-center text-xs text-neutral-400 font-medium">
+            Define stores in Settings to initialize Fleet Heatmap
+          </div>
+        `;
+        return;
+      }
+
+      window.state.stores.forEach(S => {
+        const status = getStoreStatus(S.name);
+        const isSelected = (window.state.filterStore === S.name);
+        
+        const tile = document.createElement('button');
+        tile.className = `relative p-3 rounded-2xl border text-left flex flex-col justify-between h-20 transition active:scale-[0.97] cursor-pointer overflow-hidden ${status.healthClass} ${isSelected ? 'ring-2 ring-[#EA580C] border-transparent shadow-md' : 'shadow-2xs'}`;
+        tile.setAttribute('data-action', 'filter-by-store-tile');
+        tile.setAttribute('data-store', S.name);
+
+        tile.innerHTML = `
+          <div class="space-y-0.5 leading-tight">
+            <h4 class="text-xs font-bold text-neutral-800 line-clamp-1">${escapeHtml(S.name)}</h4>
+            <p class="text-[9px] text-neutral-450 font-bold font-mono">${status.ratedCount}/${status.expectedCount} Checked</p>
+          </div>
+          <div class="flex items-center justify-between pb-1 z-10">
+            <span class="text-[10px] font-extrabold font-mono text-neutral-700">${status.percent}%</span>
+            ${status.ratedCount === 0 ? `
+              <span class="text-[8px] font-extrabold text-neutral-450 uppercase">Empty</span>
+            ` : status.badCount > 0 ? `
+              <span class="text-[8px] font-extrabold text-red-650 uppercase font-mono">${status.badCount} Bad</span>
+            ` : status.acceptableCount > 0 ? `
+              <span class="text-[8px] font-extrabold text-amber-700 uppercase font-mono">${status.acceptableCount} Acc</span>
+            ` : `
+              <span class="text-[8px] font-extrabold text-green-600 uppercase">Good</span>
+            `}
+          </div>
+          <!-- Visual progress bar -->
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-neutral-200/40">
+            <div class="bg-[#EA580C] h-full transition-all duration-300" style="width: ${status.percent}%"></div>
+          </div>
+        `;
+        grid.appendChild(tile);
+      });
+    }
+
+    // 5. Render Overview Dashboard List with deep filter matching
+    function renderOverviewCardsList() {
+      // Re-populate store fleet grid with any rating status computations
+      renderOverviewFleetGrid();
+
+      const container = document.getElementById('overview-cards-list');
+      container.innerHTML = '';
+
+      if (window.state.inspections.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-xs text-neutral-400 font-medium">
+            No audit records created. Use "Inspect" navigation below to run.
+          </div>
+        `;
+        document.getElementById('overview-count-label').innerText = "Showing 0 matching instances";
+        return;
+      }
+
+      let matchCount = 0;
+
+      // Filter settings logic inside state:
+      const selStore = window.state.filterStore;
+      const selCatQuery = window.state.filterCategory.toLowerCase().trim();
+      const selTag = window.state.filterTag;
+
+      // Update badge filters states
+      ['all', 'good', 'acceptable', 'bad'].forEach(tag => {
+        const el = document.getElementById(`filter-tag-${tag}`);
+        if (el) {
+          el.className = "text-xs font-semibold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition";
+        }
+      });
+      const activeTerm = selTag === "" ? "all" : selTag.toLowerCase();
+      const activeFilterTagEl = document.getElementById(`filter-tag-${activeTerm}`);
+      if (activeFilterTagEl) {
+        activeFilterTagEl.className = "text-xs font-semibold py-2 rounded-xl bg-neutral-900 text-white transition";
+      }
+
+      // Update quick toggle buttons active states
+      ['all', 'acceptable', 'bad'].forEach(tag => {
+        const el = document.getElementById(`quick-filter-${tag}`);
+        if (el) {
+          if ((selTag === "" && tag === 'all') || (selTag.toLowerCase() === tag)) {
+            el.className = "text-[11px] font-bold px-3.5 py-1.5 rounded-full bg-neutral-900 text-white border border-neutral-950 transition shadow-xs";
+          } else {
+            el.className = "text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-50 transition";
+          }
+        }
+      });
+
+      // Loop through all documents and extract entries matching filter criteria
+      window.state.inspections.forEach((insp) => {
+        // Store name filter match
+        if (selStore && insp.store !== selStore) return;
+
+        // Inspections contain facility and/or equipment objects
+        // Parse facility answers
+        if (insp.facility) {
+          Object.keys(insp.facility).forEach((categoryName) => {
+            const data = insp.facility[categoryName];
+            
+            // Text matching category name
+            if (selCatQuery && !categoryName.toLowerCase().includes(selCatQuery)) return;
+
+            // Status tag filtering
+            if (selTag && data.rating !== selTag) return;
+
+            matchCount++;
+            container.appendChild(createOverviewCardHTML(insp, 'Facility', categoryName, data));
+          });
+        }
+
+        // Parse equipment answers
+        if (insp.equipment) {
+          Object.keys(insp.equipment).forEach((equipName) => {
+            const data = insp.equipment[equipName];
+
+            // Text matching equipment name
+            if (selCatQuery && !equipName.toLowerCase().includes(selCatQuery)) return;
+
+            // Status tag filtering
+            if (selTag && data.rating !== selTag) return;
+
+            matchCount++;
+            container.appendChild(createOverviewCardHTML(insp, 'Equipment', equipName, data));
+          });
+        }
+      });
+
+      document.getElementById('overview-count-label').innerText = `Showing ${matchCount} matching instances`;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function createOverviewCardHTML(insp, typeTag, targetName, data) {
+      const card = document.createElement('div');
+      card.className = "bg-white p-5 rounded-3xl border border-neutral-100 shadow-sm space-y-3";
+      
+      let ratingPillColor = "bg-green-50 text-green-700 border-green-200";
+      if (data.rating === 'Acceptable') ratingPillColor = "bg-amber-50 text-amber-700 border-amber-200";
+      if (data.rating === 'Bad') ratingPillColor = "bg-red-50 text-red-700 border-red-200";
+
+      let photosRow = '';
+      if (data.photos && data.photos.length > 0) {
+        photosRow = `
+          <div class="flex gap-2.5 overflow-x-auto py-1 whitespace-nowrap scrollbar-none">
+            ${data.photos.map(p => {
+              let borderCol = "border-green-600 ring-green-600/20";
+              if (p.tag === 'Acceptable') borderCol = "border-amber-500 ring-amber-500/20";
+              if (p.tag === 'Bad') borderCol = "border-red-600 ring-red-600/20";
+
+              return `
+                <div class="relative inline-block shrink-0">
+                  <img src="${p.url}" data-action="open-lightbox" data-url="${p.url}" data-caption="${p.caption || ''}" class="w-16 h-16 object-cover rounded-xl border-2 ${borderCol} ring-2 cursor-zoom-in" alt="photo thumbnail">
+                  <span class="absolute bottom-1 right-1 px-1.5 bg-black/75 text-white rounded text-[8px] font-bold tracking-wider">${p.tag.toUpperCase()}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      card.innerHTML = `
+        <div class="flex justify-between items-start">
+          <div class="space-y-0.5">
+            <h3 class="text-sm font-bold text-neutral-900">${targetName}</h3>
+            <div class="flex items-center gap-1.5 text-[11px] text-neutral-400 font-medium">
+              <span>${insp.store}</span>
+              <span>•</span>
+              <span>${insp.dateString}</span>
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-1">
+            <span class="text-[9px] font-bold tracking-wider text-neutral-400 uppercase">${typeTag}</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full border ${ratingPillColor}">${data.rating}</span>
+          </div>
+        </div>
+
+        ${data.comment ? `
+          <div class="bg-neutral-50 px-3.5 py-3 rounded-2xl text-[11px] text-neutral-700 leading-relaxed border border-neutral-100">
+            <p class="font-semibold text-neutral-500 mb-0.5">Observation details</p>
+            ${data.comment}
+          </div>
+        ` : ''}
+
+        ${data.quantity ? `
+          <div class="text-[10px] text-neutral-400 font-medium">Quantity units check: <span class="text-neutral-800 font-bold">${data.quantity}</span></div>
+        ` : ''}
+
+        ${photosRow}
+      `;
+      return card;
+    }
+
+    // Navigation View Route Manager
+    function navigate(viewName) {
+      window.state.currentView = viewName;
+
+      // Set titles based on view context
+      const titleEl = document.getElementById('header-title');
+      const subtitleEl = document.getElementById('header-subtitle');
+      if (viewName === 'home') {
+        titleEl.innerText = "Inspections";
+        subtitleEl.innerText = "Standard Portal";
+      } else if (viewName === 'store-select') {
+        titleEl.innerText = "Location Info";
+        subtitleEl.innerText = "Checklist Target Select";
+      } else if (viewName === 'facility') {
+        titleEl.innerText = "Facility Checklist";
+        subtitleEl.innerText = "Exterior/Interior Physical Run";
+      } else if (viewName === 'equipment') {
+        titleEl.innerText = "Equipment Wizard";
+        subtitleEl.innerText = `Step ${window.state.activeEquipmentIndex + 1} item review`;
+      } else if (viewName === 'overview') {
+        titleEl.innerText = "Audit History";
+        subtitleEl.innerText = "Fast-Filtered Field Reports";
+      } else if (viewName === 'settings') {
+        titleEl.innerText = "Control Settings";
+        subtitleEl.innerText = "Checklist & Locations Database";
+      }
+
+      // Hide home navigation button if we are on home
+      const homeBtn = document.getElementById('header-home-btn');
+      if (viewName === 'home') {
+        homeBtn.classList.add('hidden');
+      } else {
+        homeBtn.classList.remove('hidden');
+      }
+
+      // Render view panel visibility
+      document.querySelectorAll('.view-panel').forEach(v => v.classList.add('hidden'));
+      const activePanel = document.getElementById(`view-${viewName}`);
+      if (activePanel) activePanel.classList.remove('hidden');
+
+      // Update Navigation bar buttons (both mobile bottom nav and desktop side-rail)
+      ['home', 'store-select', 'overview', 'settings'].forEach(route => {
+        const btn = document.getElementById(`nav-btn-${route}`);
+        if (btn) {
+          if (route === viewName) {
+            btn.className = "flex flex-col items-center gap-1 text-orange-400 font-bold transition";
+          } else {
+            btn.className = "flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition";
+          }
+        }
+
+        const deskBtn = document.getElementById(`nav-desk-btn-${route}`);
+        if (deskBtn) {
+          if (route === viewName) {
+            deskBtn.className = "w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-white bg-[#EA580C] font-bold shadow-md shadow-orange-950/25 transition";
+          } else {
+            deskBtn.className = "w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold";
+          }
+        }
+      });
+
+      // Special initializers per route load context
+      if (viewName === 'store-select') {
+        renderStoreSelections();
+      } else if (viewName === 'facility') {
+        renderFacilityChecklist();
+      } else if (viewName === 'equipment') {
+        renderEquipmentWizardItem();
+      } else if (viewName === 'overview') {
+        loadInspectionsHistory();
+      } else if (viewName === 'settings') {
+        renderSettingsItems();
+      }
+
+      window.scrollTo(0, 0);
+    }
+    window.navigate = navigate;
+
+    // Trigger Initial Hash location matching standard hash route patterns
+    function syncHash() {
+      const hash = window.location.hash.replace('#', '');
+      if (['home', 'store-select', 'facility', 'equipment', 'overview', 'settings'].includes(hash)) {
+        navigate(hash);
+      } else {
+        navigate('home');
+      }
+    }
+    window.addEventListener('hashchange', syncHash);
+    window.addEventListener('DOMContentLoaded', syncHash);
+
+
+    // --- CRITICAL EVENT DELEGATION SYSTEM ---
+    document.addEventListener('click', async (e) => {
+      const target = e.target.closest('[data-action]');
+      if (!target) return;
+
+      const action = target.getAttribute('data-action');
+      const itemAttr = target.getAttribute('data-item');
+      const valAttr = target.getAttribute('data-val');
+      const idxAttr = target.getAttribute('data-idx');
+
+      // Route Navigation
+      if (action === 'route') {
+        const rValue = target.getAttribute('data-route');
+        window.location.hash = `#${rValue}`;
+      }
+
+      // Go Home button
+      if (action === 'go-home') {
+        window.location.hash = '#home';
+      }
+
+      // Filter by Store Tile drill-down
+      if (action === 'filter-by-store-tile') {
+        const storeName = target.getAttribute('data-store');
+        const storeSel = document.getElementById('filter-store-select');
+        
+        if (window.state.filterStore === storeName) {
+          window.state.filterStore = '';
+          if (storeSel) storeSel.value = '';
+          sendNotification("Store drill-down filter cleared", "info");
+        } else {
+          window.state.filterStore = storeName;
+          if (storeSel) storeSel.value = storeName;
+          sendNotification(`Filtering views by ${storeName}`, "info");
+        }
+        renderOverviewCardsList();
+      }
+
+      // Start inspection
+      if (action === 'begin-inspection') {
+        const storeVal = document.getElementById('select-store-input').value;
+        const modeRadio = document.querySelector('input[name="select-mode-radio"]:checked');
+        const modeVal = modeRadio ? modeRadio.value : 'facility';
+
+        if (!storeVal) {
+          sendNotification("Select store name to start inspection", "error");
+          return;
+        }
+
+        window.state.selectedStore = storeVal;
+        window.state.selectedMode = modeVal;
+        window.state.facilityAnswers = {};
+        window.state.equipmentAnswers = {};
+
+        presentOverlay("Initializing Session", "Connecting database snapshot sync...");
+
+        try {
+          const todayDateStr = new Date().toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric'
+          });
+          
+          const querySnap = await getDocs(collection(db, "inspections"));
+          let existingDoc = null;
+          querySnap.forEach((doc) => {
+            const d = doc.data();
+            if (d.store === storeVal && d.dateOnly === todayDateStr) {
+              existingDoc = { id: doc.id, ...d };
+            }
+          });
+
+          if (activeInspectionSubscription) {
+            activeInspectionSubscription();
+            activeInspectionSubscription = null;
+          }
+
+          if (existingDoc) {
+            window.state.activeDocId = existingDoc.id;
+            window.state.facilityAnswers = existingDoc.facility || {};
+            window.state.equipmentAnswers = existingDoc.equipment || {};
+          } else {
+            const payload = {
+              store: storeVal,
+              dateOnly: todayDateStr,
+              dateString: new Date().toLocaleDateString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
+              }),
+              timestamp: Date.now(),
+              mode: modeVal,
+              facility: {},
+              equipment: {}
+            };
+            const docRef = await addDoc(collection(db, "inspections"), payload);
+            window.state.activeDocId = docRef.id;
+            window.state.facilityAnswers = {};
+            window.state.equipmentAnswers = {};
+          }
+
+          const docRef = doc(db, "inspections", window.state.activeDocId);
+          activeInspectionSubscription = onSnapshot(docRef, (docSnap) => {
+            if (docSnap.exists()) {
+              const d = docSnap.data();
+              const activeEl = document.activeElement;
+              const isCommentFocused = activeEl && activeEl.getAttribute('data-action') === 'update-comment';
+              const focusedItem = activeEl ? activeEl.getAttribute('data-item') : null;
+
+              if (d.facility) {
+                Object.keys(d.facility).forEach(cat => {
+                  if (!window.state.facilityAnswers[cat]) window.state.facilityAnswers[cat] = { rating: '', comment: '', photos: [] };
+                  window.state.facilityAnswers[cat].rating = d.facility[cat].rating || '';
+                  window.state.facilityAnswers[cat].photos = d.facility[cat].photos || [];
+                  if (!(isCommentFocused && focusedItem === cat)) {
+                    window.state.facilityAnswers[cat].comment = d.facility[cat].comment || '';
+                  }
+                });
+              }
+
+              if (d.equipment) {
+                Object.keys(d.equipment).forEach(eq => {
+                  if (!window.state.equipmentAnswers[eq]) window.state.equipmentAnswers[eq] = { quantity: 1, rating: '', comment: '', photos: [] };
+                  window.state.equipmentAnswers[eq].rating = d.equipment[eq].rating || '';
+                  window.state.equipmentAnswers[eq].quantity = d.equipment[eq].quantity || 1;
+                  window.state.equipmentAnswers[eq].photos = d.equipment[eq].photos || [];
+                  if (!(isCommentFocused && focusedItem === eq)) {
+                    window.state.equipmentAnswers[eq].comment = d.equipment[eq].comment || '';
+                  }
+                });
+              }
+
+              if (window.state.currentView === 'facility') {
+                renderFacilityChecklist();
+              } else if (window.state.currentView === 'equipment') {
+                renderEquipmentChecklist();
+              }
+            }
+          });
+
+          dismissOverlay();
+          sendNotification(existingDoc ? "Linked to active inspection session" : "Started new live inspection", "success");
+
+          if (modeVal === 'facility' || modeVal === 'both') {
+            window.location.hash = '#facility';
+          } else {
+            window.location.hash = '#equipment';
+          }
+        } catch (err) {
+          console.error("Firestore setup error:", err);
+          dismissOverlay();
+          sendNotification("Failed to connect live session: " + err.message, "error");
+        }
+      }
+
+      // Cancel / Exit inspection
+      if (action === 'cancel-inspection') {
+        if (confirm("Exit session? Current entries are auto-saved in the cloud.")) {
+          // Unsubscribe
+          if (activeInspectionSubscription) {
+            activeInspectionSubscription();
+            activeInspectionSubscription = null;
+          }
+          window.state.activeDocId = null;
+          window.state.facilityAnswers = {};
+          window.state.equipmentAnswers = {};
+          window.location.hash = '#home';
+        }
+      }
+
+      // Set facility rating
+      if (action === 'set-rating') {
+        const currentAns = window.state.facilityAnswers[itemAttr];
+        currentAns.rating = valAttr;
+        renderFacilityChecklist();
+        triggerCloudSave();
+      }
+
+      // Delete facility photo with auto-saving to cloud
+      if (action === 'delete-photo') {
+        if (confirm("Remove this photo attachment?")) {
+          const idx = parseInt(idxAttr);
+          window.state.facilityAnswers[itemAttr].photos.splice(idx, 1);
+          renderFacilityChecklist();
+          triggerCloudSave();
+          sendNotification("Photo removed", "info");
+        }
+      }
+
+      // Next / Continue inside Facility Checklist
+      if (action === 'next-facility') {
+        await saveImmediately();
+        if (window.state.selectedMode === 'both') {
+          window.location.hash = '#equipment';
+        } else {
+          sendNotification("Inspection complete and synchronized!", "success");
+          window.location.hash = '#overview';
+        }
+      }
+
+      // Set equipment ratings
+      if (action === 'set-equipment-rating') {
+        const currentAns = window.state.equipmentAnswers[itemAttr];
+        currentAns.rating = valAttr;
+        renderEquipmentChecklist();
+        triggerCloudSave();
+      }
+
+      // Delete Equipment Photo
+      if (action === 'delete-photo-equipment') {
+        if (confirm("Remove this photo attachment?")) {
+          const idx = parseInt(idxAttr);
+          window.state.equipmentAnswers[itemAttr].photos.splice(idx, 1);
+          renderEquipmentChecklist();
+          triggerCloudSave();
+          sendNotification("Photo removed", "info");
+        }
+      }
+
+      // Finish whole equipment list
+      if (action === 'finish-equipment') {
+        await saveImmediately();
+        sendNotification("Inspection complete and synchronized!", "success");
+        window.location.hash = '#overview';
+      }
+
+      // Open Lightbox magnifying image preview
+      if (action === 'open-lightbox') {
+        const url = target.getAttribute('data-url');
+        const caption = target.getAttribute('data-caption');
+        document.getElementById('lightbox-image').src = url;
+        document.getElementById('lightbox-caption').innerText = caption || "No optional observation caption set-up";
+        document.getElementById('lightbox-modal').classList.remove('hidden');
+      }
+
+      // Hide Lightbox Modal
+      if (action === 'close-lightbox') {
+        document.getElementById('lightbox-modal').classList.add('hidden');
+      }
+
+      // Settings navigation Tab change
+      if (action === 'set-settings-tab') {
+        const tabValue = target.getAttribute('data-tab');
+        window.state.settingsTab = tabValue;
+        window.state.editingStoreId = null; // Clear edit mode when changing settings tabs
+        renderSettingsItems();
+      }
+
+      // Start store editing
+      if (action === 'start-store-edit') {
+        const id = target.getAttribute('data-id');
+        window.state.editingStoreId = id;
+        renderSettingsItems();
+      }
+
+      // Cancel store editing
+      if (action === 'cancel-store-edit') {
+        window.state.editingStoreId = null;
+        renderSettingsItems();
+      }
+
+      // Save store editing to Firestore
+      if (action === 'save-store-edit') {
+        const id = target.getAttribute('data-id');
+        const input = document.getElementById(`edit-store-input-${id}`);
+        const newVal = input ? input.value.trim() : '';
+        if (!newVal) {
+          sendNotification("Store name cannot be empty", "error");
+          return;
+        }
+
+        presentOverlay("Saving Store Name", "Updating document in Firestore...");
+        try {
+          await updateDoc(doc(db, "stores", id), { name: newVal });
+          window.state.editingStoreId = null;
+          dismissOverlay();
+          sendNotification("Store name updated", "success");
+          await loadCollectionsFromCloud();
+        } catch(err) {
+          console.error("Store update failed", err);
+          dismissOverlay();
+          sendNotification("Could not save store name changes", "error");
+        }
+      }
+
+      // Reorder items up / down in Facilities or Equipment lists
+      if (action === 'reorder-item-up' || action === 'reorder-item-down') {
+        const coll = target.getAttribute('data-collection');
+        const id = target.getAttribute('data-id');
+        
+        let list = [];
+        if (coll === 'facilityCategories') {
+          list = [...window.state.facilityCategories];
+        } else if (coll === 'equipmentList') {
+          list = [...window.state.equipmentList];
+        } else {
+          return;
+        }
+        
+        const idx = list.findIndex(item => item.id === id);
+        if (idx === -1) return;
+        
+        if (action === 'reorder-item-up') {
+          if (idx === 0) {
+            sendNotification("Item is already at the top", "info");
+            return;
+          }
+          const temp = list[idx];
+          list[idx] = list[idx - 1];
+          list[idx - 1] = temp;
+        } else {
+          if (idx === list.length - 1) {
+            sendNotification("Item is already at the bottom", "info");
+            return;
+          }
+          const temp = list[idx];
+          list[idx] = list[idx + 1];
+          list[idx + 1] = temp;
+        }
+        
+        presentOverlay("Saving Custom Order", "Updating sequence in cloud database...");
+        try {
+          const promises = list.map((item, index) => {
+            return updateDoc(doc(db, coll, item.id), { order: index });
+          });
+          await Promise.all(promises);
+          
+          dismissOverlay();
+          sendNotification("Custom list order saved!", "success");
+          await loadCollectionsFromCloud();
+        } catch (err) {
+          console.error("Failed persisting order", err);
+          dismissOverlay();
+          sendNotification("Unable to persist order in cloud database.", "error");
+        }
+      }
+
+      // Add settings item Submission trigger
+      if (action === 'submit-settings-add') {
+        const input = document.getElementById('settings-add-input');
+        const val = input.value.trim();
+        if (!val) {
+          sendNotification("Configuration entry text is blank", "error");
+          return;
+        }
+
+        let collectionName = '';
+        let listLength = 0;
+        if (window.state.settingsTab === 'stores') {
+          collectionName = 'stores';
+        } else if (window.state.settingsTab === 'facilities') {
+          collectionName = 'facilityCategories';
+          listLength = window.state.facilityCategories.length;
+        } else {
+          collectionName = 'equipmentList';
+          listLength = window.state.equipmentList.length;
+        }
+
+        presentOverlay("Writing Live DB", "Updating records inside Firestore...");
+        try {
+          const docId = val.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
+          const docData = { name: val };
+          if (window.state.settingsTab !== 'stores') {
+            docData.order = listLength;
+          }
+          await setDoc(doc(db, collectionName, docId), docData);
+          
+          input.value = '';
+          dismissOverlay();
+          sendNotification("Configuration item stored safely!", "success");
+          
+          // Re-retrieve lists and redraw UI
+          await loadCollectionsFromCloud();
+        } catch (err) {
+          console.error("Firebase update failed", err);
+          dismissOverlay();
+          sendNotification("Security Rule Reject: Unable to store settings.", "error");
+        }
+      }
+
+      // Delete settings item
+      if (action === 'delete-settings-item') {
+        const coll = target.getAttribute('data-collection');
+        const id = target.getAttribute('data-id');
+        
+        if (confirm("Remove definition item permanently from Firestore checklist?")) {
+          presentOverlay("Deleting configuration item", "Updating remote collections...");
+          try {
+            await deleteDoc(doc(db, coll, id));
+            dismissOverlay();
+            sendNotification("Configuration item deleted", "success");
+            await loadCollectionsFromCloud();
+          } catch(err) {
+            console.error("Settings deletion failed", err);
+            dismissOverlay();
+            sendNotification("Unable to process deletion.", "error");
+          }
+        }
+      }
+
+      // Dashboard filters reset
+      if (action === 'reset-filters') {
+        const storeSel = document.getElementById('filter-store-select');
+        if (storeSel) storeSel.value = "";
+        const catSel = document.getElementById('filter-category-select');
+        if (catSel) catSel.value = "";
+        
+        window.state.filterStore = "";
+        window.state.filterCategory = "";
+        window.state.filterTag = "";
+        renderOverviewCardsList();
+        sendNotification("All search filter parameters cleared", "info");
+      }
+
+      // Dashboard Tag filters
+      if (action === 'set-filter-tag') {
+        window.state.filterTag = valAttr;
+        renderOverviewCardsList();
+      }
+
+      // Quick toggle filters
+      if (action === 'toggle-quick-filter') {
+        window.state.filterTag = valAttr || "";
+        renderOverviewCardsList();
+      }
+
+      // Manual sync/refresh Dashboard
+      if (action === 'refresh-overview') {
+        presentOverlay("Syncing records", "Synchronizing checklists list with cloud...");
+        await loadInspectionsHistory();
+        dismissOverlay();
+        sendNotification("Records database synchronized", "success");
+      }
+    });
+
+    // Delegating INPUT and CHANGE events to state updates to avoid missing any on-the-fly typing changes
+    document.addEventListener('input', (e) => {
+      const target = e.target.closest('[data-action]');
+      if (!target) return;
+      const action = target.getAttribute('data-action');
+      const item = target.getAttribute('data-item');
+      const idxAttr = target.getAttribute('data-idx');
+
+      // Update facility text comments
+      if (action === 'update-comment') {
+        if (window.state.facilityAnswers[item]) {
+          window.state.facilityAnswers[item].comment = e.target.value;
+        } else if (window.state.equipmentAnswers[item]) {
+          window.state.equipmentAnswers[item].comment = e.target.value;
+        }
+        triggerCloudSave();
+      }
+
+      // Update facility photos captions
+      if (action === 'update-photo-caption') {
+        const idx = parseInt(idxAttr);
+        if (window.state.facilityAnswers[item] && window.state.facilityAnswers[item].photos[idx]) {
+          window.state.facilityAnswers[item].photos[idx].caption = e.target.value;
+        }
+        triggerCloudSave();
+      }
+
+      // Update equipment photo caption notes
+      if (action === 'update-photo-caption-equipment') {
+        const idx = parseInt(idxAttr);
+        if (window.state.equipmentAnswers[item] && window.state.equipmentAnswers[item].photos[idx]) {
+          window.state.equipmentAnswers[item].photos[idx].caption = e.target.value;
+        }
+        triggerCloudSave();
+      }
+
+    });
+
+    document.addEventListener('change', async (e) => {
+      const target = e.target.closest('[data-action]');
+      
+      // Update store filters drop-down changes inside overview card
+      if (e.target.id === 'filter-store-select') {
+        window.state.filterStore = e.target.value;
+        renderOverviewCardsList();
+      }
+
+      // Update category/item name filters drop-down changes inside overview card
+      if (e.target.id === 'filter-category-select') {
+        window.state.filterCategory = e.target.value;
+        renderOverviewCardsList();
+      }
+
+      if (!target) return;
+      const action = target.getAttribute('data-action');
+      const item = target.getAttribute('data-item');
+      const idxAttr = target.getAttribute('data-idx');
+
+      // Update facility photo tag updates
+      if (action === 'update-photo-tag') {
+        const idx = parseInt(idxAttr);
+        if (window.state.facilityAnswers[item] && window.state.facilityAnswers[item].photos[idx]) {
+          window.state.facilityAnswers[item].photos[idx].tag = e.target.value;
+          renderFacilityChecklist();
+          triggerCloudSave();
+        }
+      }
+
+      // Update equipment photo tag updates
+      if (action === 'update-photo-tag-equipment') {
+        const idx = parseInt(idxAttr);
+        if (window.state.equipmentAnswers[item] && window.state.equipmentAnswers[item].photos[idx]) {
+          window.state.equipmentAnswers[item].photos[idx].tag = e.target.value;
+          renderEquipmentChecklist();
+          triggerCloudSave();
+        }
+      }
+
+      // Update equipment units count dropdown inside state
+      if (action === 'update-equipment-quantity') {
+        if (window.state.equipmentAnswers[item]) {
+          window.state.equipmentAnswers[item].quantity = parseInt(e.target.value);
+          triggerCloudSave();
+        }
+      }
+
+      // --- HANDLE DYNAMIC PHOTO FILE TRANSMISSIONS WITH FIFO ---
+      if (action === 'upload-photo') {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        presentOverlay("Compressing media", "Securing ImgBB visual upload link...");
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+          const resp = await fetch("https://api.imgbb.com/1/upload?key=b733862d15744e2bfaa4329d122f4ba0", {
+            method: "POST",
+            body: formData
+          });
+          const res = await resp.json();
+          dismissOverlay();
+
+          if (resp.ok && res && res.data && res.data.display_url) {
+            const url = res.data.display_url;
+            const ans = window.state.facilityAnswers[item];
+            
+            let substituted = false;
+            // Limit 6 with FIFO deletion
+            if (ans.photos.length >= 6) {
+              ans.photos.shift();
+              substituted = true;
+            }
+
+            ans.photos.push({
+              url: url,
+              tag: ans.rating || 'Good',
+              caption: ''
+            });
+
+            renderFacilityChecklist();
+            triggerCloudSave();
+
+            if (substituted) {
+              sendNotification("Photo updated", "success");
+            } else {
+              sendNotification("Attachment uploaded successfully!", "success");
+            }
+          } else {
+            sendNotification("Storage host response could not be loaded. Verify key setup.", "error");
+          }
+        } catch (err) {
+          console.error("Photo upload error", err);
+          dismissOverlay();
+          sendNotification("Storage submission error. Verify server state.", "error");
+        }
+      }
+
+      // Equipment Photo Uploading with 3-photo FIFO
+      if (action === 'upload-photo-equipment') {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        presentOverlay("Uploading Photo", "Pushing equipment photo check...");
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+          const resp = await fetch("https://api.imgbb.com/1/upload?key=b733862d15744e2bfaa4329d122f4ba0", {
+            method: "POST",
+            body: formData
+          });
+          const res = await resp.json();
+          dismissOverlay();
+
+          if (resp.ok && res && res.data && res.data.display_url) {
+            const url = res.data.display_url;
+            const ans = window.state.equipmentAnswers[item];
+            
+            let substituted = false;
+            // Limit 3 with FIFO deletion
+            if (ans.photos.length >= 3) {
+              ans.photos.shift();
+              substituted = true;
+            }
+
+            ans.photos.push({
+              url: url,
+              tag: ans.rating || 'Good',
+              caption: ''
+            });
+
+            renderEquipmentChecklist();
+            triggerCloudSave();
+
+            if (substituted) {
+              sendNotification("Photo updated", "success");
+            } else {
+              sendNotification("Attachment uploaded successfully!", "success");
+            }
+          } else {
+            sendNotification("ImgBB rejected upload connection", "error");
+          }
+        } catch (err) {
+          console.error("Photo upload error", err);
+          dismissOverlay();
+          sendNotification("Equipment upload fails. Confirm file structure.", "error");
+        }
+      }
+    });
+
+    // Boot system and list collections
+    loadCollectionsFromCloud();
+
+  </script>
+</body>
+</html>
