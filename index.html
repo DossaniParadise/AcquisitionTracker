@@ -102,8 +102,8 @@
       
       <div class="px-2">
         <div class="flex items-center gap-1.5 text-[9px] font-mono text-orange-200/60">
-          <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-md shadow-green-500/50"></span>
-          <span>Firestore Connected</span>
+          <span id="sidebar-status-dot" class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-md shadow-green-500/50"></span>
+          <span id="sidebar-status-text">Live Connection Active</span>
         </div>
       </div>
     </aside>
@@ -118,7 +118,7 @@
           <p class="text-xs text-neutral-500 font-normal mt-0.5" id="header-subtitle">Standard Portal</p>
         </div>
         <!-- Back / Home Button -->
-        <button data-action="go-home" class="p-2 rounded-full hover:bg-neutral-100 transition active:scale-95" id="header-home-btn" title="Home">
+        <button data-action="go-home" class="p-2.5 rounded-full hover:bg-neutral-100 transition active:scale-95 flex items-center justify-center gap-1 bg-neutral-50/50 border border-neutral-200" id="header-home-btn" title="Home">
           <i data-lucide="home" class="w-5 h-5 text-neutral-800"></i>
         </button>
       </header>
@@ -141,7 +141,7 @@
                 <i data-lucide="plus-circle" class="w-5 h-5 text-[#EA580C]"></i>
                 Store Inspection
               </span>
-              <p class="text-xs text-neutral-500">Conduct a facility or equipment physical run.</p>
+              <p class="text-xs text-neutral-550">Conduct a facility or equipment physical run.</p>
             </div>
             <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
           </button>
@@ -153,7 +153,7 @@
                 <i data-lucide="search" class="w-5 h-5 text-[#EA580C]"></i>
                 Overview
               </span>
-              <p class="text-xs text-neutral-500">Filter, browse records, view ratings, and inspect photos.</p>
+              <p class="text-xs text-neutral-550">Filter, browse records, view ratings, and inspect photos.</p>
             </div>
             <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
           </button>
@@ -165,7 +165,7 @@
                 <i data-lucide="sliders" class="w-5 h-5 text-[#EA580C]"></i>
                 Settings
               </span>
-              <p class="text-xs text-neutral-500">Manage stores list, categories, and equipment items.</p>
+              <p class="text-xs text-neutral-550">Manage stores list, categories, and equipment items.</p>
             </div>
             <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
           </button>
@@ -187,9 +187,15 @@
           <!-- Store Selection -->
           <div class="space-y-2">
             <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Select Store</label>
-            <select id="select-store-input" class="w-full text-sm font-medium text-neutral-800 bg-neutral-50/80 border border-transparent rounded-2xl px-4 py-3.5 appearance-none focus:bg-white cursor-pointer">
+            <select id="select-store-input" class="w-full text-sm font-medium text-neutral-800 bg-neutral-50/80 border border-orange-200 rounded-2xl px-4 py-3.5 appearance-none focus:bg-white cursor-pointer">
               <!-- Dynamically Populated -->
             </select>
+          </div>
+
+          <!-- Auditor Name Input -->
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Inspector Name</label>
+            <input type="text" id="auditor-name-input" placeholder="e.g. John" class="w-full text-sm font-semibold text-neutral-800 bg-[#F3ECE3]/60 border border-orange-100/35 rounded-2xl px-4 py-3.5 focus:bg-white focus:ring-1 focus:ring-[#EA580C]">
           </div>
 
           <!-- Checkout Mode Selection -->
@@ -222,7 +228,7 @@
             </div>
           </div>
 
-          <button data-action="begin-inspection" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold text-sm py-4 rounded-2xl shadow-md shadow-orange-950/20 transition active:scale-95 flex items-center justify-center gap-1.5 mt-2">
+          <button data-action="begin-inspection" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-[#FAF8F5] font-semibold text-sm py-4 rounded-2xl shadow-md shadow-orange-950/20 transition active:scale-95 flex items-center justify-center gap-2 mt-2">
             <span>Start Checklist</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
@@ -231,12 +237,12 @@
 
       <!-- VIEW: FACILITY INSPECTION -->
       <div id="view-facility" class="view-panel space-y-6 hidden">
-        <div class="flex items-center justify-between pb-2 border-b border-orange-100/40">
+        <div class="flex items-center justify-between pb-2 border-b border-orange-100/40 select-none">
           <div>
             <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Active Audit</span>
             <h2 class="text-xl font-extrabold text-[#1E3A8A]">Facility Checklist</h2>
           </div>
-          <button data-action="cancel-inspection" class="text-neutral-500 hover:text-[#991B1B] text-xs font-semibold px-2 py-1 transition flex items-center gap-1">
+          <button data-action="cancel-inspection" class="text-neutral-500 hover:text-[#991B1B] text-xs font-semibold px-3 py-1.5 rounded-xl border border-neutral-100 bg-white shadow-xs hover:bg-neutral-50 transition flex items-center justify-center gap-1.5">
             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Cancel
           </button>
         </div>
@@ -246,7 +252,7 @@
 
         <!-- Option to transition from Facility to Equipment if mode is 'both' -->
         <div id="facility-next-step-container" class="pt-4 hidden">
-          <button data-action="go-to-equipment" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-orange-950/15 transition active:scale-95 flex items-center justify-center gap-1.5 focus:outline-none">
+          <button data-action="go-to-equipment" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-orange-950/15 transition active:scale-95 flex items-center justify-center gap-2 focus:outline-none">
             <span>Proceed to Equipment Checklist</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
@@ -255,12 +261,12 @@
 
       <!-- VIEW: EQUIPMENT INSPECTION -->
       <div id="view-equipment" class="view-panel space-y-6 hidden">
-        <div class="flex items-center justify-between pb-2 border-b border-orange-100/40">
+        <div class="flex items-center justify-between pb-2 border-b border-orange-100/40 select-none">
           <div>
             <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Active Audit</span>
             <h2 class="text-xl font-extrabold text-[#1E3A8A]">Equipment Checklist</h2>
           </div>
-          <button data-action="cancel-inspection" class="text-neutral-500 hover:text-[#991B1B] text-xs font-semibold px-2 py-1 transition flex items-center gap-1">
+          <button data-action="cancel-inspection" class="text-neutral-500 hover:text-[#991B1B] text-xs font-semibold px-3 py-1.5 rounded-xl border border-neutral-100 bg-white shadow-xs hover:bg-neutral-50 transition flex items-center justify-center gap-1.5">
             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Cancel
           </button>
         </div>
@@ -270,7 +276,7 @@
 
         <!-- Transition to overview button -->
         <div id="equipment-finish-container" class="pt-4">
-          <button data-action="finish-checklist" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-orange-950/15 transition active:scale-95 flex items-center justify-center gap-1.5 focus:outline-none">
+          <button data-action="finish-checklist" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-orange-950/15 transition active:scale-95 flex items-center justify-center gap-2 focus:outline-none">
             <span>All Done! View Dashboard Overview</span>
             <i data-lucide="check" class="w-4 h-4"></i>
           </button>
@@ -304,7 +310,7 @@
         </div>
 
         <!-- Store Fleet Heatmap Overview -->
-        <div id="overview-fleet-card" class="bg-white border border-orange-100/60 p-5 rounded-3xl space-y-4 shadow-md shadow-orange-950/2 select-none">
+        <div id="overview-fleet-card" class="hidden sm:block bg-white border border-orange-100/60 p-5 rounded-3xl space-y-4 shadow-md shadow-orange-950/2 select-none">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-100 pb-3">
              <div>
               <h3 class="text-xs font-extrabold text-[#1E3A8A] uppercase tracking-widest flex items-center gap-1.5">
@@ -326,24 +332,28 @@
         </div>
 
         <!-- 1-Click Quick Filters -->
-        <div class="flex flex-wrap items-center gap-1.5 py-1">
-          <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mr-1">Quick Toggle:</span>
-          <button data-action="toggle-quick-filter" data-val="" id="quick-filter-all" class="text-[11px] font-bold px-3.5 py-1.5 rounded-full bg-[#1E3A8A] text-white border border-transparent transition shadow-xs">
-            All
-          </button>
-          <button data-action="toggle-quick-filter" data-val="Acceptable" id="quick-filter-acceptable" class="text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-orange-100/40 hover:bg-orange-50/20 transition">
-            All Acceptable
-          </button>
-          <button data-action="toggle-quick-filter" data-val="Bad" id="quick-filter-bad" class="text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-orange-100/40 hover:bg-orange-50/20 transition">
-            All Bad
-          </button>
+        <div class="space-y-1.5 py-1">
+          <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Quick Toggle:</div>
+          <div class="flex flex-nowrap overflow-x-auto gap-1.5 select-none no-scrollbar">
+            <button data-action="toggle-quick-filter" data-val="" id="quick-filter-all" class="shrink-0 text-[11px] font-bold px-3.5 py-1.5 rounded-full bg-[#1E3A8A] text-white border border-transparent transition shadow-xs flex items-center justify-center">
+              All
+            </button>
+            <button data-action="toggle-quick-filter" data-val="Acceptable" id="quick-filter-acceptable" class="shrink-0 text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-orange-100/40 hover:bg-orange-50/20 transition flex items-center justify-center">
+              All Acceptable
+            </button>
+            <button data-action="toggle-quick-filter" data-val="Bad" id="quick-filter-bad" class="shrink-0 text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-orange-100/40 hover:bg-orange-50/20 transition flex items-center justify-center">
+              All Bad
+            </button>
+          </div>
         </div>
 
         <!-- Dashboard Filter Grid Controls -->
         <div class="bg-stone-50/80 border border-orange-100/30 p-4 rounded-3xl space-y-3.5 shadow-sm">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-[#1E3A8A] uppercase tracking-wider">Search Filters</span>
-            <button data-action="reset-filters" class="text-xs text-[#EA580C] font-semibold hover:underline">Reset Filters</button>
+            <button data-action="reset-filters" class="text-xs text-[#EA580C] font-semibold hover:underline flex items-center justify-center gap-2">
+              Reset Filters
+            </button>
           </div>
 
           <div class="space-y-2.5">
@@ -365,21 +375,25 @@
             </div>
 
             <!-- Filter Status Tags -->
-            <div class="grid grid-cols-4 gap-1.5">
-              <button data-action="set-filter-tag" data-val="" id="filter-tag-all" class="text-xs font-semibold py-2 rounded-xl bg-neutral-900 text-white transition">All</button>
-              <button data-action="set-filter-tag" data-val="Good" id="filter-tag-good" class="text-xs font-semibold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition">Good</button>
-              <button data-action="set-filter-tag" data-val="Acceptable" id="filter-tag-acceptable" class="text-xs font-semibold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition">Acceptable</button>
-              <button data-action="set-filter-tag" data-val="Bad" id="filter-tag-bad" class="text-xs font-semibold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition">Bad</button>
+            <div class="grid grid-cols-2 gap-2 select-none w-full">
+              <button data-action="set-filter-tag" data-val="" id="filter-tag-all" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">All</button>
+              <button data-action="set-filter-tag" data-val="Good" id="filter-tag-good" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">Good</button>
+              <button data-action="set-filter-tag" data-val="Acceptable" id="filter-tag-acceptable" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">Acceptable</button>
+              <button data-action="set-filter-tag" data-val="Bad" id="filter-tag-bad" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">Bad</button>
             </div>
           </div>
         </div>
 
         <!-- Filter Count -->
-        <div class="flex items-center justify-between text-xs px-1 text-neutral-500 font-medium">
+        <div class="flex items-center justify-between text-xs px-1 text-neutral-500 font-medium select-none">
           <span id="overview-count-label">Showing 0 matching instances</span>
-          <button data-action="refresh-overview" class="text-[#EA580C] hover:text-[#C2410C] font-bold flex items-center gap-1 transition">
-            <i data-lucide="refresh-cw" class="w-3 h-3"></i> Sync Data
-          </button>
+          <div id="overview-sync-indicator-container" class="flex items-center gap-1.5 text-[11px] text-green-600 font-bold bg-green-50/70 border border-green-100 py-1 px-3 rounded-full">
+            <span id="overview-status-dot-wrapper" class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span id="overview-status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span id="overview-status-text">Live Sync Active</span>
+          </div>
         </div>
 
         <!-- Injected Cards List -->
@@ -394,19 +408,20 @@
         </div>
 
         <!-- Navigation Tabs inside settings -->
-        <div class="flex bg-stone-200/50 border border-orange-100/20 p-1 rounded-2xl gap-0.5 whitespace-nowrap overflow-x-auto">
-          <button data-action="set-settings-tab" data-tab="stores" id="tab-stores" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition bg-white text-[#EA580C] shadow-xs">Stores</button>
-          <button data-action="set-settings-tab" data-tab="facilities" id="tab-facilities" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-500 hover:text-[#1E3A8A]">Facilities</button>
-          <button data-action="set-settings-tab" data-tab="equipment" id="tab-equipment" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-500 hover:text-[#1E3A8A]">Equipment</button>
+        <div class="flex bg-stone-200/50 border border-orange-100/20 p-1 rounded-2xl gap-0.5 whitespace-nowrap overflow-x-auto select-none">
+          <button data-action="set-settings-tab" data-tab="stores" id="tab-stores" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition bg-white text-[#EA580C] shadow-xs flex items-center justify-center gap-2">Stores</button>
+          <button data-action="set-settings-tab" data-tab="facilities" id="tab-facilities" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-550 hover:text-[#1E3A8A] flex items-center justify-center gap-2">Facilities</button>
+          <button data-action="set-settings-tab" data-tab="equipment" id="tab-equipment" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-550 hover:text-[#1E3A8A] flex items-center justify-center gap-2">Equipment</button>
         </div>
 
         <!-- Add Element Control Interface -->
         <div class="bg-stone-50/80 border border-orange-100/30 p-4 rounded-3xl space-y-2.5 shadow-sm">
           <h3 id="settings-add-title" class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Add New Store Location</h3>
-          <div class="flex flex-col gap-1.5">
-            <div class="flex gap-2">
+          <div class="flex flex-col gap-2">
+            <div class="flex flex-col sm:flex-row gap-2">
               <input type="text" id="settings-add-input" placeholder="e.g. 16031 Beebe Capps" class="flex-1 bg-white border border-orange-100/30 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-[#EA580C]">
-              <button data-action="submit-settings-add" class="bg-[#EA580C] hover:bg-[#C2410C] text-white rounded-xl px-4 text-xs font-bold transition active:scale-95 flex items-center justify-center">
+              <input type="text" id="settings-add-cluster" placeholder="Cluster Tag (Optional)" class="flex-1 bg-white border border-orange-100/30 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-[#EA580C]">
+              <button data-action="submit-settings-add" class="bg-[#EA580C] hover:bg-[#C2410C] text-white rounded-xl px-4 py-2 text-xs font-bold transition active:scale-95 flex items-center justify-center shrink-0">
                 Add
               </button>
             </div>
@@ -433,10 +448,31 @@
       </div>
     </div>
 
+    <!-- Beautiful custom confirm modal to bypass window.confirm iframe restrictions -->
+    <div id="custom-confirm-modal" class="fixed inset-0 bg-neutral-950/40 backdrop-blur-xs z-50 flex items-center justify-center hidden select-none">
+      <div class="bg-white p-6 rounded-3xl shadow-xl flex flex-col gap-4 text-center max-w-xs mx-4 border border-orange-100/30">
+        <div class="mx-auto bg-amber-50 rounded-full p-3.5 w-12 h-12 flex items-center justify-center text-[#EA580C]">
+          <i data-lucide="help-circle" class="w-6 h-6"></i>
+        </div>
+        <div class="space-y-1">
+          <h4 class="font-bold text-sm text-neutral-900" id="confirm-modal-title">Are you sure?</h4>
+          <p class="text-xs text-neutral-500 leading-relaxed" id="confirm-modal-message">Do you really want to proceed with this action?</p>
+        </div>
+        <div class="flex gap-2.5 font-semibold mt-1">
+          <button id="confirm-modal-btn-cancel" class="flex-1 py-2 rounded-xl border border-neutral-200 text-neutral-600 bg-neutral-50 hover:bg-neutral-100 text-xs transition cursor-pointer">
+            Cancel
+          </button>
+          <button id="confirm-modal-btn-yes" class="flex-1 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs transition cursor-pointer">
+            Yes, exit
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Clickable Magnified Image LightboxModal -->
     <div id="lightbox-modal" class="fixed inset-0 bg-neutral-950/90 z-50 flex flex-col items-center justify-center p-6 hidden">
       <div class="relative w-full max-w-lg flex flex-col items-center gap-4">
-        <button data-action="close-lightbox" class="absolute -top-12 right-0 bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition">
+        <button data-action="close-lightbox" class="absolute -top-12 right-0 bg-white/10 hover:bg-white/20 p-2.5 rounded-full text-white transition flex items-center justify-center gap-1.5">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
         <img id="lightbox-image" class="max-h-[70vh] rounded-2xl shadow-2xl object-contain w-full" src="" alt="Lightboxed image">
@@ -445,23 +481,23 @@
     </div>
 
     <!-- IOS Global Bottom Sticky Fixed Navigation Hub -->
-    <nav class="md:hidden flex h-16 items-center justify-around absolute bottom-0 left-0 right-0 z-30 bg-[#1E3A8A] border-t border-white/5 px-2">
-      <button data-action="route" data-route="home" class="flex flex-col items-center gap-1 text-orange-400 font-bold transition" id="nav-btn-home">
+    <nav class="md:hidden flex h-16 items-center justify-around absolute bottom-0 left-0 right-0 z-30 bg-[#1E3A8A] border-t border-white/5 px-2 select-none">
+      <button data-action="route" data-route="home" class="flex flex-col items-center gap-1 text-orange-400 font-bold transition justify-center" id="nav-btn-home">
         <i data-lucide="home" class="w-5 h-5"></i>
         <span class="text-[10px]">Home</span>
       </button>
 
-      <button data-action="route" data-route="store-select" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition" id="nav-btn-store-select">
+      <button data-action="route" data-route="store-select" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-store-select">
         <i data-lucide="plus-circle" class="w-5 h-5"></i>
         <span class="text-[10px]">Inspect</span>
       </button>
 
-      <button data-action="route" data-route="overview" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition" id="nav-btn-overview">
+      <button data-action="route" data-route="overview" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-overview">
         <i data-lucide="search" class="w-5 h-5"></i>
         <span class="text-[10px]">Overview</span>
       </button>
 
-      <button data-action="route" data-route="settings" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition" id="nav-btn-settings">
+      <button data-action="route" data-route="settings" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-settings">
         <i data-lucide="sliders" class="w-5 h-5"></i>
         <span class="text-[10px]">Settings</span>
       </button>
@@ -474,7 +510,20 @@
   <!-- CORE SCRIPTS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import {
+      initializeFirestore,
+      persistentLocalCache,
+      persistentMultipleTabManager,
+      collection,
+      getDocs,
+      addDoc,
+      doc,
+      updateDoc,
+      deleteDoc,
+      setDoc,
+      getDoc,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     // Standard live Firebase Connection (as configured)
     const firebaseConfig = {
@@ -491,10 +540,66 @@
     let draggedCollection = null;
     try {
       app = initializeApp(firebaseConfig);
-      db = getFirestore(app);
+      db = initializeFirestore(app, {
+        localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+      });
     } catch (e) {
       console.error("Firebase Initialization failed", e);
     }
+
+    // --- DYNAMIC OFFLINE/ONLINE CONNECTION HANDLER ---
+    function updateOnlineStatus() {
+      const isOnline = navigator.onLine;
+      const sidebarDot = document.getElementById("sidebar-status-dot");
+      const sidebarText = document.getElementById("sidebar-status-text");
+      const overviewContainer = document.getElementById("overview-sync-indicator-container");
+      const overviewDotWrapper = document.getElementById("overview-status-dot-wrapper");
+      const overviewDot = document.getElementById("overview-status-dot");
+      const overviewText = document.getElementById("overview-status-text");
+
+      if (isOnline) {
+        if (sidebarDot) {
+          sidebarDot.className = "w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-md shadow-green-500/50";
+        }
+        if (sidebarText) {
+          sidebarText.innerText = "Live Connection Active";
+        }
+        if (overviewContainer) {
+          overviewContainer.className = "flex items-center gap-1.5 text-[11px] text-green-600 font-bold bg-green-50/70 border border-green-100 py-1 px-3 rounded-full shrink-0 select-none";
+        }
+        if (overviewDotWrapper) {
+          overviewDotWrapper.className = "relative flex h-2 w-2";
+        }
+        if (overviewDot) {
+          overviewDot.className = "relative inline-flex rounded-full h-2 w-2 bg-green-500";
+        }
+        if (overviewText) {
+          overviewText.innerText = "Live Sync Active";
+        }
+      } else {
+        if (sidebarDot) {
+          sidebarDot.className = "w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse shadow-md shadow-amber-500/50";
+        }
+        if (sidebarText) {
+          sidebarText.innerText = "Offline (Cached Mode)";
+        }
+        if (overviewContainer) {
+          overviewContainer.className = "flex items-center gap-1.5 text-[11px] text-amber-600 font-bold bg-amber-50/70 border border-amber-100 py-1 px-3 rounded-full shrink-0 select-none animate-pulse";
+        }
+        if (overviewDotWrapper) {
+          overviewDotWrapper.className = "relative flex h-2 w-2";
+        }
+        if (overviewDot) {
+          overviewDot.className = "relative inline-flex rounded-full h-2 w-2 bg-amber-550";
+        }
+        if (overviewText) {
+          overviewText.innerText = "Offline Queue Active";
+        }
+      }
+    }
+    window.addEventListener("online", updateOnlineStatus);
+    window.addEventListener("offline", updateOnlineStatus);
+    window.updateOnlineStatus = updateOnlineStatus;
 
     // --- GLOBAL SYSTEM STATE OBJECT ---
     window.state = {
@@ -567,6 +672,38 @@
       document.getElementById('global-overlay').classList.add('hidden');
     }
 
+    // --- CUSTOM CONFIRM MODAL CONTROLLER ---
+    let pendingConfirmYesCallback = null;
+    let pendingConfirmCancelCallback = null;
+
+    function showCustomConfirm(title, message, onYes, onCancel) {
+      document.getElementById('confirm-modal-title').innerText = title || "Are you sure?";
+      document.getElementById('confirm-modal-message').innerText = message || "Do you really want to proceed with this action?";
+      document.getElementById('custom-confirm-modal').classList.remove('hidden');
+      pendingConfirmYesCallback = onYes || null;
+      pendingConfirmCancelCallback = onCancel || null;
+      if (window.lucide) lucide.createIcons();
+    }
+    window.showCustomConfirm = showCustomConfirm;
+
+    document.getElementById('confirm-modal-btn-cancel').addEventListener('click', () => {
+      document.getElementById('custom-confirm-modal').classList.add('hidden');
+      if (pendingConfirmCancelCallback) {
+        pendingConfirmCancelCallback();
+      }
+      pendingConfirmYesCallback = null;
+      pendingConfirmCancelCallback = null;
+    });
+
+    document.getElementById('confirm-modal-btn-yes').addEventListener('click', () => {
+      document.getElementById('custom-confirm-modal').classList.add('hidden');
+      if (pendingConfirmYesCallback) {
+        pendingConfirmYesCallback();
+      }
+      pendingConfirmYesCallback = null;
+      pendingConfirmCancelCallback = null;
+    });
+
     // --- FIRESTORE DATA ACQUISITION & WRITES ---
     function escapeHtml(text) {
       if (!text) return '';
@@ -578,11 +715,44 @@
         .replace(/'/g, "&#039;");
     }
 
+    // Color-coded pastels style generation based on cluster name
+    function getClusterBadgeStyle(cluster) {
+      if (!cluster) return '';
+      let hash = 0;
+      for (let i = 0; i < cluster.length; i++) {
+        hash = cluster.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const hue = Math.abs(hash) % 360;
+      // Soft modern pastel style with deep contrasting text
+      return `background-color: hsl(${hue}, 85%, 94%); color: hsl(${hue}, 85%, 28%); border: 1px solid hsl(${hue}, 60%, 82%);`;
+    }
+
+    // Sort function: first by cluster tag (empty/no-cluster elements last), then by store name
+    function sortStores(storeList) {
+      return [...storeList].sort((a, b) => {
+        const clusterA = a.cluster || '';
+        const clusterB = b.cluster || '';
+        if (clusterA && !clusterB) return -1;
+        if (!clusterA && clusterB) return 1;
+        if (clusterA !== clusterB) {
+          return clusterA.localeCompare(clusterB);
+        }
+        return (a.name || '').localeCompare(b.name || '');
+      });
+    }
+
     async function loadCollectionsFromCloud() {
       // Fetch fresh configurations
       try {
         const storesSnap = await getDocs(collection(db, "stores"));
-        window.state.stores = storesSnap.docs.map(doc => ({ id: doc.id, name: doc.data().name })).sort((a,b) => a.name.localeCompare(b.name));
+        window.state.stores = sortStores(storesSnap.docs.map(doc => {
+          const d = doc.data();
+          return {
+            id: doc.id,
+            name: d.name || '',
+            cluster: d.cluster || ''
+          };
+        }));
         
         const facilitySnap = await getDocs(collection(db, "facilityCategories"));
         const rawFacilities = facilitySnap.docs.map(doc => {
@@ -713,26 +883,26 @@
       defaultOpt.selected = !window.state.selectedStore;
       select.appendChild(defaultOpt);
 
-      const sortedStores = [...window.state.stores].sort((a, b) => a.name.localeCompare(b.name));
+      const sortedStores = sortStores(window.state.stores);
       sortedStores.forEach(store => {
         const opt = document.createElement('option');
         opt.value = store.name;
-        opt.innerText = store.name;
+        opt.innerText = store.cluster ? `[${store.cluster}] ${store.name}` : store.name;
         opt.selected = (store.name === window.state.selectedStore);
         select.appendChild(opt);
       });
     }
 
-    // Populate stores in Dashboard filters dropdown (Alphabetical Order)
+    // Populate stores in Dashboard filters dropdown (Sorted by Cluster then Name)
     function renderOverviewStoreFilters() {
       const select = document.getElementById('filter-store-select');
       select.innerHTML = '<option value="">All Store Locations</option>';
       
-      const sortedStores = [...window.state.stores].sort((a, b) => a.name.localeCompare(b.name));
+      const sortedStores = sortStores(window.state.stores);
       sortedStores.forEach(store => {
         const opt = document.createElement('option');
         opt.value = store.name;
-        opt.innerText = store.name;
+        opt.innerText = store.cluster ? `[${store.cluster}] ${store.name}` : store.name;
         select.appendChild(opt);
       });
     }
@@ -772,12 +942,14 @@
       const inputAddLabel = document.getElementById('settings-add-title');
       const settingsInput = document.getElementById('settings-add-input');
       const settingsHint = document.getElementById('settings-add-hint');
+      const settingsCluster = document.getElementById('settings-add-cluster');
 
       if (window.state.settingsTab === 'stores') {
         list = window.state.stores;
         targetCollection = 'stores';
         inputAddLabel.innerText = "Add New Store Location";
         if (settingsInput) settingsInput.placeholder = "e.g. 16031 Beebe Capps";
+        if (settingsCluster) settingsCluster.classList.remove('hidden');
         if (settingsHint) {
           settingsHint.innerText = "Format: [Store Number] [Store Name]";
           settingsHint.classList.remove('hidden');
@@ -787,12 +959,14 @@
         targetCollection = 'facilityCategories';
         inputAddLabel.innerText = "Add New Category";
         if (settingsInput) settingsInput.placeholder = "Type name here...";
+        if (settingsCluster) settingsCluster.classList.add('hidden');
         if (settingsHint) settingsHint.classList.add('hidden');
       } else {
         list = window.state.equipmentList;
         targetCollection = 'equipmentList';
         inputAddLabel.innerText = "Add New Equipment Item";
         if (settingsInput) settingsInput.placeholder = "Type name here...";
+        if (settingsCluster) settingsCluster.classList.add('hidden');
         if (settingsHint) settingsHint.classList.add('hidden');
       }
 
@@ -821,26 +995,34 @@
           const isEditing = (window.state.editingStoreId === item.id);
           if (isEditing) {
             row.innerHTML = `
-              <div class="flex items-center gap-2 flex-1 mr-4">
-                <input type="text" id="edit-store-input-${item.id}" value="${escapeHtml(item.name)}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-xs font-bold focus:ring-1 focus:ring-[#EA580C]">
+              <div class="flex flex-col gap-1.5 flex-1 mr-4">
+                <input type="text" id="edit-store-input-${item.id}" value="${escapeHtml(item.name)}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-xs font-bold focus:ring-1 focus:ring-[#EA580C]" placeholder="Store Name">
+                <input type="text" id="edit-store-cluster-${item.id}" value="${escapeHtml(item.cluster || '')}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-[11px] focus:ring-1 focus:ring-[#EA580C]" placeholder="Cluster Tag (Optional)">
               </div>
               <div class="flex items-center gap-1.5 shrink-0">
-                <button data-action="save-store-edit" data-id="${item.id}" class="text-xs text-green-600 hover:text-green-700 transition p-1.5 bg-green-50 rounded-lg hover:bg-green-100" title="Save">
+                <button data-action="save-store-edit" data-id="${item.id}" class="text-xs text-green-600 hover:text-green-700 transition p-1.5 bg-green-50 rounded-lg hover:bg-green-100 flex items-center justify-center border border-green-100" title="Save">
                   <i data-lucide="check" class="w-4 h-4"></i>
                 </button>
-                <button data-action="cancel-store-edit" class="text-xs text-neutral-400 hover:text-neutral-600 transition p-1.5 bg-neutral-100 rounded-lg hover:bg-neutral-200" title="Cancel">
+                <button data-action="cancel-store-edit" class="text-xs text-neutral-400 hover:text-neutral-600 transition p-1.5 bg-neutral-100 rounded-lg hover:bg-neutral-200 flex items-center justify-center border border-neutral-200" title="Cancel">
                   <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
               </div>
             `;
           } else {
             row.innerHTML = `
-              <span class="text-xs font-bold text-neutral-800 flex-1 mr-4">${escapeHtml(item.name)}</span>
+              <div class="flex flex-wrap items-center gap-2 flex-1 mr-4">
+                <span class="text-xs font-bold text-neutral-800">${escapeHtml(item.name)}</span>
+                ${item.cluster ? `
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider" style="${getClusterBadgeStyle(item.cluster)}">
+                    ${escapeHtml(item.cluster)}
+                  </span>
+                ` : ''}
+              </div>
               <div class="flex items-center gap-1.5 shrink-0">
-                <button data-action="start-store-edit" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-[#EA580C] transition p-1" title="Edit Store Name">
+                <button data-action="start-store-edit" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-[#EA580C] transition p-1.5 hover:bg-orange-50 rounded-lg flex items-center justify-center" title="Edit Store">
                   <i data-lucide="edit-2" class="w-4 h-4"></i>
                 </button>
-                <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-600 transition p-1" title="Delete">
+                <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-600 transition p-1.5 hover:bg-red-50 rounded-lg flex items-center justify-center" title="Delete">
                   <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
               </div>
@@ -854,14 +1036,14 @@
               <span class="text-xs font-bold text-neutral-800">${escapeHtml(item.name)}</span>
             </div>
             <div class="flex items-center gap-1 shrink-0">
-              <button data-action="reorder-item-up" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-900 transition p-1" title="Move Up">
+              <button data-action="reorder-item-up" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-900 transition p-1 flex items-center justify-center" title="Move Up">
                 <i data-lucide="chevron-up" class="w-4 h-4"></i>
               </button>
-              <button data-action="reorder-item-down" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-900 transition p-1" title="Move Down">
+              <button data-action="reorder-item-down" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-900 transition p-1 flex items-center justify-center" title="Move Down">
                 <i data-lucide="chevron-down" class="w-4 h-4"></i>
               </button>
               <div class="w-px h-4 bg-neutral-200 mx-1.5"></div>
-              <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-600 transition p-1" title="Delete">
+              <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-600 transition p-1 flex items-center justify-center" title="Delete">
                 <i data-lucide="x" class="w-4 h-4"></i>
               </button>
             </div>
@@ -992,9 +1174,11 @@
 
       if (window.state.facilityCategories.length === 0) {
         container.innerHTML = `
-          <div class="p-8 text-center text-neutral-400 space-y-3">
+          <div class="col-span-full p-8 text-center text-neutral-400 space-y-3 flex flex-col items-center justify-center">
             <p class="text-xs font-medium">Setup your Facility categories to begin.</p>
-            <button data-action="route" data-route="settings" class="text-xs bg-black text-white px-4 py-2 rounded-xl">Go to Settings</button>
+            <button data-action="route" data-route="settings" class="text-xs bg-black text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 hover:bg-neutral-850 active:scale-95 transition">
+              <span>Go to Settings</span>
+            </button>
           </div>
         `;
         return;
@@ -1078,23 +1262,23 @@
           </div>
 
           <!-- Triple choice rating buttons -->
-          <div class="grid grid-cols-3 gap-2">
-            <button data-action="set-rating" data-item="${cat}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Good' ? 'bg-green-100 border-green-300 text-green-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              Good
+          <div class="grid grid-cols-3 gap-2 select-none">
+            <button data-action="set-rating" data-item="${cat}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Good' ? 'bg-green-100 border-green-300 text-green-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              <span>Good</span>
             </button>
-            <button data-action="set-rating" data-item="${cat}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              Acceptable
+            <button data-action="set-rating" data-item="${cat}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              <span>Acceptable</span>
             </button>
-            <button data-action="set-rating" data-item="${cat}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              Bad
+            <button data-action="set-rating" data-item="${cat}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              <span>Bad</span>
             </button>
           </div>
 
-          <!-- Comment input details -->
+          <!-- Comment comment input details -->
           ${commentFormHTML}
 
           <!-- File upload always shown to trigger FIFO replacement when > 6 photos -->
-          <div class="space-y-2">
+          <div class="space-y-2 select-none">
             <label class="w-full flex items-center justify-center gap-2 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-2.5 rounded-2xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
               <i data-lucide="camera" class="w-4 h-4 text-neutral-600"></i>
               <span class="text-xs text-neutral-700 font-semibold font-sans">Upload Photo</span>
@@ -1126,9 +1310,11 @@
 
       if (window.state.equipmentList.length === 0) {
         container.innerHTML = `
-          <div class="p-8 text-center text-neutral-400 space-y-3">
+          <div class="col-span-full p-8 text-center text-neutral-400 space-y-3 flex flex-col items-center justify-center">
             <p class="text-xs font-medium">Please define Equipment items in Settings first.</p>
-            <button data-action="route" data-route="settings" class="text-xs bg-black text-white px-4 py-2 rounded-xl">Go to Settings</button>
+            <button data-action="route" data-route="settings" class="text-xs bg-black text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 hover:bg-neutral-850 active:scale-95 transition">
+              <span>Go to Settings</span>
+            </button>
           </div>
         `;
         return;
@@ -1220,22 +1406,22 @@
           </div>
 
           <!-- Rating assessment choice buttons -->
-          <div class="grid grid-cols-3 gap-2">
-            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Good' ? 'bg-green-100 border-green-300 text-green-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              Good
+          <div class="grid grid-cols-3 gap-2 select-none">
+            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Good' ? 'bg-green-100 border-green-300 text-green-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              <span>Good</span>
             </button>
-            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              Acceptable
+            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              <span>Acceptable</span>
             </button>
-            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              Bad
+            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
+              <span>Bad</span>
             </button>
           </div>
 
           ${commentFormHTML}
 
           <!-- Photo uploads zone -->
-          <div class="space-y-2">
+          <div class="space-y-2 select-none">
             <label class="w-full flex items-center justify-center gap-2 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-2.5 rounded-2xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
               <i data-lucide="camera" class="w-4 h-4 text-neutral-600"></i>
               <span class="text-xs text-neutral-700 font-semibold font-sans">Upload Photo</span>
@@ -1362,7 +1548,14 @@
 
         tile.innerHTML = `
           <div class="space-y-0.5 leading-tight">
-            <h4 class="text-xs font-bold text-neutral-800 line-clamp-1">${escapeHtml(S.name)}</h4>
+            <div class="flex items-center gap-1.5 justify-between">
+              <h4 class="text-xs font-bold text-neutral-800 truncate flex-1 min-w-0">${escapeHtml(S.name)}</h4>
+              ${S.cluster ? `
+                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[7.5px] font-extrabold uppercase tracking-wider shrink-0" style="${getClusterBadgeStyle(S.cluster)}">
+                  ${escapeHtml(S.cluster)}
+                </span>
+              ` : ''}
+            </div>
             <p class="text-[9px] text-neutral-450 font-bold font-mono">${status.ratedCount}/${status.expectedCount} Checked</p>
           </div>
           <div class="flex items-center justify-between pb-1 z-10">
@@ -1415,13 +1608,21 @@
       ['all', 'good', 'acceptable', 'bad'].forEach(tag => {
         const el = document.getElementById(`filter-tag-${tag}`);
         if (el) {
-          el.className = "text-xs font-semibold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition";
+          el.className = "text-xs font-bold px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition";
         }
       });
       const activeTerm = selTag === "" ? "all" : selTag.toLowerCase();
       const activeFilterTagEl = document.getElementById(`filter-tag-${activeTerm}`);
       if (activeFilterTagEl) {
-        activeFilterTagEl.className = "text-xs font-semibold py-2 rounded-xl bg-neutral-900 text-white transition";
+        if (activeTerm === 'all') {
+          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-blue-600 text-white border border-transparent transition shadow-sm";
+        } else if (activeTerm === 'good') {
+          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-green-600 text-white border border-transparent transition shadow-sm";
+        } else if (activeTerm === 'acceptable') {
+          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-amber-500 text-white border border-transparent transition shadow-sm";
+        } else if (activeTerm === 'bad') {
+          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-red-600 text-white border border-transparent transition shadow-sm";
+        }
       }
 
       // Update quick toggle buttons active states
@@ -1513,6 +1714,7 @@
             <h3 class="text-sm font-bold text-neutral-900">${targetName}</h3>
             <div class="flex items-center gap-1.5 text-[11px] text-neutral-400 font-medium">
               <span>${insp.store}</span>
+              ${insp.auditorName ? `<span>• Checked by: <strong>${escapeHtml(insp.auditorName)}</strong></span>` : ''}
               <span>•</span>
               <span>${insp.dateString}</span>
             </div>
@@ -1671,11 +1873,19 @@
       // Start inspection
       if (action === 'begin-inspection') {
         const storeVal = document.getElementById('select-store-input').value;
+        const auditorNameInput = document.getElementById('auditor-name-input');
+        const auditorNameVal = auditorNameInput ? auditorNameInput.value.trim() : '';
         const modeRadio = document.querySelector('input[name="select-mode-radio"]:checked');
         const modeVal = modeRadio ? modeRadio.value : 'facility';
 
         if (!storeVal) {
           sendNotification("Select store name to start inspection", "error");
+          return;
+        }
+
+        if (!auditorNameVal) {
+          sendNotification("Please type your First Name for accountability", "error");
+          if (auditorNameInput) auditorNameInput.focus();
           return;
         }
 
@@ -1709,9 +1919,12 @@
             window.state.activeDocId = existingDoc.id;
             window.state.facilityAnswers = existingDoc.facility || {};
             window.state.equipmentAnswers = existingDoc.equipment || {};
+            // Update auditor name for accountability on existing doc
+            await updateDoc(doc(db, "inspections", existingDoc.id), { auditorName: auditorNameVal });
           } else {
             const payload = {
               store: storeVal,
+              auditorName: auditorNameVal,
               dateOnly: todayDateStr,
               dateString: new Date().toLocaleDateString('en-US', {
                 month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -1783,17 +1996,21 @@
 
       // Cancel / Exit inspection
       if (action === 'cancel-inspection') {
-        if (confirm("Exit session? Current entries are auto-saved in the cloud.")) {
-          // Unsubscribe
-          if (activeInspectionSubscription) {
-            activeInspectionSubscription();
-            activeInspectionSubscription = null;
+        showCustomConfirm(
+          "Exit session?",
+          "Current entries are auto-saved in the cloud. Do you want to exit to Home?",
+          () => {
+            // Unsubscribe
+            if (activeInspectionSubscription) {
+              activeInspectionSubscription();
+              activeInspectionSubscription = null;
+            }
+            window.state.activeDocId = null;
+            window.state.facilityAnswers = {};
+            window.state.equipmentAnswers = {};
+            window.location.hash = '#home';
           }
-          window.state.activeDocId = null;
-          window.state.facilityAnswers = {};
-          window.state.equipmentAnswers = {};
-          window.location.hash = '#home';
-        }
+        );
       }
 
       // Set facility rating
@@ -1806,13 +2023,17 @@
 
       // Delete facility photo with auto-saving to cloud
       if (action === 'delete-photo') {
-        if (confirm("Remove this photo attachment?")) {
-          const idx = parseInt(idxAttr);
-          window.state.facilityAnswers[itemAttr].photos.splice(idx, 1);
-          renderFacilityChecklist();
-          triggerCloudSave();
-          sendNotification("Photo removed", "info");
-        }
+        showCustomConfirm(
+          "Remove photo?",
+          "Are you sure you want to remove this photo attachment?",
+          () => {
+            const idx = parseInt(idxAttr);
+            window.state.facilityAnswers[itemAttr].photos.splice(idx, 1);
+            renderFacilityChecklist();
+            triggerCloudSave();
+            sendNotification("Photo removed", "info");
+          }
+        );
       }
 
       // Next / Continue inside Facility Checklist
@@ -1836,13 +2057,17 @@
 
       // Delete Equipment Photo
       if (action === 'delete-photo-equipment') {
-        if (confirm("Remove this photo attachment?")) {
-          const idx = parseInt(idxAttr);
-          window.state.equipmentAnswers[itemAttr].photos.splice(idx, 1);
-          renderEquipmentChecklist();
-          triggerCloudSave();
-          sendNotification("Photo removed", "info");
-        }
+        showCustomConfirm(
+          "Remove photo?",
+          "Are you sure you want to remove this photo attachment?",
+          () => {
+            const idx = parseInt(idxAttr);
+            window.state.equipmentAnswers[itemAttr].photos.splice(idx, 1);
+            renderEquipmentChecklist();
+            triggerCloudSave();
+            sendNotification("Photo removed", "info");
+          }
+        );
       }
 
       // Finish whole equipment list
@@ -1891,23 +2116,28 @@
       if (action === 'save-store-edit') {
         const id = target.getAttribute('data-id');
         const input = document.getElementById(`edit-store-input-${id}`);
+        const clusterInput = document.getElementById(`edit-store-cluster-${id}`);
         const newVal = input ? input.value.trim() : '';
+        const newCluster = clusterInput ? clusterInput.value.trim() : '';
         if (!newVal) {
           sendNotification("Store name cannot be empty", "error");
           return;
         }
 
-        presentOverlay("Saving Store Name", "Updating document in Firestore...");
+        presentOverlay("Saving Store Details", "Updating document in Firestore...");
         try {
-          await updateDoc(doc(db, "stores", id), { name: newVal });
+          await updateDoc(doc(db, "stores", id), {
+            name: newVal,
+            cluster: newCluster
+          });
           window.state.editingStoreId = null;
           dismissOverlay();
-          sendNotification("Store name updated", "success");
+          sendNotification("Store details updated", "success");
           await loadCollectionsFromCloud();
         } catch(err) {
           console.error("Store update failed", err);
           dismissOverlay();
-          sendNotification("Could not save store name changes", "error");
+          sendNotification("Could not save store details", "error");
         }
       }
 
@@ -1974,8 +2204,11 @@
 
         let collectionName = '';
         let listLength = 0;
+        let clusterVal = '';
         if (window.state.settingsTab === 'stores') {
           collectionName = 'stores';
+          const clusterInput = document.getElementById('settings-add-cluster');
+          clusterVal = clusterInput ? clusterInput.value.trim() : '';
         } else if (window.state.settingsTab === 'facilities') {
           collectionName = 'facilityCategories';
           listLength = window.state.facilityCategories.length;
@@ -1988,12 +2221,16 @@
         try {
           const docId = val.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
           const docData = { name: val };
-          if (window.state.settingsTab !== 'stores') {
+          if (window.state.settingsTab === 'stores') {
+            docData.cluster = clusterVal;
+          } else {
             docData.order = listLength;
           }
           await setDoc(doc(db, collectionName, docId), docData);
           
           input.value = '';
+          const clusterIn = document.getElementById('settings-add-cluster');
+          if (clusterIn) clusterIn.value = '';
           dismissOverlay();
           sendNotification("Configuration item stored safely!", "success");
           
@@ -2011,19 +2248,23 @@
         const coll = target.getAttribute('data-collection');
         const id = target.getAttribute('data-id');
         
-        if (confirm("Remove definition item permanently from Firestore checklist?")) {
-          presentOverlay("Deleting configuration item", "Updating remote collections...");
-          try {
-            await deleteDoc(doc(db, coll, id));
-            dismissOverlay();
-            sendNotification("Configuration item deleted", "success");
-            await loadCollectionsFromCloud();
-          } catch(err) {
-            console.error("Settings deletion failed", err);
-            dismissOverlay();
-            sendNotification("Unable to process deletion.", "error");
+        showCustomConfirm(
+          "Delete config item?",
+          "Are you sure you want to remove this definition item permanently from the Firestore checklist?",
+          async () => {
+            presentOverlay("Deleting configuration item", "Updating remote collections...");
+            try {
+              await deleteDoc(doc(db, coll, id));
+              dismissOverlay();
+              sendNotification("Configuration item deleted", "success");
+              await loadCollectionsFromCloud();
+            } catch(err) {
+              console.error("Settings deletion failed", err);
+              dismissOverlay();
+              sendNotification("Unable to process deletion.", "error");
+            }
           }
-        }
+        );
       }
 
       // Dashboard filters reset
@@ -2254,6 +2495,9 @@
 
     // Boot system and list collections
     loadCollectionsFromCloud();
+    if (typeof updateOnlineStatus === 'function') {
+      updateOnlineStatus();
+    }
 
   </script>
 </body>
