@@ -1,2504 +1,999 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inspections</title>
-  
-  <!-- Premium Hospitaly/Restaurant Brand Tailwind CSS Config -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: [
-              'Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto',
-              'sans-serif'
-            ],
-          },
-        }
-      }
-    }
-  </script>
-
-  <!-- Lucide Minimalist Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;650;700&display=swap');
-
-    /* Premium Hospitality Brand aesthetic */
-    body {
-      background-color: #FAF8F5; /* Warm stone/cream tone */
-      color: #1E293B;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    input, select, textarea {
-      background-color: #F3ECE3; /* Much warmer input background */
-      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    input:focus, select:focus, textarea:focus {
-      background-color: #ffffff;
-      outline: none;
-      box-shadow: 0 0 0 2px #EA580C; /* Burnt orange accent focus ring */
-    }
-    /* Spinner override with brand warm orange */
-    .spinner {
-      border: 2px solid #E2E8F0;
-      border-top: 2px solid #EA580C;
-      border-radius: 50%;
-      width: 1.5rem;
-      height: 1.5rem;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
-</head>
-<body class="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center p-0 md:p-6 lg:p-8">
-
-  <!-- Main Container: Fully responsive from mobile to max-7xl desktop -->
-  <div class="w-full max-w-7xl h-screen md:h-[88vh] lg:h-[92vh] flex flex-col md:flex-row relative bg-[#FCFAF7] shadow-2xl md:rounded-[2.5rem] overflow-hidden border border-[#1E3A8A]/10">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spatial Circle Drawer and Data Plotter</title>
     
-    <!-- Desktop Sleek Left-Hand Side Navigation Rail (Hidden on Mobile) -->
-    <aside class="hidden md:flex md:flex-col md:w-64 bg-[#1E3A8A] p-6 space-y-8 shrink-0 justify-between text-white shadow-xl">
-      <div class="space-y-8">
-        <div class="px-2">
-          <h2 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-            <span class="p-1.5 bg-[#EA580C] text-white rounded-xl shadow-md shadow-orange-950/30 flex items-center justify-center">
-              <i data-lucide="shield-check" class="w-5 h-5"></i>
-            </span>
-            <span class="font-sans leading-none">Inspections</span>
-          </h2>
-          <p class="text-[10px] text-orange-200/70 font-bold tracking-widest uppercase mt-3">Hospitality Portal</p>
+    <!-- Tailwind CSS (V3 Play CDN) for extreme robustness in single-file execution -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              slate: {
+                750: '#1e293b',
+                850: '#1e293b',
+                900: '#0f172a',
+                950: '#020617',
+              },
+              rose: {
+                350: '#fda4af',
+                955: '#4c0519',
+              },
+              amber: {
+                955: '#451a03',
+              },
+              emerald: {
+                955: '#022c22',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- Leaflet.js CSS and Script CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Elegant Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      
+      /* Custom scrollbar styled for dark sidebar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+      
+      /* Leaflet custom marker SVG style wrapper */
+      .custom-marker-icon {
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+      }
+      
+      /* Spatial selection circle drawing state */
+      .interactive-circle {
+        cursor: crosshair;
+        transition: stroke-width 0.2s, fill-opacity 0.2s;
+      }
+      .interactive-circle:hover {
+        stroke-width: 3px !important;
+        fill-opacity: 0.35 !important;
+      }
+      
+      /* modern overrides for Leaflet controls */
+      .leaflet-bar {
+        border: none !important;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+      }
+      .leaflet-bar a {
+        background-color: #1e293b !important;
+        color: #f1f5f9 !important;
+        border: 1px solid #334155 !important;
+        transition: background-color 0.15s, color 0.15s;
+      }
+      .leaflet-bar a:hover {
+        background-color: #334155 !important;
+        color: #ffffff !important;
+      }
+      .leaflet-popup-content-wrapper {
+        background-color: #1e293b !important;
+        color: #f1f5f9 !important;
+        border: 1px solid #334155;
+        border-radius: 8px !important;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3) !important;
+      }
+      .leaflet-popup-tip {
+        background-color: #1e293b !important;
+        border: 1px solid #334155;
+      }
+      
+      /* Fade in animation */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.18s ease-out forwards;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-950 text-white min-h-screen overflow-hidden flex flex-col md:flex-row">
+
+    <!-- Notification Toast system -->
+    <div id="toast" class="absolute top-4 right-4 z-[9999] bg-slate-900 border border-slate-800 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 transform translate-y-[-100px] opacity-0 transition-all duration-300 pointer-events-none">
+      <span id="toast-icon"></span>
+      <span id="toast-message" class="text-sm font-medium"></span>
+    </div>
+
+    <!-- COLOR SELECTION MODAL LAYER -->
+    <div id="color-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center bg-slate-950/85 backdrop-blur-sm pointer-events-auto">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 w-[90%] max-w-sm shadow-2xl space-y-4 animate-fade-in">
+        <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+          <div>
+            <h3 class="font-bold text-sm text-slate-100 flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01C7 17 9 17 9 15c0-1-1-2-2-2-1 0-2 1-2 2s1.5 2 2 2z"/>
+              </svg>
+              Choose Store Color
+            </h3>
+            <p id="modal-subtitle" class="text-[10px] text-slate-400 mt-1 truncate max-w-[240px]">Setting color for location</p>
+          </div>
+          <button onclick="closeColorModal()" class="text-slate-400 hover:text-white transition-colors cursor-pointer p-1 rounded-full hover:bg-slate-800">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
         
-        <nav class="space-y-1.5">
-          <button data-action="route" data-route="home" id="nav-desk-btn-home" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-white bg-[#EA580C] font-bold shadow-md shadow-orange-950/25 transition">
-            <i data-lucide="home" class="w-4.5 h-4.5"></i>
-            <span class="text-xs">Home</span>
+        <!-- Beautiful layout of spectrum dots inside the modal -->
+        <div class="space-y-2">
+          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">ROYGBIV Spectrum Palette</span>
+          <div id="modal-colors-grid" class="grid grid-cols-4 gap-3 py-2">
+            <!-- Populated dynamically via JS to keep spectrum fully synchronous and editable -->
+          </div>
+        </div>
+        
+        <div class="flex justify-end pt-2 border-t border-slate-800">
+          <button onclick="closeColorModal()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-750 text-slate-350 rounded-lg text-xs font-semibold cursor-pointer transition-colors">
+            Close
           </button>
-          
-          <button data-action="route" data-route="store-select" id="nav-desk-btn-store-select" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold">
-            <i data-lucide="plus-circle" class="w-4.5 h-4.5"></i>
-            <span class="text-xs">Inspect Store</span>
-          </button>
-          
-          <button data-action="route" data-route="overview" id="nav-desk-btn-overview" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold">
-            <i data-lucide="search" class="w-4.5 h-4.5"></i>
-            <span class="text-xs">Overview</span>
-          </button>
-          
-          <button data-action="route" data-route="settings" id="nav-desk-btn-settings" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold">
-            <i data-lucide="sliders" class="w-4.5 h-4.5"></i>
-            <span class="text-xs">Settings</span>
-          </button>
-        </nav>
+        </div>
       </div>
+    </div>
+
+    <!-- MAIN SIDEBAR -->
+    <div class="w-full md:w-[410px] xl:w-[440px] flex-shrink-0 flex flex-col bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 h-[60vh] md:h-screen shadow-2xl z-20">
       
-      <div class="px-2">
-        <div class="flex items-center gap-1.5 text-[9px] font-mono text-orange-200/60">
-          <span id="sidebar-status-dot" class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-md shadow-green-500/50"></span>
-          <span id="sidebar-status-text">Live Connection Active</span>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Main Content Panel (Responsive with custom header/margins) -->
-    <div class="flex-1 flex flex-col relative h-full overflow-hidden bg-[#FCFAF7]">
-      
-      <!-- Sophisticated Header -->
-      <header class="bg-white/90 backdrop-blur-md px-6 py-5 border-b border-neutral-100 flex items-center justify-between shrink-0">
-        <div>
-          <h1 class="text-2xl font-bold tracking-tight text-neutral-900" id="header-title">Inspections</h1>
-          <p class="text-xs text-neutral-500 font-normal mt-0.5" id="header-subtitle">Standard Portal</p>
-        </div>
-        <!-- Back / Home Button -->
-        <button data-action="go-home" class="p-2.5 rounded-full hover:bg-neutral-100 transition active:scale-95 flex items-center justify-center gap-1 bg-neutral-50/50 border border-neutral-200" id="header-home-btn" title="Home">
-          <i data-lucide="home" class="w-5 h-5 text-neutral-800"></i>
-        </button>
-      </header>
-
-      <!-- MAIN VIEWS WRAPPER -->
-      <main class="flex-1 overflow-y-auto px-6 py-6 pb-24" id="main-content">
-      
-      <!-- VIEW: HOME (Default) -->
-      <div id="view-home" class="view-panel space-y-8">
-        <div class="py-6 text-center space-y-2">
-          <p class="text-sm font-extrabold text-[#EA580C] uppercase tracking-widest">Workspace</p>
-          <h2 class="text-3xl font-extrabold text-[#1E3A8A] tracking-tight">Main Operations</h2>
-        </div>
-
-        <div class="space-y-4">
-          <!-- Store Inspection -->
-          <button data-action="route" data-route="store-select" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40">
-            <div class="space-y-1">
-              <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <i data-lucide="plus-circle" class="w-5 h-5 text-[#EA580C]"></i>
-                Store Inspection
-              </span>
-              <p class="text-xs text-neutral-550">Conduct a facility or equipment physical run.</p>
-            </div>
-            <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
-          </button>
-
-          <!-- Overview Dashboard -->
-          <button data-action="route" data-route="overview" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40">
-            <div class="space-y-1">
-              <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <i data-lucide="search" class="w-5 h-5 text-[#EA580C]"></i>
-                Overview
-              </span>
-              <p class="text-xs text-neutral-550">Filter, browse records, view ratings, and inspect photos.</p>
-            </div>
-            <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
-          </button>
-
-          <!-- Settings -->
-          <button data-action="route" data-route="settings" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40">
-            <div class="space-y-1">
-              <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <i data-lucide="sliders" class="w-5 h-5 text-[#EA580C]"></i>
-                Settings
-              </span>
-              <p class="text-xs text-neutral-550">Manage stores list, categories, and equipment items.</p>
-            </div>
-            <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
-          </button>
-        </div>
-
-        <div class="pt-6 border-t border-orange-100/30 text-center text-[10px] font-bold font-mono text-orange-600 tracking-wider uppercase">
-          Live Connection Active with Firestore DB
-        </div>
+      <!-- HEADER -->
+      <div class="p-5 border-b border-slate-800 bg-slate-950/40">
+        <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+          <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          Spatial circle mapping
+        </h1>
+        <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">
+          Paste tabular coord data, right-click and drag on the map to query circles and dynamically paint plotted markers.
+        </p>
       </div>
 
-      <!-- VIEW: STORE SELECT -->
-      <div id="view-store-select" class="view-panel space-y-6 hidden">
-        <div class="space-y-1">
-          <h2 class="text-2xl font-bold tracking-tight">Location & Checklist</h2>
-          <p class="text-xs text-neutral-500">Pick a store name and select focus category.</p>
-        </div>
-
-        <div class="space-y-6">
-          <!-- Store Selection -->
-          <div class="space-y-2">
-            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Select Store</label>
-            <select id="select-store-input" class="w-full text-sm font-medium text-neutral-800 bg-neutral-50/80 border border-orange-200 rounded-2xl px-4 py-3.5 appearance-none focus:bg-white cursor-pointer">
-              <!-- Dynamically Populated -->
-            </select>
-          </div>
-
-          <!-- Auditor Name Input -->
-          <div class="space-y-2">
-            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Inspector Name</label>
-            <input type="text" id="auditor-name-input" placeholder="e.g. John" class="w-full text-sm font-semibold text-neutral-800 bg-[#F3ECE3]/60 border border-orange-100/35 rounded-2xl px-4 py-3.5 focus:bg-white focus:ring-1 focus:ring-[#EA580C]">
-          </div>
-
-          <!-- Checkout Mode Selection -->
-          <div class="space-y-3">
-            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Checklist Mode</label>
-            <div class="grid grid-cols-1 gap-2.5">
-              <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
-                <input type="radio" name="select-mode-radio" value="facility" checked class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] tracking-wide accent-[#EA580C]">
-                <div class="space-y-0.5">
-                  <span class="block text-sm font-bold text-[#1E3A8A]">Facility</span>
-                  <p class="text-[11px] text-neutral-500">Validate exterior grounds, restrooms, kitchen zones.</p>
-                </div>
-              </label>
-
-              <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
-                <input type="radio" name="select-mode-radio" value="equipment" class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] tracking-wide accent-[#EA580C]">
-                <div class="space-y-0.5">
-                  <span class="block text-sm font-bold text-[#1E3A8A]">Equipment</span>
-                  <p class="text-[11px] text-neutral-500">Validate machinery, appliances, fryers, brewers inside.</p>
-                </div>
-              </label>
-
-              <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
-                <input type="radio" name="select-mode-radio" value="both" class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] tracking-wide accent-[#EA580C]">
-                <div class="space-y-0.5">
-                  <span class="block text-sm font-bold text-[#1E3A8A]">Both</span>
-                  <p class="text-[11px] text-neutral-500">Sequential checklist beginning with Facility, ending with Equipment.</p>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <button data-action="begin-inspection" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-[#FAF8F5] font-semibold text-sm py-4 rounded-2xl shadow-md shadow-orange-950/20 transition active:scale-95 flex items-center justify-center gap-2 mt-2">
-            <span>Start Checklist</span>
-            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- VIEW: FACILITY INSPECTION -->
-      <div id="view-facility" class="view-panel space-y-6 hidden">
-        <div class="flex items-center justify-between pb-2 border-b border-orange-100/40 select-none">
-          <div>
-            <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Active Audit</span>
-            <h2 class="text-xl font-extrabold text-[#1E3A8A]">Facility Checklist</h2>
-          </div>
-          <button data-action="cancel-inspection" class="text-neutral-500 hover:text-[#991B1B] text-xs font-semibold px-3 py-1.5 rounded-xl border border-neutral-100 bg-white shadow-xs hover:bg-neutral-50 transition flex items-center justify-center gap-1.5">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Cancel
-          </button>
-        </div>
-
-        <!-- Render list dynamically -->
-        <div id="facility-items-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-        <!-- Option to transition from Facility to Equipment if mode is 'both' -->
-        <div id="facility-next-step-container" class="pt-4 hidden">
-          <button data-action="go-to-equipment" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-orange-950/15 transition active:scale-95 flex items-center justify-center gap-2 focus:outline-none">
-            <span>Proceed to Equipment Checklist</span>
-            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- VIEW: EQUIPMENT INSPECTION -->
-      <div id="view-equipment" class="view-panel space-y-6 hidden">
-        <div class="flex items-center justify-between pb-2 border-b border-orange-100/40 select-none">
-          <div>
-            <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Active Audit</span>
-            <h2 class="text-xl font-extrabold text-[#1E3A8A]">Equipment Checklist</h2>
-          </div>
-          <button data-action="cancel-inspection" class="text-neutral-500 hover:text-[#991B1B] text-xs font-semibold px-3 py-1.5 rounded-xl border border-neutral-100 bg-white shadow-xs hover:bg-neutral-50 transition flex items-center justify-center gap-1.5">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Cancel
-          </button>
-        </div>
-
-        <!-- Render list dynamically -->
-        <div id="equipment-items-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-        <!-- Transition to overview button -->
-        <div id="equipment-finish-container" class="pt-4">
-          <button data-action="finish-checklist" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-orange-950/15 transition active:scale-95 flex items-center justify-center gap-2 focus:outline-none">
-            <span>All Done! View Dashboard Overview</span>
-            <i data-lucide="check" class="w-4 h-4"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- VIEW: OVERVIEW DASHBOARD -->
-      <div id="view-overview" class="view-panel space-y-6 hidden">
-        <div class="space-y-1">
-          <h2 class="text-2xl font-bold tracking-tight text-[#1E3A8A]">Inspections Record</h2>
-          <p class="text-xs text-neutral-500">Browse and filter historic checklists in the field.</p>
-        </div>
-
-        <!-- Global Stats Header Card -->
-        <div class="bg-gradient-to-br from-orange-50/60 to-stone-100/40 border border-orange-100/40 p-4.5 rounded-3xl space-y-3 shadow-md shadow-orange-950/2 flex flex-col justify-between shrink-0">
+      <!-- WORKSPACE CONTROLS (SCROLLABLE) -->
+      <div class="flex-1 overflow-y-auto p-5 space-y-5">
+        
+        <!-- DATA INPUT TEXTAREA -->
+        <div class="space-y-2">
           <div class="flex justify-between items-center">
-            <span class="text-[10px] font-extrabold text-[#EA580C] uppercase tracking-widest">Live Check-In Status</span>
-            <span class="text-[11px] font-bold text-[#1E3A8A] bg-white/95 px-3 py-1 rounded-full border border-orange-100/45 shadow-2xs" id="stats-complete-text">
-              Total Stores Complete: 0 / 0
-            </span>
+            <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Paste Map Data</label>
+            <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-slate-400 font-mono">Lon / Lat Format</span>
           </div>
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center text-xs text-neutral-500">
-              <span class="font-bold text-slate-700">Completion rate</span>
-              <span class="font-extrabold text-[#EA580C] font-mono" id="stats-complete-percent">0%</span>
-            </div>
-            <div class="w-full bg-stone-200/50 h-2.5 rounded-full overflow-hidden border border-orange-100/10">
-              <div id="stats-progress-bar" class="bg-gradient-to-r from-orange-500 to-[#EA580C] h-full transition-all duration-500 rounded-full" style="width: 0%"></div>
-            </div>
+          
+          <textarea id="data-input" 
+            placeholder="Paste exactly 4 columns:&#10;name [tab/comma] number [tab/comma] longitude [tab/comma] latitude&#10;&#10;Example:&#10;Point A	1001	-122.4194	37.7749&#10;Point B	1002	-122.4294	37.7849" 
+            class="w-full h-32 bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition-colors resize-none leading-relaxed"></textarea>
+          
+          <!-- ERROR FEEDBACK -->
+          <div id="error-container" class="hidden p-3 bg-red-950/40 border border-red-900/50 rounded-lg text-xs text-red-300 max-h-32 overflow-y-auto animate-fade-in">
+            <p class="font-semibold mb-1.5 flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              Formatting Errors (<span id="error-count">0</span>):
+            </p>
+            <ul id="error-list" class="list-disc pl-4 space-y-0.5 font-mono text-[10px] text-red-400"></ul>
           </div>
-        </div>
 
-        <!-- Store Fleet Heatmap Overview -->
-        <div id="overview-fleet-card" class="hidden sm:block bg-white border border-orange-100/60 p-5 rounded-3xl space-y-4 shadow-md shadow-orange-950/2 select-none">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-100 pb-3">
-             <div>
-              <h3 class="text-xs font-extrabold text-[#1E3A8A] uppercase tracking-widest flex items-center gap-1.5">
-                <i data-lucide="map-pin" class="w-4 h-4 text-[#EA580C]"></i> Store Fleet Heatmap
-              </h3>
-              <p class="text-[10px] text-neutral-400 font-medium">Click tile to quickly toggle filter for single store reports</p>
-            </div>
-            <!-- Indicator legends -->
-            <div class="flex flex-wrap items-center gap-2 text-[9px] font-bold">
-              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-stone-50 border border-stone-200 text-neutral-500 rounded"><span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span> Empty/0 Rated</span>
-              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-red-50 border border-red-200 text-[#991B1B] rounded"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> &gt;10% Bad</span>
-              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-amber-50 border border-amber-200 text-amber-600 rounded"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> &gt;20% Acceptable</span>
-              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-green-50 border border-green-200 text-green-600 rounded"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Good/Healthy</span>
-            </div>
-          </div>
-          <div id="overview-fleet-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-            <!-- Dynamically populated store tiles -->
-          </div>
-        </div>
-
-        <!-- 1-Click Quick Filters -->
-        <div class="space-y-1.5 py-1">
-          <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Quick Toggle:</div>
-          <div class="flex flex-nowrap overflow-x-auto gap-1.5 select-none no-scrollbar">
-            <button data-action="toggle-quick-filter" data-val="" id="quick-filter-all" class="shrink-0 text-[11px] font-bold px-3.5 py-1.5 rounded-full bg-[#1E3A8A] text-white border border-transparent transition shadow-xs flex items-center justify-center">
-              All
+          <!-- PRIMARY ACTION BUTTONS -->
+          <div class="grid grid-cols-2 gap-3 pt-1">
+            <button id="btn-plot" onclick="handlePlotButtonClick()" 
+              class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-md">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A2 2 0 013 15.485V6.368a2 2 0 011.053-1.758l4.947-2.473a2 2 0 011.66 0l4.948 2.473A2 2 0 0116 6.368v9.117a2 2 0 01-1.053 1.758L9.553 20a2 2 0 01-1.106 0z"/>
+              </svg>
+              Plot Data
             </button>
-            <button data-action="toggle-quick-filter" data-val="Acceptable" id="quick-filter-acceptable" class="shrink-0 text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-orange-100/40 hover:bg-orange-50/20 transition flex items-center justify-center">
-              All Acceptable
-            </button>
-            <button data-action="toggle-quick-filter" data-val="Bad" id="quick-filter-bad" class="shrink-0 text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-orange-100/40 hover:bg-orange-50/20 transition flex items-center justify-center">
-              All Bad
+            <button id="btn-export" onclick="exportToCsv()" 
+              class="w-full bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white text-xs font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer border border-slate-700 shadow-md">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              Export CSV
             </button>
           </div>
         </div>
 
-        <!-- Dashboard Filter Grid Controls -->
-        <div class="bg-stone-50/80 border border-orange-100/30 p-4 rounded-3xl space-y-3.5 shadow-sm">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[#1E3A8A] uppercase tracking-wider">Search Filters</span>
-            <button data-action="reset-filters" class="text-xs text-[#EA580C] font-semibold hover:underline flex items-center justify-center gap-2">
-              Reset Filters
-            </button>
-          </div>
-
-          <div class="space-y-2.5">
-            <!-- Filter Store -->
-            <div>
-              <select id="filter-store-select" class="w-full bg-white text-xs font-medium text-neutral-800 border border-orange-100/40 rounded-xl px-3 py-2.5 appearance-none focus:ring-1 focus:ring-[#EA580C] cursor-pointer">
-                <option value="">All Store Locations</option>
-              </select>
-            </div>
-
-            <!-- Filter Categories/Items dropdown match -->
-            <div class="relative">
-              <select id="filter-category-select" class="w-full bg-white text-xs font-medium text-neutral-800 border border-orange-100/40 rounded-xl px-3 py-2.5 appearance-none focus:ring-1 focus:ring-[#EA580C] cursor-pointer">
-                <option value="">All Item Names</option>
-              </select>
-              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-neutral-400">
-                <i data-lucide="chevron-down" class="w-4 h-4"></i>
-              </div>
-            </div>
-
-            <!-- Filter Status Tags -->
-            <div class="grid grid-cols-2 gap-2 select-none w-full">
-              <button data-action="set-filter-tag" data-val="" id="filter-tag-all" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">All</button>
-              <button data-action="set-filter-tag" data-val="Good" id="filter-tag-good" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">Good</button>
-              <button data-action="set-filter-tag" data-val="Acceptable" id="filter-tag-acceptable" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">Acceptable</button>
-              <button data-action="set-filter-tag" data-val="Bad" id="filter-tag-bad" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">Bad</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Filter Count -->
-        <div class="flex items-center justify-between text-xs px-1 text-neutral-500 font-medium select-none">
-          <span id="overview-count-label">Showing 0 matching instances</span>
-          <div id="overview-sync-indicator-container" class="flex items-center gap-1.5 text-[11px] text-green-600 font-bold bg-green-50/70 border border-green-100 py-1 px-3 rounded-full">
-            <span id="overview-status-dot-wrapper" class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span id="overview-status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            <span id="overview-status-text">Live Sync Active</span>
-          </div>
-        </div>
-
-        <!-- Injected Cards List -->
-        <div id="overview-cards-list" class="space-y-4"></div>
-      </div>
-
-      <!-- VIEW: SETTINGS -->
-      <div id="view-settings" class="view-panel space-y-6 hidden">
-        <div class="space-y-1">
-          <h2 class="text-2xl font-bold tracking-tight text-[#1E3A8A]">Database Settings</h2>
-          <p class="text-xs text-neutral-500 font-normal mt-0.5">Edit live configurations dynamically in real-time.</p>
-        </div>
-
-        <!-- Navigation Tabs inside settings -->
-        <div class="flex bg-stone-200/50 border border-orange-100/20 p-1 rounded-2xl gap-0.5 whitespace-nowrap overflow-x-auto select-none">
-          <button data-action="set-settings-tab" data-tab="stores" id="tab-stores" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition bg-white text-[#EA580C] shadow-xs flex items-center justify-center gap-2">Stores</button>
-          <button data-action="set-settings-tab" data-tab="facilities" id="tab-facilities" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-550 hover:text-[#1E3A8A] flex items-center justify-center gap-2">Facilities</button>
-          <button data-action="set-settings-tab" data-tab="equipment" id="tab-equipment" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-550 hover:text-[#1E3A8A] flex items-center justify-center gap-2">Equipment</button>
-        </div>
-
-        <!-- Add Element Control Interface -->
-        <div class="bg-stone-50/80 border border-orange-100/30 p-4 rounded-3xl space-y-2.5 shadow-sm">
-          <h3 id="settings-add-title" class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Add New Store Location</h3>
-          <div class="flex flex-col gap-2">
-            <div class="flex flex-col sm:flex-row gap-2">
-              <input type="text" id="settings-add-input" placeholder="e.g. 16031 Beebe Capps" class="flex-1 bg-white border border-orange-100/30 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-[#EA580C]">
-              <input type="text" id="settings-add-cluster" placeholder="Cluster Tag (Optional)" class="flex-1 bg-white border border-orange-100/30 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-[#EA580C]">
-              <button data-action="submit-settings-add" class="bg-[#EA580C] hover:bg-[#C2410C] text-white rounded-xl px-4 py-2 text-xs font-bold transition active:scale-95 flex items-center justify-center shrink-0">
-                Add
-              </button>
-            </div>
-            <p id="settings-add-hint" class="text-[10px] text-neutral-400 mt-1">Format: [Store Number] [Store Name]</p>
-          </div>
-        </div>
-
-        <!-- Current items managed list -->
-        <div class="space-y-1.5" id="settings-managed-items-list">
-          <!-- Dynamically populated list items with delete triggers -->
-        </div>
-      </div>
-
-    </main>
-
-    <!-- Global Upload / Load State Overlay with premium minimal blur -->
-    <div id="global-overlay" class="fixed inset-0 bg-neutral-950/20 backdrop-blur-xs z-50 flex items-center justify-center hidden">
-      <div class="bg-white p-6 rounded-3xl shadow-xl flex flex-col items-center gap-3.5 text-center max-w-xs mx-4">
-        <div class="spinner"></div>
-        <div class="space-y-1">
-          <h4 class="font-bold text-sm text-neutral-900" id="overlay-title">Uploading media</h4>
-          <p class="text-xs text-neutral-500" id="overlay-subtitle">Uploading image to cloud repository...</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Beautiful custom confirm modal to bypass window.confirm iframe restrictions -->
-    <div id="custom-confirm-modal" class="fixed inset-0 bg-neutral-950/40 backdrop-blur-xs z-50 flex items-center justify-center hidden select-none">
-      <div class="bg-white p-6 rounded-3xl shadow-xl flex flex-col gap-4 text-center max-w-xs mx-4 border border-orange-100/30">
-        <div class="mx-auto bg-amber-50 rounded-full p-3.5 w-12 h-12 flex items-center justify-center text-[#EA580C]">
-          <i data-lucide="help-circle" class="w-6 h-6"></i>
-        </div>
-        <div class="space-y-1">
-          <h4 class="font-bold text-sm text-neutral-900" id="confirm-modal-title">Are you sure?</h4>
-          <p class="text-xs text-neutral-500 leading-relaxed" id="confirm-modal-message">Do you really want to proceed with this action?</p>
-        </div>
-        <div class="flex gap-2.5 font-semibold mt-1">
-          <button id="confirm-modal-btn-cancel" class="flex-1 py-2 rounded-xl border border-neutral-200 text-neutral-600 bg-neutral-50 hover:bg-neutral-100 text-xs transition cursor-pointer">
-            Cancel
-          </button>
-          <button id="confirm-modal-btn-yes" class="flex-1 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs transition cursor-pointer">
-            Yes, exit
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Clickable Magnified Image LightboxModal -->
-    <div id="lightbox-modal" class="fixed inset-0 bg-neutral-950/90 z-50 flex flex-col items-center justify-center p-6 hidden">
-      <div class="relative w-full max-w-lg flex flex-col items-center gap-4">
-        <button data-action="close-lightbox" class="absolute -top-12 right-0 bg-white/10 hover:bg-white/20 p-2.5 rounded-full text-white transition flex items-center justify-center gap-1.5">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-        <img id="lightbox-image" class="max-h-[70vh] rounded-2xl shadow-2xl object-contain w-full" src="" alt="Lightboxed image">
-        <p id="lightbox-caption" class="text-xs text-neutral-300 bg-white/10 px-4 py-2.5 rounded-full text-center tracking-medium max-w-[85%] leading-relaxed"></p>
-      </div>
-    </div>
-
-    <!-- IOS Global Bottom Sticky Fixed Navigation Hub -->
-    <nav class="md:hidden flex h-16 items-center justify-around absolute bottom-0 left-0 right-0 z-30 bg-[#1E3A8A] border-t border-white/5 px-2 select-none">
-      <button data-action="route" data-route="home" class="flex flex-col items-center gap-1 text-orange-400 font-bold transition justify-center" id="nav-btn-home">
-        <i data-lucide="home" class="w-5 h-5"></i>
-        <span class="text-[10px]">Home</span>
-      </button>
-
-      <button data-action="route" data-route="store-select" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-store-select">
-        <i data-lucide="plus-circle" class="w-5 h-5"></i>
-        <span class="text-[10px]">Inspect</span>
-      </button>
-
-      <button data-action="route" data-route="overview" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-overview">
-        <i data-lucide="search" class="w-5 h-5"></i>
-        <span class="text-[10px]">Overview</span>
-      </button>
-
-      <button data-action="route" data-route="settings" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-settings">
-        <i data-lucide="sliders" class="w-5 h-5"></i>
-        <span class="text-[10px]">Settings</span>
-      </button>
-    </nav>
-  </div></div>
-
-  <!-- Toast Feed notifications -->
-  <div id="toast-feed" class="fixed top-4 right-4 left-4 md:left-auto md:w-80 flex flex-col gap-2 z-50 pointer-events-none"></div>
-
-  <!-- CORE SCRIPTS -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import {
-      initializeFirestore,
-      persistentLocalCache,
-      persistentMultipleTabManager,
-      collection,
-      getDocs,
-      addDoc,
-      doc,
-      updateDoc,
-      deleteDoc,
-      setDoc,
-      getDoc,
-      onSnapshot
-    } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-    // Standard live Firebase Connection (as configured)
-    const firebaseConfig = {
-      apiKey: "AIzaSyDNHaXUqUn32rLaCMcdA7WNcm0LemJ206c",
-      authDomain: "bkacquisition-checklist.firebaseapp.com",
-      projectId: "bkacquisition-checklist",
-      storageBucket: "bkacquisition-checklist.firebasestorage.app",
-      messagingSenderId: "504136933551",
-      appId: "1:504136933551:web:093e7f44fed49709b9f45a"
-    };
-
-    let app, db;
-    let draggedItemId = null;
-    let draggedCollection = null;
-    try {
-      app = initializeApp(firebaseConfig);
-      db = initializeFirestore(app, {
-        localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
-      });
-    } catch (e) {
-      console.error("Firebase Initialization failed", e);
-    }
-
-    // --- DYNAMIC OFFLINE/ONLINE CONNECTION HANDLER ---
-    function updateOnlineStatus() {
-      const isOnline = navigator.onLine;
-      const sidebarDot = document.getElementById("sidebar-status-dot");
-      const sidebarText = document.getElementById("sidebar-status-text");
-      const overviewContainer = document.getElementById("overview-sync-indicator-container");
-      const overviewDotWrapper = document.getElementById("overview-status-dot-wrapper");
-      const overviewDot = document.getElementById("overview-status-dot");
-      const overviewText = document.getElementById("overview-status-text");
-
-      if (isOnline) {
-        if (sidebarDot) {
-          sidebarDot.className = "w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-md shadow-green-500/50";
-        }
-        if (sidebarText) {
-          sidebarText.innerText = "Live Connection Active";
-        }
-        if (overviewContainer) {
-          overviewContainer.className = "flex items-center gap-1.5 text-[11px] text-green-600 font-bold bg-green-50/70 border border-green-100 py-1 px-3 rounded-full shrink-0 select-none";
-        }
-        if (overviewDotWrapper) {
-          overviewDotWrapper.className = "relative flex h-2 w-2";
-        }
-        if (overviewDot) {
-          overviewDot.className = "relative inline-flex rounded-full h-2 w-2 bg-green-500";
-        }
-        if (overviewText) {
-          overviewText.innerText = "Live Sync Active";
-        }
-      } else {
-        if (sidebarDot) {
-          sidebarDot.className = "w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse shadow-md shadow-amber-500/50";
-        }
-        if (sidebarText) {
-          sidebarText.innerText = "Offline (Cached Mode)";
-        }
-        if (overviewContainer) {
-          overviewContainer.className = "flex items-center gap-1.5 text-[11px] text-amber-600 font-bold bg-amber-50/70 border border-amber-100 py-1 px-3 rounded-full shrink-0 select-none animate-pulse";
-        }
-        if (overviewDotWrapper) {
-          overviewDotWrapper.className = "relative flex h-2 w-2";
-        }
-        if (overviewDot) {
-          overviewDot.className = "relative inline-flex rounded-full h-2 w-2 bg-amber-550";
-        }
-        if (overviewText) {
-          overviewText.innerText = "Offline Queue Active";
-        }
-      }
-    }
-    window.addEventListener("online", updateOnlineStatus);
-    window.addEventListener("offline", updateOnlineStatus);
-    window.updateOnlineStatus = updateOnlineStatus;
-
-    // --- GLOBAL SYSTEM STATE OBJECT ---
-    window.state = {
-      stores: [],
-      facilityCategories: [],
-      equipmentList: [],
-      inspections: [],
-      
-      // Inspection state
-      selectedStore: '',
-      selectedMode: 'facility', // 'facility', 'equipment', 'both'
-      currentView: 'home',
-      activeDocId: '', // Live collaborative sync ID
-
-      // Ratings responses mapped in-memory during flow
-      // key: category/equipment name => { rating: 'Good'|'Acceptable'|'Bad', comment: '', photos: [{ url, tag: 'Good'..., caption: '' }], quantity?: 1 }
-      facilityAnswers: {},
-      equipmentAnswers: {},
-      activeEquipmentIndex: 0,
-      
-      // Settings managed state
-      settingsTab: 'stores', // 'stores', 'facilities', 'equipment'
-      
-      // Fast filters cache
-      filterStore: '',
-      filterCategory: '',
-      filterTag: '', // 'Good', 'Acceptable', 'Bad' or ''
-    };
-
-    // --- TOAST ALERTS ---
-    function sendNotification(message, type = 'info') {
-      const container = document.getElementById('toast-feed');
-      const toast = document.createElement('div');
-      
-      let bgStyle = "bg-neutral-900 border-neutral-800 text-white";
-      let icon = "info";
-      
-      if (type === 'success') {
-        bgStyle = "bg-white border-neutral-100 text-green-600 shadow-xl";
-        icon = "check-circle";
-      } else if (type === 'error') {
-        bgStyle = "bg-rose-900 border-rose-800 text-white shadow-xl";
-        icon = "alert-circle";
-      }
-      
-      toast.className = `flex items-center gap-3 px-4 py-3 border.5 rounded-2xl text-xs font-semibold pointer-events-auto transform transition duration-300 translate-y-3 opacity-0 shadow-lg ${bgStyle}`;
-      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i><span class="flex-1">${message}</span>`;
-      
-      container.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.classList.remove('translate-y-3', 'opacity-0');
-        if (window.lucide) lucide.createIcons();
-      }, 30);
-      
-      setTimeout(() => {
-        toast.classList.add('translate-y-3', 'opacity-0');
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-    }
-    window.sendNotification = sendNotification;
-
-    // --- OVERLAY TRIGGERS ---
-    function presentOverlay(title, subtitle) {
-      document.getElementById('overlay-title').innerText = title;
-      document.getElementById('overlay-subtitle').innerText = subtitle;
-      document.getElementById('global-overlay').classList.remove('hidden');
-    }
-    function dismissOverlay() {
-      document.getElementById('global-overlay').classList.add('hidden');
-    }
-
-    // --- CUSTOM CONFIRM MODAL CONTROLLER ---
-    let pendingConfirmYesCallback = null;
-    let pendingConfirmCancelCallback = null;
-
-    function showCustomConfirm(title, message, onYes, onCancel) {
-      document.getElementById('confirm-modal-title').innerText = title || "Are you sure?";
-      document.getElementById('confirm-modal-message').innerText = message || "Do you really want to proceed with this action?";
-      document.getElementById('custom-confirm-modal').classList.remove('hidden');
-      pendingConfirmYesCallback = onYes || null;
-      pendingConfirmCancelCallback = onCancel || null;
-      if (window.lucide) lucide.createIcons();
-    }
-    window.showCustomConfirm = showCustomConfirm;
-
-    document.getElementById('confirm-modal-btn-cancel').addEventListener('click', () => {
-      document.getElementById('custom-confirm-modal').classList.add('hidden');
-      if (pendingConfirmCancelCallback) {
-        pendingConfirmCancelCallback();
-      }
-      pendingConfirmYesCallback = null;
-      pendingConfirmCancelCallback = null;
-    });
-
-    document.getElementById('confirm-modal-btn-yes').addEventListener('click', () => {
-      document.getElementById('custom-confirm-modal').classList.add('hidden');
-      if (pendingConfirmYesCallback) {
-        pendingConfirmYesCallback();
-      }
-      pendingConfirmYesCallback = null;
-      pendingConfirmCancelCallback = null;
-    });
-
-    // --- FIRESTORE DATA ACQUISITION & WRITES ---
-    function escapeHtml(text) {
-      if (!text) return '';
-      return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    // Color-coded pastels style generation based on cluster name
-    function getClusterBadgeStyle(cluster) {
-      if (!cluster) return '';
-      let hash = 0;
-      for (let i = 0; i < cluster.length; i++) {
-        hash = cluster.charCodeAt(i) + ((hash << 5) - hash);
-      }
-      const hue = Math.abs(hash) % 360;
-      // Soft modern pastel style with deep contrasting text
-      return `background-color: hsl(${hue}, 85%, 94%); color: hsl(${hue}, 85%, 28%); border: 1px solid hsl(${hue}, 60%, 82%);`;
-    }
-
-    // Sort function: first by cluster tag (empty/no-cluster elements last), then by store name
-    function sortStores(storeList) {
-      return [...storeList].sort((a, b) => {
-        const clusterA = a.cluster || '';
-        const clusterB = b.cluster || '';
-        if (clusterA && !clusterB) return -1;
-        if (!clusterA && clusterB) return 1;
-        if (clusterA !== clusterB) {
-          return clusterA.localeCompare(clusterB);
-        }
-        return (a.name || '').localeCompare(b.name || '');
-      });
-    }
-
-    async function loadCollectionsFromCloud() {
-      // Fetch fresh configurations
-      try {
-        const storesSnap = await getDocs(collection(db, "stores"));
-        window.state.stores = sortStores(storesSnap.docs.map(doc => {
-          const d = doc.data();
-          return {
-            id: doc.id,
-            name: d.name || '',
-            cluster: d.cluster || ''
-          };
-        }));
-        
-        const facilitySnap = await getDocs(collection(db, "facilityCategories"));
-        const rawFacilities = facilitySnap.docs.map(doc => {
-          const d = doc.data();
-          return { id: doc.id, name: d.name, order: typeof d.order === 'number' ? d.order : null };
-        });
-        rawFacilities.sort((a, b) => {
-          if (a.order !== null && b.order !== null) return a.order - b.order;
-          if (a.order !== null) return -1;
-          if (b.order !== null) return 1;
-          return a.name.localeCompare(b.name);
-        });
-        rawFacilities.forEach((item, index) => {
-          item.order = index;
-        });
-        window.state.facilityCategories = rawFacilities;
-        
-        const equipmentSnap = await getDocs(collection(db, "equipmentList"));
-        const rawEquipment = equipmentSnap.docs.map(doc => {
-          const d = doc.data();
-          return { id: doc.id, name: d.name, order: typeof d.order === 'number' ? d.order : null };
-        });
-        rawEquipment.sort((a, b) => {
-          if (a.order !== null && b.order !== null) return a.order - b.order;
-          if (a.order !== null) return -1;
-          if (b.order !== null) return 1;
-          return a.name.localeCompare(b.name);
-        });
-        rawEquipment.forEach((item, index) => {
-          item.order = index;
-        });
-        window.state.equipmentList = rawEquipment;
-
-        // Re-render related UI Components
-        renderStoreSelections();
-        renderSettingsItems();
-        renderOverviewStoreFilters();
-        renderOverviewItemFilters();
-      } catch (err) {
-        console.error("Firestore read error:", err);
-        sendNotification("Database configuration failed to load. Check settings.", "error");
-      }
-    }
-
-    async function loadInspectionsHistory() {
-      try {
-        const inspectionsSnap = await getDocs(collection(db, "inspections"));
-        const temp = [];
-        inspectionsSnap.forEach((doc) => {
-          temp.push({ id: doc.id, ...doc.data() });
-        });
-        // Sort descending by timestamp
-        window.state.inspections = temp.sort((a, b) => b.timestamp - a.timestamp);
-        
-        // Count completed stores
-        const completedStoresCount = new Set(window.state.inspections.map(i => i.store)).size;
-        const totalStoresCount = window.state.stores.length || 1;
-        const completionPercent = Math.min(100, Math.round((completedStoresCount / totalStoresCount) * 100));
-        
-        const completeTextEl = document.getElementById('stats-complete-text');
-        const completePercentEl = document.getElementById('stats-complete-percent');
-        const progressBarEl = document.getElementById('stats-progress-bar');
-        
-        if (completeTextEl) {
-          completeTextEl.innerText = `Total Stores Complete: ${completedStoresCount} / ${totalStoresCount}`;
-        }
-        if (completePercentEl) {
-          completePercentEl.innerText = `${completionPercent}%`;
-        }
-        if (progressBarEl) {
-          progressBarEl.style.width = `${completionPercent}%`;
-        }
-
-        renderOverviewCardsList();
-      } catch (err) {
-        console.error("Failed downloading inspections", err);
-        sendNotification("Error synchronizing database records.", "error");
-      }
-    }
-
-    // --- REALTIME AUTO-SAVE / CLOUD SYNC LOGIC ---
-    let saveTimeout = null;
-    let activeInspectionSubscription = null;
-
-    async function pushChecklistUpdate() {
-      if (!window.state.activeDocId) return;
-      const docRef = doc(db, "inspections", window.state.activeDocId);
-      try {
-        await updateDoc(docRef, {
-          facility: window.state.facilityAnswers,
-          equipment: window.state.equipmentAnswers,
-          timestamp: Date.now()
-        });
-      } catch (err) {
-        console.error("Failed saving to Firestore:", err);
-      }
-    }
-
-    function triggerCloudSave() {
-      if (saveTimeout) clearTimeout(saveTimeout);
-      saveTimeout = setTimeout(async () => {
-        await pushChecklistUpdate();
-      }, 500);
-    }
-
-    async function saveImmediately() {
-      if (saveTimeout) clearTimeout(saveTimeout);
-      await pushChecklistUpdate();
-    }
-
-    // --- UI RENDERERS ---
-
-    // 1. Populate Selection View
-    function renderStoreSelections() {
-      const select = document.getElementById('select-store-input');
-      select.innerHTML = '';
-      
-      if (window.state.stores.length === 0) {
-        select.innerHTML = `<option value="">No stores set up. Edit under Settings tab.</option>`;
-        return;
-      }
-
-      // Default option
-      const defaultOpt = document.createElement('option');
-      defaultOpt.value = "";
-      defaultOpt.innerText = "Choose Store location...";
-      defaultOpt.disabled = true;
-      defaultOpt.selected = !window.state.selectedStore;
-      select.appendChild(defaultOpt);
-
-      const sortedStores = sortStores(window.state.stores);
-      sortedStores.forEach(store => {
-        const opt = document.createElement('option');
-        opt.value = store.name;
-        opt.innerText = store.cluster ? `[${store.cluster}] ${store.name}` : store.name;
-        opt.selected = (store.name === window.state.selectedStore);
-        select.appendChild(opt);
-      });
-    }
-
-    // Populate stores in Dashboard filters dropdown (Sorted by Cluster then Name)
-    function renderOverviewStoreFilters() {
-      const select = document.getElementById('filter-store-select');
-      select.innerHTML = '<option value="">All Store Locations</option>';
-      
-      const sortedStores = sortStores(window.state.stores);
-      sortedStores.forEach(store => {
-        const opt = document.createElement('option');
-        opt.value = store.name;
-        opt.innerText = store.cluster ? `[${store.cluster}] ${store.name}` : store.name;
-        select.appendChild(opt);
-      });
-    }
-
-    // Populate items/categories in Dashboard filters dropdown (alphabetical order)
-    function renderOverviewItemFilters() {
-      const select = document.getElementById('filter-category-select');
-      if (!select) return;
-      select.innerHTML = '<option value="">All Item Names</option>';
-      
-      // Get all unique names from facility categories and equipment lists
-      const itemNamesSet = new Set();
-      window.state.facilityCategories.forEach(c => {
-        if (c.name) itemNamesSet.add(c.name.trim());
-      });
-      window.state.equipmentList.forEach(e => {
-        if (e.name) itemNamesSet.add(e.name.trim());
-      });
-      
-      const sortedNames = Array.from(itemNamesSet).sort((a, b) => a.localeCompare(b));
-      sortedNames.forEach(name => {
-        const opt = document.createElement('option');
-        opt.value = name;
-        opt.innerText = name;
-        opt.selected = (name === window.state.filterCategory);
-        select.appendChild(opt);
-      });
-    }
-
-    // 2. Render Settings tab list of options and management triggers
-    function renderSettingsItems() {
-      const container = document.getElementById('settings-managed-items-list');
-      container.innerHTML = '';
-
-      let list = [];
-      let targetCollection = '';
-      const inputAddLabel = document.getElementById('settings-add-title');
-      const settingsInput = document.getElementById('settings-add-input');
-      const settingsHint = document.getElementById('settings-add-hint');
-      const settingsCluster = document.getElementById('settings-add-cluster');
-
-      if (window.state.settingsTab === 'stores') {
-        list = window.state.stores;
-        targetCollection = 'stores';
-        inputAddLabel.innerText = "Add New Store Location";
-        if (settingsInput) settingsInput.placeholder = "e.g. 16031 Beebe Capps";
-        if (settingsCluster) settingsCluster.classList.remove('hidden');
-        if (settingsHint) {
-          settingsHint.innerText = "Format: [Store Number] [Store Name]";
-          settingsHint.classList.remove('hidden');
-        }
-      } else if (window.state.settingsTab === 'facilities') {
-        list = window.state.facilityCategories;
-        targetCollection = 'facilityCategories';
-        inputAddLabel.innerText = "Add New Category";
-        if (settingsInput) settingsInput.placeholder = "Type name here...";
-        if (settingsCluster) settingsCluster.classList.add('hidden');
-        if (settingsHint) settingsHint.classList.add('hidden');
-      } else {
-        list = window.state.equipmentList;
-        targetCollection = 'equipmentList';
-        inputAddLabel.innerText = "Add New Equipment Item";
-        if (settingsInput) settingsInput.placeholder = "Type name here...";
-        if (settingsCluster) settingsCluster.classList.add('hidden');
-        if (settingsHint) settingsHint.classList.add('hidden');
-      }
-
-      const activeTabBtn = document.getElementById(`tab-${window.state.settingsTab}`);
-      // Clear tab style
-      ['tab-stores', 'tab-facilities', 'tab-equipment'].forEach(btnId => {
-        const el = document.getElementById(btnId);
-        if (el) {
-          el.className = "flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition text-neutral-500 hover:text-neutral-900";
-        }
-      });
-      if (activeTabBtn) {
-        activeTabBtn.className = "flex-1 py-2 px-3 text-xs font-bold rounded-xl transition bg-white text-neutral-900 shadow-sm";
-      }
-
-      if (list.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-xs text-neutral-400 font-medium">List database collection empty.</div>`;
-        return;
-      }
-
-      list.forEach(item => {
-        const row = document.createElement('div');
-        row.className = "flex items-center justify-between p-4 bg-neutral-50 rounded-2xl hover:bg-neutral-100/70 transition border-2 border-transparent select-none";
-        
-        if (targetCollection === 'stores') {
-          const isEditing = (window.state.editingStoreId === item.id);
-          if (isEditing) {
-            row.innerHTML = `
-              <div class="flex flex-col gap-1.5 flex-1 mr-4">
-                <input type="text" id="edit-store-input-${item.id}" value="${escapeHtml(item.name)}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-xs font-bold focus:ring-1 focus:ring-[#EA580C]" placeholder="Store Name">
-                <input type="text" id="edit-store-cluster-${item.id}" value="${escapeHtml(item.cluster || '')}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-[11px] focus:ring-1 focus:ring-[#EA580C]" placeholder="Cluster Tag (Optional)">
-              </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <button data-action="save-store-edit" data-id="${item.id}" class="text-xs text-green-600 hover:text-green-700 transition p-1.5 bg-green-50 rounded-lg hover:bg-green-100 flex items-center justify-center border border-green-100" title="Save">
-                  <i data-lucide="check" class="w-4 h-4"></i>
-                </button>
-                <button data-action="cancel-store-edit" class="text-xs text-neutral-400 hover:text-neutral-600 transition p-1.5 bg-neutral-100 rounded-lg hover:bg-neutral-200 flex items-center justify-center border border-neutral-200" title="Cancel">
-                  <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-              </div>
-            `;
-          } else {
-            row.innerHTML = `
-              <div class="flex flex-wrap items-center gap-2 flex-1 mr-4">
-                <span class="text-xs font-bold text-neutral-800">${escapeHtml(item.name)}</span>
-                ${item.cluster ? `
-                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider" style="${getClusterBadgeStyle(item.cluster)}">
-                    ${escapeHtml(item.cluster)}
-                  </span>
-                ` : ''}
-              </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <button data-action="start-store-edit" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-[#EA580C] transition p-1.5 hover:bg-orange-50 rounded-lg flex items-center justify-center" title="Edit Store">
-                  <i data-lucide="edit-2" class="w-4 h-4"></i>
-                </button>
-                <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-600 transition p-1.5 hover:bg-red-50 rounded-lg flex items-center justify-center" title="Delete">
-                  <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-              </div>
-            `;
-          }
-        } else {
-          // Facilities and Equipment lists with Drag Handle + Order / Chevron Shifting buttons
-          row.innerHTML = `
-            <div class="flex items-center gap-2 flex-1 mr-4">
-              <i data-lucide="grip-vertical" class="w-4 h-4 text-neutral-300 shrink-0 cursor-grab active:cursor-grabbing hover:text-neutral-500 transition"></i>
-              <span class="text-xs font-bold text-neutral-800">${escapeHtml(item.name)}</span>
-            </div>
-            <div class="flex items-center gap-1 shrink-0">
-              <button data-action="reorder-item-up" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-900 transition p-1 flex items-center justify-center" title="Move Up">
-                <i data-lucide="chevron-up" class="w-4 h-4"></i>
-              </button>
-              <button data-action="reorder-item-down" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-900 transition p-1 flex items-center justify-center" title="Move Down">
-                <i data-lucide="chevron-down" class="w-4 h-4"></i>
-              </button>
-              <div class="w-px h-4 bg-neutral-200 mx-1.5"></div>
-              <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-600 transition p-1 flex items-center justify-center" title="Delete">
-                <i data-lucide="x" class="w-4 h-4"></i>
-              </button>
-            </div>
-          `;
-
-          // Add drag and drop listeners
-          row.setAttribute('draggable', 'true');
-          row.classList.add('cursor-grab', 'active:cursor-grabbing');
-
-          row.addEventListener('dragstart', (e) => {
-            draggedItemId = item.id;
-            draggedCollection = targetCollection;
-            row.style.opacity = '0.5';
-            row.style.backgroundColor = '#eff6ff'; // Soft blue highlight
-            row.style.borderColor = '#3b82f6';
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', item.id);
-          });
-
-          row.addEventListener('dragend', () => {
-            row.style.opacity = '';
-            row.style.backgroundColor = '';
-            row.style.borderColor = '';
-            // Make sure all sibling styles are cleaned up
-            Array.from(container.children).forEach(child => {
-              child.style.borderTopColor = 'transparent';
-              child.style.borderBottomColor = 'transparent';
-            });
-          });
-
-          row.addEventListener('dragover', (e) => {
-            if (draggedCollection !== targetCollection) return;
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-
-            const rect = row.getBoundingClientRect();
-            const relativeY = e.clientY - rect.top;
-            const isTopHalf = relativeY < (rect.height / 2);
-
-            Array.from(container.children).forEach(child => {
-              if (child !== row) {
-                child.style.borderTopColor = 'transparent';
-                child.style.borderBottomColor = 'transparent';
-              }
-            });
-
-            if (isTopHalf) {
-              row.style.borderTopColor = '#3b82f6';
-              row.style.borderBottomColor = 'transparent';
-            } else {
-              row.style.borderBottomColor = '#3b82f6';
-              row.style.borderTopColor = 'transparent';
-            }
-          });
-
-          row.addEventListener('dragleave', () => {
-            row.style.borderTopColor = 'transparent';
-            row.style.borderBottomColor = 'transparent';
-          });
-
-          row.addEventListener('drop', async (e) => {
-            e.preventDefault();
-            row.style.borderTopColor = 'transparent';
-            row.style.borderBottomColor = 'transparent';
-
-            if (draggedCollection !== targetCollection || draggedItemId === item.id) return;
-
-            let currentList = [];
-            if (targetCollection === 'facilityCategories') {
-              currentList = [...window.state.facilityCategories];
-            } else if (targetCollection === 'equipmentList') {
-              currentList = [...window.state.equipmentList];
-            }
-
-            const fromIdx = currentList.findIndex(x => x.id === draggedItemId);
-            const toIdx = currentList.findIndex(x => x.id === item.id);
-            if (fromIdx === -1 || toIdx === -1) return;
-
-            const rect = row.getBoundingClientRect();
-            const relativeY = e.clientY - rect.top;
-            const isTopHalf = relativeY < (rect.height / 2);
-
-            const [draggedObj] = currentList.splice(fromIdx, 1);
-            let insertIdx = toIdx;
-            if (!isTopHalf) {
-              if (fromIdx < toIdx) {
-                insertIdx = toIdx;
-              } else {
-                insertIdx = toIdx + 1;
-              }
-            } else {
-              if (fromIdx < toIdx) {
-                insertIdx = toIdx - 1;
-              } else {
-                insertIdx = toIdx;
-              }
-            }
-
-            currentList.splice(insertIdx, 0, draggedObj);
-
-            presentOverlay("Saving Drag Order", "Saving custom arrangement to Firestore database...");
-            try {
-              const promises = currentList.map((listItem, idx) => {
-                return updateDoc(doc(db, targetCollection, listItem.id), { order: idx });
-              });
-              await Promise.all(promises);
-              dismissOverlay();
-              sendNotification("Custom drag-and-drop order saved!", "success");
-              await loadCollectionsFromCloud();
-            } catch (err) {
-              console.error("Failed persisting drag order", err);
-              dismissOverlay();
-              sendNotification("Unable to save order in Firebase.", "error");
-            }
-          });
-        }
-        
-        container.appendChild(row);
-      });
-
-      if (window.lucide) lucide.createIcons();
-    }
-
-    // 3. Render Facility Inspections Scroll view
-    function renderFacilityChecklist() {
-      const container = document.getElementById('facility-items-list');
-      container.innerHTML = '';
-
-      if (window.state.facilityCategories.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full p-8 text-center text-neutral-400 space-y-3 flex flex-col items-center justify-center">
-            <p class="text-xs font-medium">Setup your Facility categories to begin.</p>
-            <button data-action="route" data-route="settings" class="text-xs bg-black text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 hover:bg-neutral-850 active:scale-95 transition">
-              <span>Go to Settings</span>
-            </button>
-          </div>
-        `;
-        return;
-      }
-
-      window.state.facilityCategories.forEach((catObj) => {
-        const cat = catObj.name;
-        if (!window.state.facilityAnswers[cat]) {
-          window.state.facilityAnswers[cat] = { rating: '', comment: '', photos: [] };
-        }
-        const ans = window.state.facilityAnswers[cat];
-
-        // Comments are optional to provide a seamless UX
-        let commentFormHTML = '';
-        if (ans.rating === 'Acceptable') {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${cat} as Good?</label>
-              <textarea data-action="update-comment" data-item="${cat}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional observation details...">${ans.comment}</textarea>
-            </div>
-          `;
-        } else if (ans.rating === 'Bad') {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${cat} as Acceptable?</label>
-              <textarea data-action="update-comment" data-item="${cat}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional physical hazard details...">${ans.comment}</textarea>
-            </div>
-          `;
-        } else {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-400">Additional observation note (Optional)</label>
-              <textarea data-action="update-comment" data-item="${cat}" class="w-full text-xs bg-[#F3ECE3] rounded-xl p-2 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional comments...">${ans.comment}</textarea>
-            </div>
-          `;
-        }
-
-        // Photos gallery subview
-        let photosHTML = '';
-        if (ans.photos && ans.photos.length > 0) {
-          photosHTML = `
-            <div class="grid grid-cols-2 gap-3 pt-3">
-              ${ans.photos.map((photo, pIdx) => {
-                let borderCol = "border-green-600 ring-green-600";
-                if (photo.tag === 'Acceptable') borderCol = "border-amber-500 ring-amber-500";
-                if (photo.tag === 'Bad') borderCol = "border-red-600 ring-red-600";
-
-                return `
-                  <div class="bg-neutral-50 p-2.5 rounded-2xl relative border-2 ${borderCol} flex flex-col gap-2 shadow-sm">
-                    <!-- Delete photo button -->
-                    <button data-action="delete-photo" data-item="${cat}" data-idx="${pIdx}" class="absolute -top-2 -right-2 bg-neutral-900 border border-neutral-850 text-white rounded-full p-1 shadow hover:bg-red-600 transition z-10 w-6 h-6 flex items-center justify-center">
-                      <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                    </button>
-                    
-                    <img src="${photo.url}" class="w-full h-24 object-cover rounded-xl cursor-zoom-in" data-action="open-lightbox" data-url="${photo.url}" data-caption="${photo.caption || ''}" alt="Thumbnail">
-                    
-                    <!-- Tag selection dropdown -->
-                    <div class="space-y-1">
-                      <select data-action="update-photo-tag" data-item="${cat}" data-idx="${pIdx}" class="w-full text-[10px] py-1 px-1.5 font-bold bg-white rounded-lg border border-neutral-100">
-                        <option value="Good" ${photo.tag === 'Good' ? 'selected' : ''}>Good</option>
-                        <option value="Acceptable" ${photo.tag === 'Acceptable' ? 'selected' : ''}>Acceptable</option>
-                        <option value="Bad" ${photo.tag === 'Bad' ? 'selected' : ''}>Bad</option>
-                      </select>
-                    </div>
-
-                    <!-- Caption input -->
-                    <input type="text" data-action="update-photo-caption" data-item="${cat}" data-idx="${pIdx}" placeholder="Caption note" value="${photo.caption || ''}" class="w-full text-[10px] bg-white border border-neutral-100 rounded-lg px-2 py-1">
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          `;
-        }
-
-        const card = document.createElement('div');
-        card.className = "bg-white p-3.5 rounded-2xl border border-orange-100/65 shadow-md shadow-orange-950/5 space-y-2";
-        card.innerHTML = `
-          <div class="flex justify-between items-start">
-            <h3 class="text-sm font-bold text-slate-800 flex-1 pr-4 leading-tight">${cat}</h3>
-            <span class="text-[10px] font-bold text-orange-600 font-mono">${ans.photos ? ans.photos.length : 0}/6 Photos</span>
-          </div>
-
-          <!-- Triple choice rating buttons -->
-          <div class="grid grid-cols-3 gap-2 select-none">
-            <button data-action="set-rating" data-item="${cat}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Good' ? 'bg-green-100 border-green-300 text-green-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Good</span>
-            </button>
-            <button data-action="set-rating" data-item="${cat}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Acceptable</span>
-            </button>
-            <button data-action="set-rating" data-item="${cat}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Bad</span>
-            </button>
-          </div>
-
-          <!-- Comment comment input details -->
-          ${commentFormHTML}
-
-          <!-- File upload always shown to trigger FIFO replacement when > 6 photos -->
-          <div class="space-y-2 select-none">
-            <label class="w-full flex items-center justify-center gap-2 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-2.5 rounded-2xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
-              <i data-lucide="camera" class="w-4 h-4 text-neutral-600"></i>
-              <span class="text-xs text-neutral-700 font-semibold font-sans">Upload Photo</span>
-              <input type="file" accept="image/*" capture="environment" class="hidden" data-action="upload-photo" data-item="${cat}">
-            </label>
-            ${photosHTML}
-          </div>
-        `;
-        container.appendChild(card);
-      });
-
-      // Show proceeding container only for split workflows
-      const nextContainer = document.getElementById('facility-next-step-container');
-      if (nextContainer) {
-        if (window.state.selectedMode === 'both') {
-          nextContainer.classList.remove('hidden');
-        } else {
-          nextContainer.classList.add('hidden');
-        }
-      }
-
-      if (window.lucide) lucide.createIcons();
-    }
-
-    // 4. Render Equipment Inspections Scroll view
-    function renderEquipmentChecklist() {
-      const container = document.getElementById('equipment-items-list');
-      container.innerHTML = '';
-
-      if (window.state.equipmentList.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full p-8 text-center text-neutral-400 space-y-3 flex flex-col items-center justify-center">
-            <p class="text-xs font-medium">Please define Equipment items in Settings first.</p>
-            <button data-action="route" data-route="settings" class="text-xs bg-black text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 hover:bg-neutral-850 active:scale-95 transition">
-              <span>Go to Settings</span>
-            </button>
-          </div>
-        `;
-        return;
-      }
-
-      window.state.equipmentList.forEach((eqObj) => {
-        const eq = eqObj.name;
-        if (!window.state.equipmentAnswers[eq]) {
-          window.state.equipmentAnswers[eq] = { quantity: 1, rating: '', comment: '', photos: [] };
-        }
-        const ans = window.state.equipmentAnswers[eq];
-
-        // Comment section logic is optional
-        let commentFormHTML = '';
-        if (ans.rating === 'Acceptable') {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${eq} as Good?</label>
-              <textarea data-action="update-comment" data-item="${eq}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional observation details...">${ans.comment}</textarea>
-            </div>
-          `;
-        } else if (ans.rating === 'Bad') {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${eq} as Acceptable?</label>
-              <textarea data-action="update-comment" data-item="${eq}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional physical hazard details...">${ans.comment}</textarea>
-            </div>
-          `;
-        } else {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-400">Additional observation note (Optional)</label>
-              <textarea data-action="update-comment" data-item="${eq}" class="w-full text-xs bg-[#F3ECE3] rounded-xl p-2 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional comments...">${ans.comment}</textarea>
-            </div>
-          `;
-        }
-
-        // Photo upload list output structure
-        let photosHTML = '';
-        if (ans.photos && ans.photos.length > 0) {
-          photosHTML = `
-            <div class="grid grid-cols-2 gap-3 pt-3">
-              ${ans.photos.map((photo, pIdx) => {
-                let borderCol = "border-green-600 ring-green-600";
-                if (photo.tag === 'Acceptable') borderCol = "border-amber-500 ring-amber-500";
-                if (photo.tag === 'Bad') borderCol = "border-red-600 ring-red-600";
-
-                return `
-                  <div class="bg-neutral-50 p-2.5 rounded-2xl relative border-2 ${borderCol} flex flex-col gap-2 shadow-sm">
-                    <!-- Delete photo button -->
-                    <button data-action="delete-photo-equipment" data-item="${eq}" data-idx="${pIdx}" class="absolute -top-2 -right-2 bg-neutral-900 border border-neutral-850 text-white rounded-full p-1 shadow hover:bg-red-600 transition z-10 w-6 h-6 flex items-center justify-center">
-                      <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                    </button>
-                    
-                    <img src="${photo.url}" class="w-full h-24 object-cover rounded-xl cursor-zoom-in" data-action="open-lightbox" data-url="${photo.url}" data-caption="${photo.caption || ''}" alt="Thumbnail">
-                    
-                    <!-- Tag select -->
-                    <div class="space-y-1">
-                      <select data-action="update-photo-tag-equipment" data-item="${eq}" data-idx="${pIdx}" class="w-full text-[10px] py-1 px-1.5 font-bold bg-white rounded-lg border border-neutral-100">
-                        <option value="Good" ${photo.tag === 'Good' ? 'selected' : ''}>Good</option>
-                        <option value="Acceptable" ${photo.tag === 'Acceptable' ? 'selected' : ''}>Acceptable</option>
-                        <option value="Bad" ${photo.tag === 'Bad' ? 'selected' : ''}>Bad</option>
-                      </select>
-                    </div>
-
-                    <!-- Caption input info -->
-                    <input type="text" data-action="update-photo-caption-equipment" data-item="${eq}" data-idx="${pIdx}" placeholder="Caption note" value="${photo.caption || ''}" class="w-full text-[10px] bg-white border border-neutral-100 rounded-lg px-2 py-1">
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          `;
-        }
-
-        const card = document.createElement('div');
-        card.className = "bg-white p-3.5 rounded-2xl border border-orange-100/65 shadow-md shadow-orange-950/5 space-y-2";
-        card.innerHTML = `
-          <div class="flex items-start justify-between">
-            <h3 class="text-sm font-bold text-slate-800 flex-1 pr-3 leading-tight">${eq}</h3>
-            <span class="text-[10px] font-bold text-orange-600 font-mono">${ans.photos ? ans.photos.length : 0}/3 Photos</span>
-          </div>
-
-          <!-- Quantity input selection -->
-          <div class="grid grid-cols-2 gap-2 items-center">
-            <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider">Unit Quantity (Count)</span>
-            <select data-action="update-equipment-quantity" data-item="${eq}" class="w-full text-xs font-bold bg-neutral-50 px-3 py-1.5 rounded-xl cursor-pointer">
-              ${[1,2,3,4,5,6,7,8,9,10].map(n => `<option value="${n}" ${ans.quantity == n ? 'selected' : ''}>${n}</option>`).join('')}
+        <!-- DRAWING COLOR PICKER -->
+        <div class="space-y-2 border-t border-slate-800/60 pt-4">
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider font-sans">Drawing Palette Color</label>
+          <div class="relative flex items-center">
+            <div id="color-preview" class="absolute left-3 w-4.5 h-4.5 rounded-full border border-white/25 shadow-md transition-all duration-200 bg-red-500"></div>
+            <select id="color-picker" onchange="updateSelectedColor()" class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-lg py-2.5 pl-10 pr-10 text-xs focus:outline-none focus:border-blue-500 cursor-pointer appearance-none transition-colors font-medium">
+              <option value="red" selected>Red</option>
+              <option value="orange">Orange</option>
+              <option value="amber">Amber</option>
+              <option value="yellow">Yellow</option>
+              <option value="lime">Lime</option>
+              <option value="green">Green</option>
+              <option value="teal">Teal</option>
+              <option value="cyan">Cyan</option>
+              <option value="blue">Blue</option>
+              <option value="indigo">Indigo</option>
+              <option value="violet">Violet</option>
+              <option value="purple">Purple</option>
+              <option value="pink">Pink</option>
+              <option value="rose">Rose</option>
+              <option value="brown">Brown</option>
             </select>
-          </div>
-
-          <!-- Rating assessment choice buttons -->
-          <div class="grid grid-cols-3 gap-2 select-none">
-            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Good' ? 'bg-green-100 border-green-300 text-green-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Good</span>
-            </button>
-            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Acceptable</span>
-            </button>
-            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Bad</span>
-            </button>
-          </div>
-
-          ${commentFormHTML}
-
-          <!-- Photo uploads zone -->
-          <div class="space-y-2 select-none">
-            <label class="w-full flex items-center justify-center gap-2 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-2.5 rounded-2xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
-              <i data-lucide="camera" class="w-4 h-4 text-neutral-600"></i>
-              <span class="text-xs text-neutral-700 font-semibold font-sans">Upload Photo</span>
-              <input type="file" accept="image/*" capture="environment" class="hidden" data-action="upload-photo-equipment" data-item="${eq}">
-            </label>
-            ${photosHTML}
-          </div>
-        `;
-        container.appendChild(card);
-      });
-
-      // Update finish helper container if mode is both or single equipment
-      const finishContainer = document.getElementById('equipment-finish-container');
-      if (finishContainer) {
-        finishContainer.classList.remove('hidden');
-      }
-
-      if (window.lucide) lucide.createIcons();
-    }
-
-    // Helper to calculate store health status and completion percentages for Fleet Grid
-    function getStoreStatus(storeName) {
-      // Find latest inspection
-      const insp = window.state.inspections.find(i => i.store === storeName);
-      if (!insp) {
-        return {
-          percent: 0,
-          ratedCount: 0,
-          expectedCount: (window.state.facilityCategories.length || 0) + (window.state.equipmentList.length || 0) || 1,
-          badCount: 0,
-          acceptableCount: 0,
-          goodCount: 0,
-          healthClass: 'bg-white border-neutral-200 text-neutral-400'
-        };
-      }
-
-      let ratedCount = 0;
-      let badCount = 0;
-      let acceptableCount = 0;
-      let goodCount = 0;
-
-      if (insp.facility) {
-        Object.values(insp.facility).forEach(ans => {
-          if (ans && ans.rating) {
-            ratedCount++;
-            if (ans.rating === 'Bad') badCount++;
-            else if (ans.rating === 'Acceptable') acceptableCount++;
-            else if (ans.rating === 'Good') goodCount++;
-          }
-        });
-      }
-
-      if (insp.equipment) {
-        Object.values(insp.equipment).forEach(ans => {
-          if (ans && ans.rating) {
-            ratedCount++;
-            if (ans.rating === 'Bad') badCount++;
-            else if (ans.rating === 'Acceptable') acceptableCount++;
-            else if (ans.rating === 'Good') goodCount++;
-          }
-        });
-      }
-
-      let expectedCount = 0;
-      if (insp.mode === 'facility') {
-        expectedCount = window.state.facilityCategories.length;
-      } else if (insp.mode === 'equipment') {
-        expectedCount = window.state.equipmentList.length;
-      } else {
-        expectedCount = window.state.facilityCategories.length + window.state.equipmentList.length;
-      }
-      if (expectedCount === 0) expectedCount = 1;
-
-      const percent = Math.min(100, Math.round((ratedCount / expectedCount) * 100));
-
-      let healthClass = 'bg-white border-neutral-200';
-      if (ratedCount > 0) {
-        const badPercent = (badCount / ratedCount) * 100;
-        const acceptablePercent = (acceptableCount / ratedCount) * 100;
-
-        if (badPercent > 10) {
-          healthClass = 'bg-red-50/80 border-red-300 hover:bg-red-100/30';
-        } else if (acceptablePercent > 20) {
-          healthClass = 'bg-amber-50/80 border-amber-300 hover:bg-amber-100/30';
-        } else {
-          healthClass = 'bg-green-50/80 border-green-300 hover:bg-green-100/30';
-        }
-      }
-
-      return {
-        percent,
-        ratedCount,
-        expectedCount,
-        badCount,
-        acceptableCount,
-        goodCount,
-        healthClass
-      };
-    }
-
-    // Render Store Fleet Heatmap status grid
-    function renderOverviewFleetGrid() {
-      const grid = document.getElementById('overview-fleet-grid');
-      if (!grid) return;
-      grid.innerHTML = '';
-
-      if (!window.state.stores || window.state.stores.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full py-4 text-center text-xs text-neutral-400 font-medium">
-            Define stores in Settings to initialize Fleet Heatmap
-          </div>
-        `;
-        return;
-      }
-
-      window.state.stores.forEach(S => {
-        const status = getStoreStatus(S.name);
-        const isSelected = (window.state.filterStore === S.name);
-        
-        const tile = document.createElement('button');
-        tile.className = `relative p-3 rounded-2xl border text-left flex flex-col justify-between h-20 transition active:scale-[0.97] cursor-pointer overflow-hidden ${status.healthClass} ${isSelected ? 'ring-2 ring-[#EA580C] border-transparent shadow-md' : 'shadow-2xs'}`;
-        tile.setAttribute('data-action', 'filter-by-store-tile');
-        tile.setAttribute('data-store', S.name);
-
-        tile.innerHTML = `
-          <div class="space-y-0.5 leading-tight">
-            <div class="flex items-center gap-1.5 justify-between">
-              <h4 class="text-xs font-bold text-neutral-800 truncate flex-1 min-w-0">${escapeHtml(S.name)}</h4>
-              ${S.cluster ? `
-                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[7.5px] font-extrabold uppercase tracking-wider shrink-0" style="${getClusterBadgeStyle(S.cluster)}">
-                  ${escapeHtml(S.cluster)}
-                </span>
-              ` : ''}
+            <div class="absolute right-3 pointer-events-none text-slate-500">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
             </div>
-            <p class="text-[9px] text-neutral-450 font-bold font-mono">${status.ratedCount}/${status.expectedCount} Checked</p>
-          </div>
-          <div class="flex items-center justify-between pb-1 z-10">
-            <span class="text-[10px] font-extrabold font-mono text-neutral-700">${status.percent}%</span>
-            ${status.ratedCount === 0 ? `
-              <span class="text-[8px] font-extrabold text-neutral-450 uppercase">Empty</span>
-            ` : status.badCount > 0 ? `
-              <span class="text-[8px] font-extrabold text-red-650 uppercase font-mono">${status.badCount} Bad</span>
-            ` : status.acceptableCount > 0 ? `
-              <span class="text-[8px] font-extrabold text-amber-700 uppercase font-mono">${status.acceptableCount} Acc</span>
-            ` : `
-              <span class="text-[8px] font-extrabold text-green-600 uppercase">Good</span>
-            `}
-          </div>
-          <!-- Visual progress bar -->
-          <div class="absolute bottom-0 left-0 right-0 h-1 bg-neutral-200/40">
-            <div class="bg-[#EA580C] h-full transition-all duration-300" style="width: ${status.percent}%"></div>
-          </div>
-        `;
-        grid.appendChild(tile);
-      });
-    }
-
-    // 5. Render Overview Dashboard List with deep filter matching
-    function renderOverviewCardsList() {
-      // Re-populate store fleet grid with any rating status computations
-      renderOverviewFleetGrid();
-
-      const container = document.getElementById('overview-cards-list');
-      container.innerHTML = '';
-
-      if (window.state.inspections.length === 0) {
-        container.innerHTML = `
-          <div class="p-8 text-center text-xs text-neutral-400 font-medium">
-            No audit records created. Use "Inspect" navigation below to run.
-          </div>
-        `;
-        document.getElementById('overview-count-label').innerText = "Showing 0 matching instances";
-        return;
-      }
-
-      let matchCount = 0;
-
-      // Filter settings logic inside state:
-      const selStore = window.state.filterStore;
-      const selCatQuery = window.state.filterCategory.toLowerCase().trim();
-      const selTag = window.state.filterTag;
-
-      // Update badge filters states
-      ['all', 'good', 'acceptable', 'bad'].forEach(tag => {
-        const el = document.getElementById(`filter-tag-${tag}`);
-        if (el) {
-          el.className = "text-xs font-bold px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition";
-        }
-      });
-      const activeTerm = selTag === "" ? "all" : selTag.toLowerCase();
-      const activeFilterTagEl = document.getElementById(`filter-tag-${activeTerm}`);
-      if (activeFilterTagEl) {
-        if (activeTerm === 'all') {
-          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-blue-600 text-white border border-transparent transition shadow-sm";
-        } else if (activeTerm === 'good') {
-          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-green-600 text-white border border-transparent transition shadow-sm";
-        } else if (activeTerm === 'acceptable') {
-          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-amber-500 text-white border border-transparent transition shadow-sm";
-        } else if (activeTerm === 'bad') {
-          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-red-600 text-white border border-transparent transition shadow-sm";
-        }
-      }
-
-      // Update quick toggle buttons active states
-      ['all', 'acceptable', 'bad'].forEach(tag => {
-        const el = document.getElementById(`quick-filter-${tag}`);
-        if (el) {
-          if ((selTag === "" && tag === 'all') || (selTag.toLowerCase() === tag)) {
-            el.className = "text-[11px] font-bold px-3.5 py-1.5 rounded-full bg-neutral-900 text-white border border-neutral-950 transition shadow-xs";
-          } else {
-            el.className = "text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-50 transition";
-          }
-        }
-      });
-
-      // Loop through all documents and extract entries matching filter criteria
-      window.state.inspections.forEach((insp) => {
-        // Store name filter match
-        if (selStore && insp.store !== selStore) return;
-
-        // Inspections contain facility and/or equipment objects
-        // Parse facility answers
-        if (insp.facility) {
-          Object.keys(insp.facility).forEach((categoryName) => {
-            const data = insp.facility[categoryName];
-            
-            // Text matching category name
-            if (selCatQuery && !categoryName.toLowerCase().includes(selCatQuery)) return;
-
-            // Status tag filtering
-            if (selTag && data.rating !== selTag) return;
-
-            matchCount++;
-            container.appendChild(createOverviewCardHTML(insp, 'Facility', categoryName, data));
-          });
-        }
-
-        // Parse equipment answers
-        if (insp.equipment) {
-          Object.keys(insp.equipment).forEach((equipName) => {
-            const data = insp.equipment[equipName];
-
-            // Text matching equipment name
-            if (selCatQuery && !equipName.toLowerCase().includes(selCatQuery)) return;
-
-            // Status tag filtering
-            if (selTag && data.rating !== selTag) return;
-
-            matchCount++;
-            container.appendChild(createOverviewCardHTML(insp, 'Equipment', equipName, data));
-          });
-        }
-      });
-
-      document.getElementById('overview-count-label').innerText = `Showing ${matchCount} matching instances`;
-      if (window.lucide) lucide.createIcons();
-    }
-
-    function createOverviewCardHTML(insp, typeTag, targetName, data) {
-      const card = document.createElement('div');
-      card.className = "bg-white p-5 rounded-3xl border border-neutral-100 shadow-sm space-y-3";
-      
-      let ratingPillColor = "bg-green-50 text-green-700 border-green-200";
-      if (data.rating === 'Acceptable') ratingPillColor = "bg-amber-50 text-amber-700 border-amber-200";
-      if (data.rating === 'Bad') ratingPillColor = "bg-red-50 text-red-700 border-red-200";
-
-      let photosRow = '';
-      if (data.photos && data.photos.length > 0) {
-        photosRow = `
-          <div class="flex gap-2.5 overflow-x-auto py-1 whitespace-nowrap scrollbar-none">
-            ${data.photos.map(p => {
-              let borderCol = "border-green-600 ring-green-600/20";
-              if (p.tag === 'Acceptable') borderCol = "border-amber-500 ring-amber-500/20";
-              if (p.tag === 'Bad') borderCol = "border-red-600 ring-red-600/20";
-
-              return `
-                <div class="relative inline-block shrink-0">
-                  <img src="${p.url}" data-action="open-lightbox" data-url="${p.url}" data-caption="${p.caption || ''}" class="w-16 h-16 object-cover rounded-xl border-2 ${borderCol} ring-2 cursor-zoom-in" alt="photo thumbnail">
-                  <span class="absolute bottom-1 right-1 px-1.5 bg-black/75 text-white rounded text-[8px] font-bold tracking-wider">${p.tag.toUpperCase()}</span>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        `;
-      }
-
-      card.innerHTML = `
-        <div class="flex justify-between items-start">
-          <div class="space-y-0.5">
-            <h3 class="text-sm font-bold text-neutral-900">${targetName}</h3>
-            <div class="flex items-center gap-1.5 text-[11px] text-neutral-400 font-medium">
-              <span>${insp.store}</span>
-              ${insp.auditorName ? `<span>• Checked by: <strong>${escapeHtml(insp.auditorName)}</strong></span>` : ''}
-              <span>•</span>
-              <span>${insp.dateString}</span>
-            </div>
-          </div>
-          <div class="flex flex-col items-end gap-1">
-            <span class="text-[9px] font-bold tracking-wider text-neutral-400 uppercase">${typeTag}</span>
-            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full border ${ratingPillColor}">${data.rating}</span>
           </div>
         </div>
 
-        ${data.comment ? `
-          <div class="bg-neutral-50 px-3.5 py-3 rounded-2xl text-[11px] text-neutral-700 leading-relaxed border border-neutral-100">
-            <p class="font-semibold text-neutral-500 mb-0.5">Observation details</p>
-            ${data.comment}
+        <!-- CHEAT SHEET / GUIDES -->
+        <div class="bg-slate-950/50 rounded-xl p-3.5 border border-slate-800/80 text-xs text-slate-400 space-y-2 leading-relaxed">
+          <h4 class="font-semibold text-slate-300">Quick interaction guide:</h4>
+          <ul class="space-y-1.5 list-none pl-0">
+            <li class="flex gap-2">
+              <span class="text-blue-500 font-bold">&#8226;</span>
+              <span><strong>Left-Click & Drag</strong>: Pan map freely</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-amber-500 font-bold">&#8226;</span>
+              <span><strong>Right-Click & Drag</strong>: Draw spatial query circle</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-rose-500 font-bold">&#8226;</span>
+              <span><strong>Left-Click Circle</strong>: Delete circle instantly</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-emerald-500 font-bold">&#8226;</span>
+              <span><strong>Change Store Color</strong>: Dropdown menu when clicking a map marker, popup modal when clicking "Change Color" in sidebar.</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- PLOTTED LOCATIONS LIST SECTION -->
+      <div class="flex-1 flex flex-col min-h-[160px] border-t border-slate-800">
+        <div class="px-5 py-3 border-b border-slate-800 bg-slate-950/40 flex justify-between items-center">
+          <h2 class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            Plotted Locations 
+            <span id="plotted-badge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 ml-1">0</span>
+          </h2>
+          <button id="btn-clear-list" onclick="clearAllPlottedData()" class="text-[10px] text-slate-500 hover:text-rose-400 font-medium transition-colors flex items-center gap-1 hidden">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+            Clear Data
+          </button>
+        </div>
+        
+        <!-- SCROLLABLE CONTAINER -->
+        <div id="locations-list" class="flex-1 overflow-y-auto bg-slate-900/50 scroll-py-1 divide-y divide-slate-800/50">
+          <!-- Populated dynamically via JS -->
+          <div class="text-center py-10 px-4 text-slate-500 text-xs">
+            <svg class="w-8 h-8 mx-auto text-slate-700 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            No locations plotted. Paste data above and click "Plot Data" to begin.
           </div>
-        ` : ''}
+        </div>
+      </div>
 
-        ${data.quantity ? `
-          <div class="text-[10px] text-neutral-400 font-medium">Quantity units check: <span class="text-neutral-800 font-bold">${data.quantity}</span></div>
-        ` : ''}
+    </div>
 
-        ${photosRow}
-      `;
-      return card;
-    }
+    <!-- MAIN PANEL: LEAFLET MAP -->
+    <div id="map" class="flex-1 h-[40vh] md:h-screen relative z-10 bg-slate-950">
+      <!-- LEAFLET MAP RENDERS HERE -->
+    </div>
 
-    // Navigation View Route Manager
-    function navigate(viewName) {
-      window.state.currentView = viewName;
+    <script>
+      // Beautiful ROYGBIV Spectrum configuration color catalog (excluding codes inside labels)
+      const colorMap = {
+        'red': '#EF4444',
+        'orange': '#F97316',
+        'amber': '#D97706',
+        'yellow': '#F59E0B',
+        'lime': '#84CC16',
+        'green': '#10B981',
+        'teal': '#14B8A6',
+        'cyan': '#06B6D4',
+        'blue': '#3B82F6',
+        'indigo': '#6366F1',
+        'violet': '#7C3AED',
+        'purple': '#8B5CF6',
+        'pink': '#EC4899',
+        'rose': '#F43F5E',
+        'brown': '#78350F',
+        'gray': '#808080'
+      };
 
-      // Set titles based on view context
-      const titleEl = document.getElementById('header-title');
-      const subtitleEl = document.getElementById('header-subtitle');
-      if (viewName === 'home') {
-        titleEl.innerText = "Inspections";
-        subtitleEl.innerText = "Standard Portal";
-      } else if (viewName === 'store-select') {
-        titleEl.innerText = "Location Info";
-        subtitleEl.innerText = "Checklist Target Select";
-      } else if (viewName === 'facility') {
-        titleEl.innerText = "Facility Checklist";
-        subtitleEl.innerText = "Exterior/Interior Physical Run";
-      } else if (viewName === 'equipment') {
-        titleEl.innerText = "Equipment Wizard";
-        subtitleEl.innerText = `Step ${window.state.activeEquipmentIndex + 1} item review`;
-      } else if (viewName === 'overview') {
-        titleEl.innerText = "Audit History";
-        subtitleEl.innerText = "Fast-Filtered Field Reports";
-      } else if (viewName === 'settings') {
-        titleEl.innerText = "Control Settings";
-        subtitleEl.innerText = "Checklist & Locations Database";
-      }
+      // Ordered keys following standard ROYGBIV spectrum
+      const spectrumOrder = [
+        'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'teal', 'cyan', 'blue', 'indigo', 'violet', 'purple', 'pink', 'rose', 'brown', 'gray'
+      ];
 
-      // Hide home navigation button if we are on home
-      const homeBtn = document.getElementById('header-home-btn');
-      if (viewName === 'home') {
-        homeBtn.classList.add('hidden');
-      } else {
-        homeBtn.classList.remove('hidden');
-      }
-
-      // Render view panel visibility
-      document.querySelectorAll('.view-panel').forEach(v => v.classList.add('hidden'));
-      const activePanel = document.getElementById(`view-${viewName}`);
-      if (activePanel) activePanel.classList.remove('hidden');
-
-      // Update Navigation bar buttons (both mobile bottom nav and desktop side-rail)
-      ['home', 'store-select', 'overview', 'settings'].forEach(route => {
-        const btn = document.getElementById(`nav-btn-${route}`);
-        if (btn) {
-          if (route === viewName) {
-            btn.className = "flex flex-col items-center gap-1 text-orange-400 font-bold transition";
-          } else {
-            btn.className = "flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition";
-          }
-        }
-
-        const deskBtn = document.getElementById(`nav-desk-btn-${route}`);
-        if (deskBtn) {
-          if (route === viewName) {
-            deskBtn.className = "w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-white bg-[#EA580C] font-bold shadow-md shadow-orange-950/25 transition";
-          } else {
-            deskBtn.className = "w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold";
-          }
-        }
-      });
-
-      // Special initializers per route load context
-      if (viewName === 'store-select') {
-        renderStoreSelections();
-      } else if (viewName === 'facility') {
-        renderFacilityChecklist();
-      } else if (viewName === 'equipment') {
-        renderEquipmentWizardItem();
-      } else if (viewName === 'overview') {
-        loadInspectionsHistory();
-      } else if (viewName === 'settings') {
-        renderSettingsItems();
-      }
-
-      window.scrollTo(0, 0);
-    }
-    window.navigate = navigate;
-
-    // Trigger Initial Hash location matching standard hash route patterns
-    function syncHash() {
-      const hash = window.location.hash.replace('#', '');
-      if (['home', 'store-select', 'facility', 'equipment', 'overview', 'settings'].includes(hash)) {
-        navigate(hash);
-      } else {
-        navigate('home');
-      }
-    }
-    window.addEventListener('hashchange', syncHash);
-    window.addEventListener('DOMContentLoaded', syncHash);
-
-
-    // --- CRITICAL EVENT DELEGATION SYSTEM ---
-    document.addEventListener('click', async (e) => {
-      const target = e.target.closest('[data-action]');
-      if (!target) return;
-
-      const action = target.getAttribute('data-action');
-      const itemAttr = target.getAttribute('data-item');
-      const valAttr = target.getAttribute('data-val');
-      const idxAttr = target.getAttribute('data-idx');
-
-      // Route Navigation
-      if (action === 'route') {
-        const rValue = target.getAttribute('data-route');
-        window.location.hash = `#${rValue}`;
-      }
-
-      // Go Home button
-      if (action === 'go-home') {
-        window.location.hash = '#home';
-      }
-
-      // Filter by Store Tile drill-down
-      if (action === 'filter-by-store-tile') {
-        const storeName = target.getAttribute('data-store');
-        const storeSel = document.getElementById('filter-store-select');
-        
-        if (window.state.filterStore === storeName) {
-          window.state.filterStore = '';
-          if (storeSel) storeSel.value = '';
-          sendNotification("Store drill-down filter cleared", "info");
-        } else {
-          window.state.filterStore = storeName;
-          if (storeSel) storeSel.value = storeName;
-          sendNotification(`Filtering views by ${storeName}`, "info");
-        }
-        renderOverviewCardsList();
-      }
-
-      // Start inspection
-      if (action === 'begin-inspection') {
-        const storeVal = document.getElementById('select-store-input').value;
-        const auditorNameInput = document.getElementById('auditor-name-input');
-        const auditorNameVal = auditorNameInput ? auditorNameInput.value.trim() : '';
-        const modeRadio = document.querySelector('input[name="select-mode-radio"]:checked');
-        const modeVal = modeRadio ? modeRadio.value : 'facility';
-
-        if (!storeVal) {
-          sendNotification("Select store name to start inspection", "error");
-          return;
-        }
-
-        if (!auditorNameVal) {
-          sendNotification("Please type your First Name for accountability", "error");
-          if (auditorNameInput) auditorNameInput.focus();
-          return;
-        }
-
-        window.state.selectedStore = storeVal;
-        window.state.selectedMode = modeVal;
-        window.state.facilityAnswers = {};
-        window.state.equipmentAnswers = {};
-
-        presentOverlay("Initializing Session", "Connecting database snapshot sync...");
-
-        try {
-          const todayDateStr = new Date().toLocaleDateString('en-US', {
-            month: 'short', day: 'numeric', year: 'numeric'
-          });
-          
-          const querySnap = await getDocs(collection(db, "inspections"));
-          let existingDoc = null;
-          querySnap.forEach((doc) => {
-            const d = doc.data();
-            if (d.store === storeVal && d.dateOnly === todayDateStr) {
-              existingDoc = { id: doc.id, ...d };
-            }
-          });
-
-          if (activeInspectionSubscription) {
-            activeInspectionSubscription();
-            activeInspectionSubscription = null;
-          }
-
-          if (existingDoc) {
-            window.state.activeDocId = existingDoc.id;
-            window.state.facilityAnswers = existingDoc.facility || {};
-            window.state.equipmentAnswers = existingDoc.equipment || {};
-            // Update auditor name for accountability on existing doc
-            await updateDoc(doc(db, "inspections", existingDoc.id), { auditorName: auditorNameVal });
-          } else {
-            const payload = {
-              store: storeVal,
-              auditorName: auditorNameVal,
-              dateOnly: todayDateStr,
-              dateString: new Date().toLocaleDateString('en-US', {
-                month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
-              }),
-              timestamp: Date.now(),
-              mode: modeVal,
-              facility: {},
-              equipment: {}
-            };
-            const docRef = await addDoc(collection(db, "inspections"), payload);
-            window.state.activeDocId = docRef.id;
-            window.state.facilityAnswers = {};
-            window.state.equipmentAnswers = {};
-          }
-
-          const docRef = doc(db, "inspections", window.state.activeDocId);
-          activeInspectionSubscription = onSnapshot(docRef, (docSnap) => {
-            if (docSnap.exists()) {
-              const d = docSnap.data();
-              const activeEl = document.activeElement;
-              const isCommentFocused = activeEl && activeEl.getAttribute('data-action') === 'update-comment';
-              const focusedItem = activeEl ? activeEl.getAttribute('data-item') : null;
-
-              if (d.facility) {
-                Object.keys(d.facility).forEach(cat => {
-                  if (!window.state.facilityAnswers[cat]) window.state.facilityAnswers[cat] = { rating: '', comment: '', photos: [] };
-                  window.state.facilityAnswers[cat].rating = d.facility[cat].rating || '';
-                  window.state.facilityAnswers[cat].photos = d.facility[cat].photos || [];
-                  if (!(isCommentFocused && focusedItem === cat)) {
-                    window.state.facilityAnswers[cat].comment = d.facility[cat].comment || '';
-                  }
-                });
-              }
-
-              if (d.equipment) {
-                Object.keys(d.equipment).forEach(eq => {
-                  if (!window.state.equipmentAnswers[eq]) window.state.equipmentAnswers[eq] = { quantity: 1, rating: '', comment: '', photos: [] };
-                  window.state.equipmentAnswers[eq].rating = d.equipment[eq].rating || '';
-                  window.state.equipmentAnswers[eq].quantity = d.equipment[eq].quantity || 1;
-                  window.state.equipmentAnswers[eq].photos = d.equipment[eq].photos || [];
-                  if (!(isCommentFocused && focusedItem === eq)) {
-                    window.state.equipmentAnswers[eq].comment = d.equipment[eq].comment || '';
-                  }
-                });
-              }
-
-              if (window.state.currentView === 'facility') {
-                renderFacilityChecklist();
-              } else if (window.state.currentView === 'equipment') {
-                renderEquipmentChecklist();
-              }
-            }
-          });
-
-          dismissOverlay();
-          sendNotification(existingDoc ? "Linked to active inspection session" : "Started new live inspection", "success");
-
-          if (modeVal === 'facility' || modeVal === 'both') {
-            window.location.hash = '#facility';
-          } else {
-            window.location.hash = '#equipment';
-          }
-        } catch (err) {
-          console.error("Firestore setup error:", err);
-          dismissOverlay();
-          sendNotification("Failed to connect live session: " + err.message, "error");
-        }
-      }
-
-      // Cancel / Exit inspection
-      if (action === 'cancel-inspection') {
-        showCustomConfirm(
-          "Exit session?",
-          "Current entries are auto-saved in the cloud. Do you want to exit to Home?",
-          () => {
-            // Unsubscribe
-            if (activeInspectionSubscription) {
-              activeInspectionSubscription();
-              activeInspectionSubscription = null;
-            }
-            window.state.activeDocId = null;
-            window.state.facilityAnswers = {};
-            window.state.equipmentAnswers = {};
-            window.location.hash = '#home';
-          }
-        );
-      }
-
-      // Set facility rating
-      if (action === 'set-rating') {
-        const currentAns = window.state.facilityAnswers[itemAttr];
-        currentAns.rating = valAttr;
-        renderFacilityChecklist();
-        triggerCloudSave();
-      }
-
-      // Delete facility photo with auto-saving to cloud
-      if (action === 'delete-photo') {
-        showCustomConfirm(
-          "Remove photo?",
-          "Are you sure you want to remove this photo attachment?",
-          () => {
-            const idx = parseInt(idxAttr);
-            window.state.facilityAnswers[itemAttr].photos.splice(idx, 1);
-            renderFacilityChecklist();
-            triggerCloudSave();
-            sendNotification("Photo removed", "info");
-          }
-        );
-      }
-
-      // Next / Continue inside Facility Checklist
-      if (action === 'next-facility') {
-        await saveImmediately();
-        if (window.state.selectedMode === 'both') {
-          window.location.hash = '#equipment';
-        } else {
-          sendNotification("Inspection complete and synchronized!", "success");
-          window.location.hash = '#overview';
-        }
-      }
-
-      // Set equipment ratings
-      if (action === 'set-equipment-rating') {
-        const currentAns = window.state.equipmentAnswers[itemAttr];
-        currentAns.rating = valAttr;
-        renderEquipmentChecklist();
-        triggerCloudSave();
-      }
-
-      // Delete Equipment Photo
-      if (action === 'delete-photo-equipment') {
-        showCustomConfirm(
-          "Remove photo?",
-          "Are you sure you want to remove this photo attachment?",
-          () => {
-            const idx = parseInt(idxAttr);
-            window.state.equipmentAnswers[itemAttr].photos.splice(idx, 1);
-            renderEquipmentChecklist();
-            triggerCloudSave();
-            sendNotification("Photo removed", "info");
-          }
-        );
-      }
-
-      // Finish whole equipment list
-      if (action === 'finish-equipment') {
-        await saveImmediately();
-        sendNotification("Inspection complete and synchronized!", "success");
-        window.location.hash = '#overview';
-      }
-
-      // Open Lightbox magnifying image preview
-      if (action === 'open-lightbox') {
-        const url = target.getAttribute('data-url');
-        const caption = target.getAttribute('data-caption');
-        document.getElementById('lightbox-image').src = url;
-        document.getElementById('lightbox-caption').innerText = caption || "No optional observation caption set-up";
-        document.getElementById('lightbox-modal').classList.remove('hidden');
-      }
-
-      // Hide Lightbox Modal
-      if (action === 'close-lightbox') {
-        document.getElementById('lightbox-modal').classList.add('hidden');
-      }
-
-      // Settings navigation Tab change
-      if (action === 'set-settings-tab') {
-        const tabValue = target.getAttribute('data-tab');
-        window.state.settingsTab = tabValue;
-        window.state.editingStoreId = null; // Clear edit mode when changing settings tabs
-        renderSettingsItems();
-      }
-
-      // Start store editing
-      if (action === 'start-store-edit') {
-        const id = target.getAttribute('data-id');
-        window.state.editingStoreId = id;
-        renderSettingsItems();
-      }
-
-      // Cancel store editing
-      if (action === 'cancel-store-edit') {
-        window.state.editingStoreId = null;
-        renderSettingsItems();
-      }
-
-      // Save store editing to Firestore
-      if (action === 'save-store-edit') {
-        const id = target.getAttribute('data-id');
-        const input = document.getElementById(`edit-store-input-${id}`);
-        const clusterInput = document.getElementById(`edit-store-cluster-${id}`);
-        const newVal = input ? input.value.trim() : '';
-        const newCluster = clusterInput ? clusterInput.value.trim() : '';
-        if (!newVal) {
-          sendNotification("Store name cannot be empty", "error");
-          return;
-        }
-
-        presentOverlay("Saving Store Details", "Updating document in Firestore...");
-        try {
-          await updateDoc(doc(db, "stores", id), {
-            name: newVal,
-            cluster: newCluster
-          });
-          window.state.editingStoreId = null;
-          dismissOverlay();
-          sendNotification("Store details updated", "success");
-          await loadCollectionsFromCloud();
-        } catch(err) {
-          console.error("Store update failed", err);
-          dismissOverlay();
-          sendNotification("Could not save store details", "error");
-        }
-      }
-
-      // Reorder items up / down in Facilities or Equipment lists
-      if (action === 'reorder-item-up' || action === 'reorder-item-down') {
-        const coll = target.getAttribute('data-collection');
-        const id = target.getAttribute('data-id');
-        
-        let list = [];
-        if (coll === 'facilityCategories') {
-          list = [...window.state.facilityCategories];
-        } else if (coll === 'equipmentList') {
-          list = [...window.state.equipmentList];
-        } else {
-          return;
-        }
-        
-        const idx = list.findIndex(item => item.id === id);
-        if (idx === -1) return;
-        
-        if (action === 'reorder-item-up') {
-          if (idx === 0) {
-            sendNotification("Item is already at the top", "info");
-            return;
-          }
-          const temp = list[idx];
-          list[idx] = list[idx - 1];
-          list[idx - 1] = temp;
-        } else {
-          if (idx === list.length - 1) {
-            sendNotification("Item is already at the bottom", "info");
-            return;
-          }
-          const temp = list[idx];
-          list[idx] = list[idx + 1];
-          list[idx + 1] = temp;
-        }
-        
-        presentOverlay("Saving Custom Order", "Updating sequence in cloud database...");
-        try {
-          const promises = list.map((item, index) => {
-            return updateDoc(doc(db, coll, item.id), { order: index });
-          });
-          await Promise.all(promises);
-          
-          dismissOverlay();
-          sendNotification("Custom list order saved!", "success");
-          await loadCollectionsFromCloud();
-        } catch (err) {
-          console.error("Failed persisting order", err);
-          dismissOverlay();
-          sendNotification("Unable to persist order in cloud database.", "error");
-        }
-      }
-
-      // Add settings item Submission trigger
-      if (action === 'submit-settings-add') {
-        const input = document.getElementById('settings-add-input');
-        const val = input.value.trim();
-        if (!val) {
-          sendNotification("Configuration entry text is blank", "error");
-          return;
-        }
-
-        let collectionName = '';
-        let listLength = 0;
-        let clusterVal = '';
-        if (window.state.settingsTab === 'stores') {
-          collectionName = 'stores';
-          const clusterInput = document.getElementById('settings-add-cluster');
-          clusterVal = clusterInput ? clusterInput.value.trim() : '';
-        } else if (window.state.settingsTab === 'facilities') {
-          collectionName = 'facilityCategories';
-          listLength = window.state.facilityCategories.length;
-        } else {
-          collectionName = 'equipmentList';
-          listLength = window.state.equipmentList.length;
-        }
-
-        presentOverlay("Writing Live DB", "Updating records inside Firestore...");
-        try {
-          const docId = val.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
-          const docData = { name: val };
-          if (window.state.settingsTab === 'stores') {
-            docData.cluster = clusterVal;
-          } else {
-            docData.order = listLength;
-          }
-          await setDoc(doc(db, collectionName, docId), docData);
-          
-          input.value = '';
-          const clusterIn = document.getElementById('settings-add-cluster');
-          if (clusterIn) clusterIn.value = '';
-          dismissOverlay();
-          sendNotification("Configuration item stored safely!", "success");
-          
-          // Re-retrieve lists and redraw UI
-          await loadCollectionsFromCloud();
-        } catch (err) {
-          console.error("Firebase update failed", err);
-          dismissOverlay();
-          sendNotification("Security Rule Reject: Unable to store settings.", "error");
-        }
-      }
-
-      // Delete settings item
-      if (action === 'delete-settings-item') {
-        const coll = target.getAttribute('data-collection');
-        const id = target.getAttribute('data-id');
-        
-        showCustomConfirm(
-          "Delete config item?",
-          "Are you sure you want to remove this definition item permanently from the Firestore checklist?",
-          async () => {
-            presentOverlay("Deleting configuration item", "Updating remote collections...");
-            try {
-              await deleteDoc(doc(db, coll, id));
-              dismissOverlay();
-              sendNotification("Configuration item deleted", "success");
-              await loadCollectionsFromCloud();
-            } catch(err) {
-              console.error("Settings deletion failed", err);
-              dismissOverlay();
-              sendNotification("Unable to process deletion.", "error");
-            }
-          }
-        );
-      }
-
-      // Dashboard filters reset
-      if (action === 'reset-filters') {
-        const storeSel = document.getElementById('filter-store-select');
-        if (storeSel) storeSel.value = "";
-        const catSel = document.getElementById('filter-category-select');
-        if (catSel) catSel.value = "";
-        
-        window.state.filterStore = "";
-        window.state.filterCategory = "";
-        window.state.filterTag = "";
-        renderOverviewCardsList();
-        sendNotification("All search filter parameters cleared", "info");
-      }
-
-      // Dashboard Tag filters
-      if (action === 'set-filter-tag') {
-        window.state.filterTag = valAttr;
-        renderOverviewCardsList();
-      }
-
-      // Quick toggle filters
-      if (action === 'toggle-quick-filter') {
-        window.state.filterTag = valAttr || "";
-        renderOverviewCardsList();
-      }
-
-      // Manual sync/refresh Dashboard
-      if (action === 'refresh-overview') {
-        presentOverlay("Syncing records", "Synchronizing checklists list with cloud...");
-        await loadInspectionsHistory();
-        dismissOverlay();
-        sendNotification("Records database synchronized", "success");
-      }
-    });
-
-    // Delegating INPUT and CHANGE events to state updates to avoid missing any on-the-fly typing changes
-    document.addEventListener('input', (e) => {
-      const target = e.target.closest('[data-action]');
-      if (!target) return;
-      const action = target.getAttribute('data-action');
-      const item = target.getAttribute('data-item');
-      const idxAttr = target.getAttribute('data-idx');
-
-      // Update facility text comments
-      if (action === 'update-comment') {
-        if (window.state.facilityAnswers[item]) {
-          window.state.facilityAnswers[item].comment = e.target.value;
-        } else if (window.state.equipmentAnswers[item]) {
-          window.state.equipmentAnswers[item].comment = e.target.value;
-        }
-        triggerCloudSave();
-      }
-
-      // Update facility photos captions
-      if (action === 'update-photo-caption') {
-        const idx = parseInt(idxAttr);
-        if (window.state.facilityAnswers[item] && window.state.facilityAnswers[item].photos[idx]) {
-          window.state.facilityAnswers[item].photos[idx].caption = e.target.value;
-        }
-        triggerCloudSave();
-      }
-
-      // Update equipment photo caption notes
-      if (action === 'update-photo-caption-equipment') {
-        const idx = parseInt(idxAttr);
-        if (window.state.equipmentAnswers[item] && window.state.equipmentAnswers[item].photos[idx]) {
-          window.state.equipmentAnswers[item].photos[idx].caption = e.target.value;
-        }
-        triggerCloudSave();
-      }
-
-    });
-
-    document.addEventListener('change', async (e) => {
-      const target = e.target.closest('[data-action]');
+      // State Managers
+      let map;
+      let locations = [];
+      let markerMap = {}; // Key: location.id, Value: L.marker instance
+      let circles = []; // Array of L.circle instances currently drawn on map
       
-      // Update store filters drop-down changes inside overview card
-      if (e.target.id === 'filter-store-select') {
-        window.state.filterStore = e.target.value;
-        renderOverviewCardsList();
+      // Modal selection tracking state
+      let activeModalLocationId = null;
+
+      // Right-click circle drawing state
+      let isDrawing = false;
+      let startLatLng = null;
+      let tempCircle = null;
+
+      // 1. Initialize Map
+      function initMap() {
+        // Default viewpoint centered roughly around continental US / San Francisco
+        map = L.map('map', {
+          zoomControl: true,
+          doubleClickZoom: true,
+          boxZoom: false
+        }).setView([37.7749, -122.4194], 13);
+
+        // Add sleek premium styled tile layers
+        // Using standard OpenStreetMap Tiles with custom attributions
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Setup Custom Mouse Interactions for drawing
+        setupMapDrawingListeners();
       }
 
-      // Update category/item name filters drop-down changes inside overview card
-      if (e.target.id === 'filter-category-select') {
-        window.state.filterCategory = e.target.value;
-        renderOverviewCardsList();
-      }
+      // 2. Custom Mouse Interactions & Drawing (Right-Click Circles)
+      function setupMapDrawingListeners() {
+        const mapContainer = document.getElementById('map');
+        
+        // Prevent default browser context menu on the map container
+        mapContainer.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+        });
 
-      if (!target) return;
-      const action = target.getAttribute('data-action');
-      const item = target.getAttribute('data-item');
-      const idxAttr = target.getAttribute('data-idx');
+        // Right-Click Mousedown to establish center
+        map.on('mousedown', function(e) {
+          // e.originalEvent.button === 2 is Right-Click
+          if (e.originalEvent && e.originalEvent.button === 2) {
+            e.originalEvent.preventDefault();
+            isDrawing = true;
+            startLatLng = e.latlng;
 
-      // Update facility photo tag updates
-      if (action === 'update-photo-tag') {
-        const idx = parseInt(idxAttr);
-        if (window.state.facilityAnswers[item] && window.state.facilityAnswers[item].photos[idx]) {
-          window.state.facilityAnswers[item].photos[idx].tag = e.target.value;
-          renderFacilityChecklist();
-          triggerCloudSave();
-        }
-      }
+            const colorName = document.getElementById('color-picker').value;
+            const colorHex = colorMap[colorName] || '#808080';
 
-      // Update equipment photo tag updates
-      if (action === 'update-photo-tag-equipment') {
-        const idx = parseInt(idxAttr);
-        if (window.state.equipmentAnswers[item] && window.state.equipmentAnswers[item].photos[idx]) {
-          window.state.equipmentAnswers[item].photos[idx].tag = e.target.value;
-          renderEquipmentChecklist();
-          triggerCloudSave();
-        }
-      }
+            // Spawn dynamic L.circle representing initial distance query
+            tempCircle = L.circle(startLatLng, {
+              radius: 0,
+              color: colorHex,
+              fillColor: colorHex,
+              fillOpacity: 0.15,
+              weight: 2,
+              className: 'interactive-circle'
+            }).addTo(map);
 
-      // Update equipment units count dropdown inside state
-      if (action === 'update-equipment-quantity') {
-        if (window.state.equipmentAnswers[item]) {
-          window.state.equipmentAnswers[item].quantity = parseInt(e.target.value);
-          triggerCloudSave();
-        }
-      }
-
-      // --- HANDLE DYNAMIC PHOTO FILE TRANSMISSIONS WITH FIFO ---
-      if (action === 'upload-photo') {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        presentOverlay("Compressing media", "Securing ImgBB visual upload link...");
-        const formData = new FormData();
-        formData.append("image", file);
-
-        try {
-          const resp = await fetch("https://api.imgbb.com/1/upload?key=b733862d15744e2bfaa4329d122f4ba0", {
-            method: "POST",
-            body: formData
-          });
-          const res = await resp.json();
-          dismissOverlay();
-
-          if (resp.ok && res && res.data && res.data.display_url) {
-            const url = res.data.display_url;
-            const ans = window.state.facilityAnswers[item];
-            
-            let substituted = false;
-            // Limit 6 with FIFO deletion
-            if (ans.photos.length >= 6) {
-              ans.photos.shift();
-              substituted = true;
-            }
-
-            ans.photos.push({
-              url: url,
-              tag: ans.rating || 'Good',
-              caption: ''
-            });
-
-            renderFacilityChecklist();
-            triggerCloudSave();
-
-            if (substituted) {
-              sendNotification("Photo updated", "success");
-            } else {
-              sendNotification("Attachment uploaded successfully!", "success");
-            }
-          } else {
-            sendNotification("Storage host response could not be loaded. Verify key setup.", "error");
+            // Temporarily disable map dragging/panning during drawing phase
+            map.dragging.disable();
           }
-        } catch (err) {
-          console.error("Photo upload error", err);
-          dismissOverlay();
-          sendNotification("Storage submission error. Verify server state.", "error");
-        }
-      }
+        });
 
-      // Equipment Photo Uploading with 3-photo FIFO
-      if (action === 'upload-photo-equipment') {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        presentOverlay("Uploading Photo", "Pushing equipment photo check...");
-        const formData = new FormData();
-        formData.append("image", file);
-
-        try {
-          const resp = await fetch("https://api.imgbb.com/1/upload?key=b733862d15744e2bfaa4329d122f4ba0", {
-            method: "POST",
-            body: formData
-          });
-          const res = await resp.json();
-          dismissOverlay();
-
-          if (resp.ok && res && res.data && res.data.display_url) {
-            const url = res.data.display_url;
-            const ans = window.state.equipmentAnswers[item];
-            
-            let substituted = false;
-            // Limit 3 with FIFO deletion
-            if (ans.photos.length >= 3) {
-              ans.photos.shift();
-              substituted = true;
-            }
-
-            ans.photos.push({
-              url: url,
-              tag: ans.rating || 'Good',
-              caption: ''
-            });
-
-            renderEquipmentChecklist();
-            triggerCloudSave();
-
-            if (substituted) {
-              sendNotification("Photo updated", "success");
-            } else {
-              sendNotification("Attachment uploaded successfully!", "success");
-            }
-          } else {
-            sendNotification("ImgBB rejected upload connection", "error");
+        // Mousemove to update standard viewport Radius
+        map.on('mousemove', function(e) {
+          if (isDrawing && tempCircle && startLatLng) {
+            const currentLatLng = e.latlng;
+            const distance = map.distance(startLatLng, currentLatLng); // returns distance in meters
+            tempCircle.setRadius(distance);
           }
-        } catch (err) {
-          console.error("Photo upload error", err);
-          dismissOverlay();
-          sendNotification("Equipment upload fails. Confirm file structure.", "error");
+        });
+
+        // Map mouseup to finalize drawn circle
+        map.on('mouseup', function(e) {
+          finalizeDrawing();
+        });
+
+        // Window-level global mouseup to safely capture drag releases that slip outside boundaries
+        window.addEventListener('mouseup', function(e) {
+          if (isDrawing) {
+            finalizeDrawing();
+          }
+        });
+      }
+
+      // Finish drawing logic
+      function finalizeDrawing() {
+        if (!isDrawing) return;
+        isDrawing = false;
+        map.dragging.enable();
+
+        if (tempCircle) {
+          const radius = tempCircle.getRadius();
+          const center = tempCircle.getLatLng();
+
+          // Reject accidental clicks with nearly zero radius
+          if (radius < 5) {
+            map.removeLayer(tempCircle);
+            tempCircle = null;
+            return;
+          }
+
+          const colorName = document.getElementById('color-picker').value;
+          const colorHex = colorMap[colorName] || '#808080';
+          const finalCircle = tempCircle;
+          
+          tempCircle = null;
+
+          // Register click-to-delete behavior on finalized circle
+          finalCircle.on('click', function(e) {
+            L.DomEvent.stopPropagation(e); // Stop propagation to map click
+            map.removeLayer(finalCircle);
+            circles = circles.filter(c => c !== finalCircle);
+            showToast('Erase spatial query zone successfully', 'warning');
+          });
+
+          circles.push(finalCircle);
+
+          // Apply Spatial query lookup and styling instantly
+          applySpatialColoring(center, radius, colorHex, colorName);
         }
       }
-    });
 
-    // Boot system and list collections
-    loadCollectionsFromCloud();
-    if (typeof updateOnlineStatus === 'function') {
-      updateOnlineStatus();
-    }
+      // 3. Custom Marker Styling (divIcon using Dynamic Inline SVG)
+      function createCustomMarkerIcon(color) {
+        // High quality inline drawing pin SVG with dropshadow inside a transparent Leaflet divIcon
+        const svgHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${color}" width="32" height="32" style="filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.45));">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+        </svg>
+        `;
+        return L.divIcon({
+          html: svgHTML,
+          className: 'custom-marker-icon', // overrules default border/background CSS of L.divIcon
+          iconSize: [32, 32],
+          iconAnchor: [16, 32], // absolute center-bottom alignment representing position anchor
+          popupAnchor: [0, -32]
+        });
+      }
 
-  </script>
-</body>
+      // Generates map marker popup with elegant standard dropdown SELECT menu organized on ROYGBIV spectrum
+      function generatePopupContent(loc) {
+        let selectOptions = '';
+        spectrumOrder.forEach(col => {
+          const label = col.charAt(0).toUpperCase() + col.slice(1);
+          const isSelected = loc.colorName === col ? 'selected' : '';
+          selectOptions += `<option value="${col}" ${isSelected}>${label}</option>`;
+        });
+
+        return `
+          <div class="font-sans text-xs p-1.5 space-y-2.5 w-[205px] text-slate-100">
+            <div>
+              <p class="font-bold text-white border-b border-slate-705 pb-1 mb-1.5 text-sm truncate" title="${escapeHtml(loc.name)}">${escapeHtml(loc.name)}</p>
+              <p class="text-[10px] text-slate-400"><strong>Number:</strong> ${escapeHtml(loc.number)}</p>
+              <p class="text-[10px] text-slate-400"><strong>Coords:</strong> ${loc.longitude.toFixed(5)}, ${loc.latitude.toFixed(5)}</p>
+            </div>
+            
+            <div class="space-y-1 pt-1.5 border-t border-slate-800">
+              <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Set Color Dropdown</label>
+              <select onchange="window.changeMarkerColorFromPopup('${loc.id}', this.value)" 
+                class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded px-2.5 py-1.5 text-xs focus:outline-none focus:border-blue-500 cursor-pointer font-medium">
+                ${selectOptions}
+              </select>
+            </div>
+          </div>
+        `;
+      }
+
+      // Global wrapper handler to allow dynamic direct updates from map dropdown 
+      window.changeMarkerColorFromPopup = function(id, colorName) {
+        updateSingleStoreColor(id, colorName);
+      };
+
+      // 4. Data Extraction and Parser (Name Number Lon Lat)
+      function parsePastedData(text) {
+        const lines = text.split(/\r?\n/);
+        const parsedLocations = [];
+        const errors = [];
+
+        lines.forEach((line, index) => {
+          const trimmed = line.trim();
+          if (!trimmed) return; // skip silent blank rows
+
+          let cols = [];
+          if (trimmed.includes('\t')) {
+            cols = trimmed.split('\t');
+          } else {
+            cols = trimmed.split(',');
+          }
+
+          cols = cols.map(c => c.trim());
+
+          if (cols.length < 4) {
+            errors.push(`Line ${index + 1}: Found only ${cols.length} columns (Requires Name, Number, Longitude, Latitude)`);
+            return;
+          }
+
+          const name = cols[0];
+          const number = cols[1];
+          const lonStr = cols[2];
+          const latStr = cols[3];
+
+          const longitude = parseFloat(lonStr);
+          const latitude = parseFloat(latStr);
+
+          // Full parsing checks and coordinates range assertions
+          if (isNaN(longitude)) {
+            errors.push(`Line ${index + 1}: Longitude value "${lonStr}" is invalid`);
+            return;
+          }
+          if (isNaN(latitude)) {
+            errors.push(`Line ${index + 1}: Latitude value "${latStr}" is invalid`);
+            return;
+          }
+
+          if (longitude < -180 || longitude > 180) {
+            errors.push(`Line ${index + 1}: longitude is out of range (${lonStr})`);
+            return;
+          }
+          if (latitude < -90 || latitude > 90) {
+            errors.push(`Line ${index + 1}: latitude is out of range (${latStr})`);
+            return;
+          }
+
+          parsedLocations.push({
+            id: Date.now() + Math.random().toString(36).substr(2, 9), // unique runtime ID
+            name: name,
+            number: number,
+            longitude: longitude,
+            latitude: latitude,
+            color: '#808080', // Default Gray
+            colorName: 'gray'
+          });
+        });
+
+        return { data: parsedLocations, errors: errors };
+      }
+
+      // Handler for parsing and plotting pasted items
+      function handlePlotButtonClick() {
+        const rawContent = document.getElementById('data-input').value;
+        if (!rawContent.trim()) {
+          showToast('Paste tab-separated spatial data to begin', 'error');
+          return;
+        }
+
+        const result = parsePastedData(rawContent);
+
+        if (result.data.length === 0) {
+          showToast('Failed to plot data. Double check raw alignment.', 'error');
+          if (result.errors.length > 0) {
+            displayErrorsInUI(result.errors);
+          }
+          return;
+        }
+
+        // overwrite with new parsed set
+        locations = result.data;
+        saveLocationsToStorage();
+
+        // Map visualization
+        clearAllMarkers();
+        plotMarkers();
+        renderLocationList();
+
+        if (result.errors.length > 0) {
+          displayErrorsInUI(result.errors);
+          showToast(`Plotted ${result.data.length} tags. ${result.errors.length} rows failed.`, 'warning');
+        } else {
+          clearErrorsInUI();
+          showToast(`Plotted ${result.data.length} coordinate locations!`, 'success');
+        }
+
+        // Automatic fitBounds coordinates assertion
+        fitMapBoundsToMarkers();
+      }
+
+      // Clean live markers
+      function clearAllMarkers() {
+        for (let id in markerMap) {
+          map.removeLayer(markerMap[id]);
+        }
+        markerMap = {};
+      }
+
+      // Plot marker state instances to Leaflet map
+      function plotMarkers() {
+        locations.forEach(loc => {
+          const markerColor = loc.color || '#808080';
+          const marker = L.marker([loc.latitude, loc.longitude], {
+            icon: createCustomMarkerIcon(markerColor)
+          });
+
+          // Metadata Popup binding with dropdown select capability
+          marker.bindPopup(generatePopupContent(loc));
+
+          marker.addTo(map);
+          markerMap[loc.id] = marker;
+        });
+      }
+
+      // Fit view limits
+      function fitMapBoundsToMarkers() {
+        if (locations.length === 0) return;
+        const coordinates = locations.map(loc => [loc.latitude, loc.longitude]);
+        const bounds = L.latLngBounds(coordinates);
+        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+      }
+
+      // Zoom focus and trigger marker popup
+      function zoomToMarker(id) {
+        const loc = locations.find(l => l.id === id);
+        if (loc) {
+          map.setView([loc.latitude, loc.longitude], 15);
+          const marker = markerMap[id];
+          if (marker) {
+            marker.openPopup();
+          }
+        }
+      }
+
+      // 5. Spatial Intersect Color Logic
+      function applySpatialColoring(center, radius, colorHex, colorName) {
+        let matchingCount = 0;
+
+        locations.forEach(loc => {
+          const markerLatLng = L.latLng(loc.latitude, loc.longitude);
+          const distance = map.distance(center, markerLatLng); // distance between values in meters
+
+          if (distance <= radius) {
+            loc.color = colorHex;
+            loc.colorName = colorName;
+            matchingCount++;
+
+            // Swap icon representation visually
+            const marker = markerMap[loc.id];
+            if (marker) {
+              marker.setIcon(createCustomMarkerIcon(colorHex));
+              // Refresh dynamic dropdown popups
+              marker.setPopupContent(generatePopupContent(loc));
+            }
+          }
+        });
+
+        if (matchingCount > 0) {
+          saveLocationsToStorage();
+          renderLocationList();
+          showToast(`Spatial query painted ${matchingCount} markers ${colorName}!`, 'success');
+        } else {
+          showToast('Query area created. No markers fell within radius.', 'warning');
+        }
+      }
+
+      // Single-click active color override logic for both map dropdowns and sidebar modals
+      window.updateSingleStoreColor = function(id, colorName) {
+        const loc = locations.find(l => l.id === id);
+        if (!loc) return;
+
+        const hex = colorMap[colorName] || '#808080';
+        loc.color = hex;
+        loc.colorName = colorName;
+
+        // Persist values
+        saveLocationsToStorage();
+
+        // Update active marker representation on the live canvas
+        const marker = markerMap[id];
+        if (marker) {
+          marker.setIcon(createCustomMarkerIcon(hex));
+          // Redraw dropdown select popup statically so change reflects immediately
+          marker.setPopupContent(generatePopupContent(loc));
+        }
+
+        // Refresh List sidebar item cards
+        renderLocationList();
+
+        showToast(`Painted "${loc.name}" marker to ${colorName}`, 'success');
+      };
+
+      // POPUP MODAL CONTROL LOGIC (Sidebar Change Color Trigger)
+      window.openColorModal = function(id) {
+        const loc = locations.find(l => l.id === id);
+        if (!loc) return;
+        
+        activeModalLocationId = id;
+        
+        // Update labels
+        document.getElementById('modal-subtitle').textContent = `Setting color for "${loc.name}" (ID: ${loc.number})`;
+        
+        // Build the swatches in spectrum order
+        const grid = document.getElementById('modal-colors-grid');
+        grid.innerHTML = '';
+        
+        spectrumOrder.forEach(colName => {
+          const hex = colorMap[colName];
+          const isSelected = loc.colorName === colName;
+          
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.title = colName.charAt(0).toUpperCase() + colName.slice(1);
+          button.className = `h-10 rounded-lg flex flex-col items-center justify-center border transition-all duration-150 cursor-pointer relative ${
+            isSelected 
+              ? 'bg-slate-850 border-blue-500 ring-2 ring-blue-500/40 text-white font-bold scale-105 shadow-lg' 
+              : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200'
+          }`;
+          
+          // Click handler inside modal swatches
+          button.onclick = function() {
+            window.updateSingleStoreColor(id, colName);
+            closeColorModal();
+          };
+          
+          button.innerHTML = `
+            <span class="w-4 h-4 rounded-full mb-1 shadow-inner flex-shrink-0" style="background-color: ${hex}"></span>
+            <span class="text-[8px] tracking-wider uppercase font-semibold truncate max-w-[70px]">${colName}</span>
+          `;
+          
+          grid.appendChild(button);
+        });
+        
+        // Show overlay with fade-in properties
+        const modal = document.getElementById('color-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      };
+
+      window.closeColorModal = function() {
+        const modal = document.getElementById('color-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        activeModalLocationId = null;
+      };
+
+      // 6. CSV Compiling and Download trigger
+      function exportToCsv() {
+        if (locations.length === 0) {
+          showToast('No parsed locations to export currently', 'error');
+          return;
+        }
+
+        // CSV Header formation
+        let csvContent = "name,number,longitude,latitude,color\n";
+
+        locations.forEach(loc => {
+          const escapedName = loc.name.replace(/"/g, '""');
+          const escapedNumber = loc.number.replace(/"/g, '""');
+          csvContent += `"${escapedName}","${escapedNumber}",${loc.longitude},${loc.latitude},"${loc.colorName || 'gray'}"\n`;
+        });
+
+        // Trigger safe file system download via dynamic blob anchor
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const downloadUrl = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        
+        link.setAttribute("href", downloadUrl);
+        link.setAttribute("download", `spatial_export_${Date.now()}.csv`);
+        link.style.visibility = 'hidden';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showToast(`CSV compiled and downloaded!`, 'success');
+      }
+
+      // Color pick select trigger preview update
+      function updateSelectedColor() {
+        const picker = document.getElementById('color-picker');
+        const preview = document.getElementById('color-preview');
+        const colorHex = colorMap[picker.value] || '#808080';
+        preview.style.backgroundColor = colorHex;
+      }
+
+      // Plotted list dynamic HTML rendering - cleanly designed cards with interactive popups triggers
+      function renderLocationList() {
+        const container = document.getElementById('locations-list');
+        const badge = document.getElementById('plotted-badge');
+        const clearBtn = document.getElementById('btn-clear-list');
+        
+        badge.textContent = locations.length;
+
+        if (locations.length === 0) {
+          clearBtn.classList.add('hidden');
+          container.innerHTML = `
+            <div class="text-center py-10 px-4 text-slate-500 text-xs animate-fade-in">
+              <svg class="w-8 h-8 mx-auto text-slate-700 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              No locations plotted. Paste data above and click "Plot Data" to begin.
+            </div>
+          `;
+          return;
+        }
+
+        clearBtn.classList.remove('hidden');
+        container.innerHTML = '';
+        
+        locations.forEach(loc => {
+          const div = document.createElement('div');
+          div.className = "p-4 hover:bg-slate-800/25 flex items-center justify-between gap-3 text-xs transition-all duration-125 animate-fade-in border-b border-slate-800/40";
+          
+          div.innerHTML = `
+            <div class="flex items-center gap-3 overflow-hidden pr-2">
+              <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${loc.color || '#808080'}"></span>
+              <div class="truncate">
+                <p class="font-bold text-slate-200 hover:text-white truncate cursor-pointer transition-colors" onclick="zoomToMarker('${loc.id}')" title="Zoom & Center Map">${escapeHtml(loc.name)}</p>
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-[9px] text-slate-500 font-medium font-mono">ID: ${escapeHtml(loc.number)}</span>
+                  <span class="inline-block w-1 h-1 rounded-full bg-slate-700"></span>
+                  <span class="text-[9px] uppercase font-bold text-slate-400 font-sans tracking-wide">
+                    ${loc.colorName || 'gray'}
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <!-- Expanded change color menu button trigger -->
+              <button onclick="window.openColorModal('${loc.id}')" 
+                class="px-2.5 py-1 text-[10px] bg-slate-800 hover:bg-slate-700 text-blue-300 hover:text-blue-200 rounded-lg cursor-pointer transition-colors border border-slate-700 font-semibold shadow-sm">
+                Change Color
+              </button>
+              
+              <button onclick="zoomToMarker('${loc.id}')" class="p-1 px-1.5 text-slate-400 hover:text-blue-400 hover:bg-slate-800 rounded transition-colors flex items-center justify-center cursor-pointer" title="Zoom & Center Focus">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // UI Error Log togglers
+      function displayErrorsInUI(errors) {
+        const container = document.getElementById('error-container');
+        const list = document.getElementById('error-list');
+        const count = document.getElementById('error-count');
+
+        list.innerHTML = '';
+        count.textContent = errors.length;
+
+        errors.forEach(err => {
+          const li = document.createElement('li');
+          li.textContent = err;
+          list.appendChild(li);
+        });
+
+        container.classList.remove('hidden');
+      }
+
+      // Clear parsing error log
+      function clearErrorsInUI() {
+        const container = document.getElementById('error-container');
+        container.classList.add('hidden');
+      }
+
+      // Clean whole live storage data
+      function clearAllPlottedData() {
+        locations = [];
+        clearAllMarkers();
+        circles.forEach(circle => map.removeLayer(circle));
+        circles = [];
+        saveLocationsToStorage();
+        renderLocationList();
+        clearErrorsInUI();
+        showToast('All mapping and spatial layers cleared.', 'warning');
+      }
+
+      // LocalStorage persistence routines
+      function saveLocationsToStorage() {
+        localStorage.setItem('spatial_plotted_locations_app', JSON.stringify(locations));
+      }
+
+      function loadLocationsFromStorage() {
+        const storedStr = localStorage.getItem('spatial_plotted_locations_app');
+        if (storedStr) {
+          try {
+            locations = JSON.parse(storedStr);
+          } catch(e) {
+            locations = [];
+          }
+        }
+      }
+
+      // Utilities
+      function escapeHtml(text) {
+        if (typeof text !== 'string') return '';
+        return text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // Premium Dynamic Toasts Notification Script
+      let toastTimeout;
+      function showToast(message, type = 'success') {
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        const toastIcon = document.getElementById('toast-icon');
+
+        toastMessage.textContent = message;
+
+        // Reset class to prevent stacking styles
+        toast.className = "absolute top-4 right-4 z-[9999] text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 transform transition-all duration-300 pointer-events-auto border";
+
+        if (type === 'success') {
+          toast.className += " bg-emerald-950/95 border-emerald-800 text-emerald-200";
+          toastIcon.innerHTML = `<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+        } else if (type === 'error') {
+          toast.className += " bg-red-950/95 border-red-800 text-red-200";
+          toastIcon.innerHTML = `<svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+        } else if (type === 'warning') {
+          toast.className += " bg-amber-950/95 border-amber-800 text-amber-200";
+          toastIcon.innerHTML = `<svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
+        }
+
+        // slide and show
+        toast.style.transform = "translateY(0)";
+        toast.style.opacity = "1";
+
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          toast.style.transform = "translateY(-100px)";
+          toast.style.opacity = "0";
+        }, 3500);
+      }
+
+      // Start core applet
+      window.onload = function() {
+        initMap();
+        loadLocationsFromStorage();
+        updateSelectedColor();
+
+        if (locations.length > 0) {
+          plotMarkers();
+          renderLocationList();
+          fitMapBoundsToMarkers();
+          showToast(`Restored ${locations.length} locations from local cache`, 'success');
+        } else {
+          // Preload standard San Francisco sample data to demonstrate functionality easily
+          const sfSampleData = `Mission Dolores\t1001\t-122.4267\t37.7599\nFisherman's Wharf\t1002\t-122.4177\t37.8080\nGolden Gate Park Central\t1003\t-122.4862\t37.7694\nFerry Building\t1004\t-122.3937\t37.7955\nUnion Square Mall\t1005\t-122.4080\t37.7876\nTwin Peaks Viewpoint\t1006\t-122.4475\t37.7523`;
+          document.getElementById('data-input').value = sfSampleData;
+          showToast("Sample dataset loaded. Click 'Plot Data' to render!", "warning");
+        }
+      };
+    </script>
+  </body>
 </html>
