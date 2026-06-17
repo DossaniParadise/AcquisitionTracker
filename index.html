@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inspections Portal</title>
+  <title>DPM Acquisition Tracker</title>
   
   <!-- Premium Hospitality/Restaurant Brand Tailwind CSS Config -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -78,9 +78,9 @@
             <span class="p-1.5 bg-[#EA580C] text-white rounded-xl shadow-md flex items-center justify-center">
               <i data-lucide="shield-check" class="w-5 h-5"></i>
             </span>
-            <span class="font-sans leading-none">Inspections</span>
+            <span class="font-sans leading-none text-base">DPM Acquisition</span>
           </h2>
-          <p class="text-[10px] text-orange-200/70 font-bold tracking-widest uppercase mt-3">Hospitality Portal</p>
+          <p class="text-[10px] text-orange-200/70 font-bold tracking-widest uppercase mt-3">Field Auditor Hub</p>
         </div>
         
         <nav class="space-y-1.5">
@@ -117,8 +117,8 @@
       <!-- Premium Header -->
       <header class="bg-white/90 backdrop-blur-md px-6 py-5 border-b border-neutral-100 flex items-center justify-between shrink-0">
         <div>
-          <h1 class="text-2xl font-bold tracking-tight text-neutral-900" id="header-title">Inspections</h1>
-          <p class="text-xs text-neutral-500 font-normal mt-0.5" id="header-subtitle">Standard Portal</p>
+          <h1 class="text-2xl font-bold tracking-tight text-neutral-900" id="header-title">DPM Acquisition Tracker</h1>
+          <p class="text-xs text-neutral-500 font-normal mt-0.5" id="header-subtitle">Field Auditor Hub</p>
         </div>
         <button data-action="go-home" class="p-2.5 rounded-full hover:bg-neutral-100 transition active:scale-95 flex items-center justify-center gap-1 bg-neutral-50/50 border border-neutral-200" id="header-home-btn" title="Home">
           <i data-lucide="home" class="w-5 h-5 text-neutral-800"></i>
@@ -132,7 +132,7 @@
         <div id="view-home" class="view-panel space-y-8">
           <div class="py-6 text-center space-y-2">
             <p class="text-sm font-extrabold text-[#EA580C] uppercase tracking-widest">Workspace</p>
-            <h2 class="text-3xl font-extrabold text-[#1E3A8A] tracking-tight">Main Operations</h2>
+            <h2 class="text-3xl font-extrabold text-[#1E3A8A] tracking-tight">DPM Acquisition Tracker</h2>
           </div>
 
           <div class="space-y-4">
@@ -768,15 +768,25 @@
         });
         window.state.inspections = temp.sort((a, b) => b.timestamp - a.timestamp);
         
-        const completedStoresCount = new Set(window.state.inspections.map(i => i.store)).size;
+        let fullyCompletedStores = 0;
+        let sumPercent = 0;
         const totalStoresCount = window.state.stores.length || 1;
-        const completionPercent = Math.min(100, Math.round((completedStoresCount / totalStoresCount) * 100));
+        
+        window.state.stores.forEach(store => {
+          const status = getStoreStatus(store.name);
+          if (status.percent === 100) {
+            fullyCompletedStores++;
+          }
+          sumPercent += status.percent;
+        });
+        
+        const completionPercent = window.state.stores.length ? Math.min(100, Math.round(sumPercent / window.state.stores.length)) : 0;
         
         const completeTextEl = document.getElementById('stats-complete-text');
         const completePercentEl = document.getElementById('stats-complete-percent');
         const progressBarEl = document.getElementById('stats-progress-bar');
         
-        if (completeTextEl) completeTextEl.innerText = `Total Stores Complete: ${completedStoresCount} / ${totalStoresCount}`;
+        if (completeTextEl) completeTextEl.innerText = `Total Stores Complete: ${fullyCompletedStores} / ${totalStoresCount}`;
         if (completePercentEl) completePercentEl.innerText = `${completionPercent}%`;
         if (progressBarEl) progressBarEl.style.width = `${completionPercent}%`;
 
@@ -1343,8 +1353,9 @@
       let goodCount = 0;
 
       if (insp.facility) {
-        Object.values(insp.facility).forEach(ans => {
-          if (ans && ans.rating) {
+        Object.entries(insp.facility).forEach(([key, ans]) => {
+          const exists = window.state.facilityCategories.some(cat => cat.name === key);
+          if (exists && ans && ans.rating) {
             ratedCount++;
             if (ans.rating === 'Bad') badCount++;
             else if (ans.rating === 'Acceptable') acceptableCount++;
@@ -1354,8 +1365,9 @@
       }
 
       if (insp.equipment) {
-        Object.values(insp.equipment).forEach(ans => {
-          if (ans && ans.rating) {
+        Object.entries(insp.equipment).forEach(([key, ans]) => {
+          const exists = window.state.equipmentList.some(eq => eq.name === key);
+          if (exists && ans && ans.rating) {
             ratedCount++;
             if (ans.rating === 'Bad') badCount++;
             else if (ans.rating === 'Acceptable') acceptableCount++;
@@ -1570,8 +1582,8 @@
       const subtitleEl = document.getElementById('header-subtitle');
       
       if (viewName === 'home') {
-        if (titleEl) titleEl.innerText = "Operations Portal";
-        if (subtitleEl) subtitleEl.innerText = "Welcome Back Inspector";
+        if (titleEl) titleEl.innerText = "DPM Acquisition Tracker";
+        if (subtitleEl) subtitleEl.innerText = "Field Auditor Hub";
       } else if (viewName === 'store-select') {
         if (titleEl) titleEl.innerText = "Location Info";
         if (subtitleEl) subtitleEl.innerText = "Checklist Target Selection";
