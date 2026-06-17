@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inspections</title>
+  <title>Inspections Portal</title>
   
-  <!-- Premium Hospitaly/Restaurant Brand Tailwind CSS Config -->
+  <!-- Premium Hospitality/Restaurant Brand Tailwind CSS Config -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -22,7 +22,7 @@
     }
   </script>
 
-  <!-- Lucide Minimalist Icons -->
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
@@ -44,7 +44,6 @@
       outline: none;
       box-shadow: 0 0 0 2px #EA580C; /* Burnt orange accent focus ring */
     }
-    /* Spinner override with brand warm orange */
     .spinner {
       border: 2px solid #E2E8F0;
       border-top: 2px solid #EA580C;
@@ -57,19 +56,26 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center p-0 md:p-6 lg:p-8">
 
-  <!-- Main Container: Fully responsive from mobile to max-7xl desktop -->
+  <!-- Main Container -->
   <div class="w-full max-w-7xl h-screen md:h-[88vh] lg:h-[92vh] flex flex-col md:flex-row relative bg-[#FCFAF7] shadow-2xl md:rounded-[2.5rem] overflow-hidden border border-[#1E3A8A]/10">
     
-    <!-- Desktop Sleek Left-Hand Side Navigation Rail (Hidden on Mobile) -->
+    <!-- Left Hand Navigation Rail -->
     <aside class="hidden md:flex md:flex-col md:w-64 bg-[#1E3A8A] p-6 space-y-8 shrink-0 justify-between text-white shadow-xl">
       <div class="space-y-8">
         <div class="px-2">
           <h2 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-            <span class="p-1.5 bg-[#EA580C] text-white rounded-xl shadow-md shadow-orange-950/30 flex items-center justify-center">
+            <span class="p-1.5 bg-[#EA580C] text-white rounded-xl shadow-md flex items-center justify-center">
               <i data-lucide="shield-check" class="w-5 h-5"></i>
             </span>
             <span class="font-sans leading-none">Inspections</span>
@@ -78,21 +84,18 @@
         </div>
         
         <nav class="space-y-1.5">
-          <button data-action="route" data-route="home" id="nav-desk-btn-home" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-white bg-[#EA580C] font-bold shadow-md shadow-orange-950/25 transition">
+          <button data-action="route" data-route="home" id="nav-desk-btn-home" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-white bg-[#EA580C] font-bold shadow-md transition">
             <i data-lucide="home" class="w-4.5 h-4.5"></i>
             <span class="text-xs">Home</span>
           </button>
-          
           <button data-action="route" data-route="store-select" id="nav-desk-btn-store-select" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold">
             <i data-lucide="plus-circle" class="w-4.5 h-4.5"></i>
             <span class="text-xs">Inspect Store</span>
           </button>
-          
           <button data-action="route" data-route="overview" id="nav-desk-btn-overview" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold">
             <i data-lucide="search" class="w-4.5 h-4.5"></i>
             <span class="text-xs">Overview</span>
           </button>
-          
           <button data-action="route" data-route="settings" id="nav-desk-btn-settings" class="w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold">
             <i data-lucide="sliders" class="w-4.5 h-4.5"></i>
             <span class="text-xs">Settings</span>
@@ -102,412 +105,413 @@
       
       <div class="px-2">
         <div class="flex items-center gap-1.5 text-[9px] font-mono text-orange-200/60">
-          <span id="sidebar-status-dot" class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-md shadow-green-500/50"></span>
+          <span id="sidebar-status-dot" class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-md"></span>
           <span id="sidebar-status-text">Live Connection Active</span>
         </div>
       </div>
     </aside>
 
-    <!-- Main Content Panel (Responsive with custom header/margins) -->
+    <!-- Main Content Panel -->
     <div class="flex-1 flex flex-col relative h-full overflow-hidden bg-[#FCFAF7]">
       
-      <!-- Sophisticated Header -->
+      <!-- Premium Header -->
       <header class="bg-white/90 backdrop-blur-md px-6 py-5 border-b border-neutral-100 flex items-center justify-between shrink-0">
         <div>
           <h1 class="text-2xl font-bold tracking-tight text-neutral-900" id="header-title">Inspections</h1>
           <p class="text-xs text-neutral-500 font-normal mt-0.5" id="header-subtitle">Standard Portal</p>
         </div>
-        <!-- Back / Home Button -->
         <button data-action="go-home" class="p-2.5 rounded-full hover:bg-neutral-100 transition active:scale-95 flex items-center justify-center gap-1 bg-neutral-50/50 border border-neutral-200" id="header-home-btn" title="Home">
           <i data-lucide="home" class="w-5 h-5 text-neutral-800"></i>
         </button>
       </header>
 
-      <!-- MAIN VIEWS WRAPPER -->
+      <!-- MAIN VIEWS -->
       <main class="flex-1 overflow-y-auto px-6 py-6 pb-24" id="main-content">
       
-      <!-- VIEW: HOME (Default) -->
-      <div id="view-home" class="view-panel space-y-8">
-        <div class="py-6 text-center space-y-2">
-          <p class="text-sm font-extrabold text-[#EA580C] uppercase tracking-widest">Workspace</p>
-          <h2 class="text-3xl font-extrabold text-[#1E3A8A] tracking-tight">Main Operations</h2>
-        </div>
-
-        <div class="space-y-4">
-          <!-- Store Inspection -->
-          <button data-action="route" data-route="store-select" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40">
-            <div class="space-y-1">
-              <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <i data-lucide="plus-circle" class="w-5 h-5 text-[#EA580C]"></i>
-                Store Inspection
-              </span>
-              <p class="text-xs text-neutral-550">Conduct a facility or equipment physical run.</p>
-            </div>
-            <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
-          </button>
-
-          <!-- Overview Dashboard -->
-          <button data-action="route" data-route="overview" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40">
-            <div class="space-y-1">
-              <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <i data-lucide="search" class="w-5 h-5 text-[#EA580C]"></i>
-                Overview
-              </span>
-              <p class="text-xs text-neutral-550">Filter, browse records, view ratings, and inspect photos.</p>
-            </div>
-            <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
-          </button>
-
-          <!-- Settings -->
-          <button data-action="route" data-route="settings" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40">
-            <div class="space-y-1">
-              <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <i data-lucide="sliders" class="w-5 h-5 text-[#EA580C]"></i>
-                Settings
-              </span>
-              <p class="text-xs text-neutral-550">Manage stores list, categories, and equipment items.</p>
-            </div>
-            <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
-          </button>
-        </div>
-
-        <div class="pt-6 border-t border-orange-100/30 text-center text-[10px] font-bold font-mono text-orange-600 tracking-wider uppercase">
-          Live Connection Active with Firestore DB
-        </div>
-      </div>
-
-      <!-- VIEW: STORE SELECT -->
-      <div id="view-store-select" class="view-panel space-y-6 hidden">
-        <div class="space-y-1">
-          <h2 class="text-2xl font-bold tracking-tight">Location & Checklist</h2>
-          <p class="text-xs text-neutral-500">Pick a store name and select focus category.</p>
-        </div>
-
-        <div class="space-y-6">
-          <!-- Store Selection -->
-          <div class="space-y-2">
-            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Select Store</label>
-            <select id="select-store-input" class="w-full text-sm font-medium text-neutral-800 bg-neutral-50/80 border border-orange-200 rounded-2xl px-4 py-3.5 appearance-none focus:bg-white cursor-pointer">
-              <!-- Dynamically Populated -->
-            </select>
+        <!-- VIEW: HOME -->
+        <div id="view-home" class="view-panel space-y-8">
+          <div class="py-6 text-center space-y-2">
+            <p class="text-sm font-extrabold text-[#EA580C] uppercase tracking-widest">Workspace</p>
+            <h2 class="text-3xl font-extrabold text-[#1E3A8A] tracking-tight">Main Operations</h2>
           </div>
 
-          <!-- Auditor Name Input -->
-          <div class="space-y-2">
-            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Inspector Name</label>
-            <input type="text" id="auditor-name-input" placeholder="e.g. John" class="w-full text-sm font-semibold text-neutral-800 bg-[#F3ECE3]/60 border border-orange-100/35 rounded-2xl px-4 py-3.5 focus:bg-white focus:ring-1 focus:ring-[#EA580C]">
-          </div>
-
-          <!-- Checkout Mode Selection -->
-          <div class="space-y-3">
-            <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Checklist Mode</label>
-            <div class="grid grid-cols-1 gap-2.5">
-              <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
-                <input type="radio" name="select-mode-radio" value="facility" checked class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] tracking-wide accent-[#EA580C]">
-                <div class="space-y-0.5">
-                  <span class="block text-sm font-bold text-[#1E3A8A]">Facility</span>
-                  <p class="text-[11px] text-neutral-500">Validate exterior grounds, restrooms, kitchen zones.</p>
-                </div>
-              </label>
-
-              <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
-                <input type="radio" name="select-mode-radio" value="equipment" class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] tracking-wide accent-[#EA580C]">
-                <div class="space-y-0.5">
-                  <span class="block text-sm font-bold text-[#1E3A8A]">Equipment</span>
-                  <p class="text-[11px] text-neutral-500">Validate machinery, appliances, fryers, brewers inside.</p>
-                </div>
-              </label>
-
-              <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
-                <input type="radio" name="select-mode-radio" value="both" class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] tracking-wide accent-[#EA580C]">
-                <div class="space-y-0.5">
-                  <span class="block text-sm font-bold text-[#1E3A8A]">Both</span>
-                  <p class="text-[11px] text-neutral-500">Sequential checklist beginning with Facility, ending with Equipment.</p>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <button data-action="begin-inspection" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-[#FAF8F5] font-semibold text-sm py-4 rounded-2xl shadow-md shadow-orange-950/20 transition active:scale-95 flex items-center justify-center gap-2 mt-2">
-            <span>Start Checklist</span>
-            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- VIEW: FACILITY INSPECTION -->
-      <div id="view-facility" class="view-panel space-y-6 hidden">
-        <div class="flex items-center justify-between pb-2 border-b border-orange-100/40 select-none">
-          <div>
-            <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Active Audit</span>
-            <h2 class="text-xl font-extrabold text-[#1E3A8A]">Facility Checklist</h2>
-          </div>
-          <button data-action="cancel-inspection" class="text-neutral-500 hover:text-[#991B1B] text-xs font-semibold px-3 py-1.5 rounded-xl border border-neutral-100 bg-white shadow-xs hover:bg-neutral-50 transition flex items-center justify-center gap-1.5">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Cancel
-          </button>
-        </div>
-
-        <!-- Render list dynamically -->
-        <div id="facility-items-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-        <!-- Option to transition from Facility to Equipment if mode is 'both' -->
-        <div id="facility-next-step-container" class="pt-4 hidden">
-          <button data-action="go-to-equipment" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-orange-950/15 transition active:scale-95 flex items-center justify-center gap-2 focus:outline-none">
-            <span>Proceed to Equipment Checklist</span>
-            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- VIEW: EQUIPMENT INSPECTION -->
-      <div id="view-equipment" class="view-panel space-y-6 hidden">
-        <div class="flex items-center justify-between pb-2 border-b border-orange-100/40 select-none">
-          <div>
-            <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Active Audit</span>
-            <h2 class="text-xl font-extrabold text-[#1E3A8A]">Equipment Checklist</h2>
-          </div>
-          <button data-action="cancel-inspection" class="text-neutral-500 hover:text-[#991B1B] text-xs font-semibold px-3 py-1.5 rounded-xl border border-neutral-100 bg-white shadow-xs hover:bg-neutral-50 transition flex items-center justify-center gap-1.5">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Cancel
-          </button>
-        </div>
-
-        <!-- Render list dynamically -->
-        <div id="equipment-items-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-        <!-- Transition to overview button -->
-        <div id="equipment-finish-container" class="pt-4">
-          <button data-action="finish-checklist" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-orange-950/15 transition active:scale-95 flex items-center justify-center gap-2 focus:outline-none">
-            <span>All Done! View Dashboard Overview</span>
-            <i data-lucide="check" class="w-4 h-4"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- VIEW: OVERVIEW DASHBOARD -->
-      <div id="view-overview" class="view-panel space-y-6 hidden">
-        <div class="space-y-1">
-          <h2 class="text-2xl font-bold tracking-tight text-[#1E3A8A]">Inspections Record</h2>
-          <p class="text-xs text-neutral-500">Browse and filter historic checklists in the field.</p>
-        </div>
-
-        <!-- Global Stats Header Card -->
-        <div class="bg-gradient-to-br from-orange-50/60 to-stone-100/40 border border-orange-100/40 p-4.5 rounded-3xl space-y-3 shadow-md shadow-orange-950/2 flex flex-col justify-between shrink-0">
-          <div class="flex justify-between items-center">
-            <span class="text-[10px] font-extrabold text-[#EA580C] uppercase tracking-widest">Live Check-In Status</span>
-            <span class="text-[11px] font-bold text-[#1E3A8A] bg-white/95 px-3 py-1 rounded-full border border-orange-100/45 shadow-2xs" id="stats-complete-text">
-              Total Stores Complete: 0 / 0
-            </span>
-          </div>
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center text-xs text-neutral-500">
-              <span class="font-bold text-slate-700">Completion rate</span>
-              <span class="font-extrabold text-[#EA580C] font-mono" id="stats-complete-percent">0%</span>
-            </div>
-            <div class="w-full bg-stone-200/50 h-2.5 rounded-full overflow-hidden border border-orange-100/10">
-              <div id="stats-progress-bar" class="bg-gradient-to-r from-orange-500 to-[#EA580C] h-full transition-all duration-500 rounded-full" style="width: 0%"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Store Fleet Heatmap Overview -->
-        <div id="overview-fleet-card" class="hidden sm:block bg-white border border-orange-100/60 p-5 rounded-3xl space-y-4 shadow-md shadow-orange-950/2 select-none">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-100 pb-3">
-             <div>
-              <h3 class="text-xs font-extrabold text-[#1E3A8A] uppercase tracking-widest flex items-center gap-1.5">
-                <i data-lucide="map-pin" class="w-4 h-4 text-[#EA580C]"></i> Store Fleet Heatmap
-              </h3>
-              <p class="text-[10px] text-neutral-400 font-medium">Click tile to quickly toggle filter for single store reports</p>
-            </div>
-            <!-- Indicator legends -->
-            <div class="flex flex-wrap items-center gap-2 text-[9px] font-bold">
-              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-stone-50 border border-stone-200 text-neutral-500 rounded"><span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span> Empty/0 Rated</span>
-              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-red-50 border border-red-200 text-[#991B1B] rounded"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> &gt;10% Bad</span>
-              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-amber-50 border border-amber-200 text-amber-600 rounded"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> &gt;20% Acceptable</span>
-              <span class="flex items-center gap-1 px-1.5 py-0.5 bg-green-50 border border-green-200 text-green-600 rounded"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Good/Healthy</span>
-            </div>
-          </div>
-          <div id="overview-fleet-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-            <!-- Dynamically populated store tiles -->
-          </div>
-        </div>
-
-        <!-- 1-Click Quick Filters -->
-        <div class="space-y-1.5 py-1">
-          <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Quick Toggle:</div>
-          <div class="flex flex-nowrap overflow-x-auto gap-1.5 select-none no-scrollbar">
-            <button data-action="toggle-quick-filter" data-val="" id="quick-filter-all" class="shrink-0 text-[11px] font-bold px-3.5 py-1.5 rounded-full bg-[#1E3A8A] text-white border border-transparent transition shadow-xs flex items-center justify-center">
-              All
+          <div class="space-y-4">
+            <button data-action="route" data-route="store-select" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40 cursor-pointer">
+              <div class="space-y-1">
+                <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                  <i data-lucide="plus-circle" class="w-5 h-5 text-[#EA580C]"></i>
+                  Store Inspection
+                </span>
+                <p class="text-xs text-neutral-500">Conduct a facility or equipment physical run.</p>
+              </div>
+              <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
             </button>
-            <button data-action="toggle-quick-filter" data-val="Acceptable" id="quick-filter-acceptable" class="shrink-0 text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-orange-100/40 hover:bg-orange-50/20 transition flex items-center justify-center">
-              All Acceptable
-            </button>
-            <button data-action="toggle-quick-filter" data-val="Bad" id="quick-filter-bad" class="shrink-0 text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-orange-100/40 hover:bg-orange-50/20 transition flex items-center justify-center">
-              All Bad
-            </button>
-          </div>
-        </div>
 
-        <!-- Dashboard Filter Grid Controls -->
-        <div class="bg-stone-50/80 border border-orange-100/30 p-4 rounded-3xl space-y-3.5 shadow-sm">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[#1E3A8A] uppercase tracking-wider">Search Filters</span>
-            <button data-action="reset-filters" class="text-xs text-[#EA580C] font-semibold hover:underline flex items-center justify-center gap-2">
-              Reset Filters
+            <button data-action="route" data-route="overview" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40 cursor-pointer">
+              <div class="space-y-1">
+                <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                  <i data-lucide="search" class="w-5 h-5 text-[#EA580C]"></i>
+                  Overview History
+                </span>
+                <p class="text-xs text-neutral-500">Filter, browse records, view ratings, and inspect photos.</p>
+              </div>
+              <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
+            </button>
+
+            <button data-action="route" data-route="settings" class="w-full flex items-center justify-between bg-white border border-orange-100/45 p-6 rounded-3xl transition active:scale-[0.98] group text-left shadow-sm hover:border-[#EA580C]/40 cursor-pointer">
+              <div class="space-y-1">
+                <span class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                  <i data-lucide="sliders" class="w-5 h-5 text-[#EA580C]"></i>
+                  Settings Configuration
+                </span>
+                <p class="text-xs text-neutral-500">Manage stores list, categories, and equipment items.</p>
+              </div>
+              <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-400 group-hover:text-[#EA580C] transition translate-x-0 group-hover:translate-x-1"></i>
             </button>
           </div>
 
-          <div class="space-y-2.5">
-            <!-- Filter Store -->
-            <div>
-              <select id="filter-store-select" class="w-full bg-white text-xs font-medium text-neutral-800 border border-orange-100/40 rounded-xl px-3 py-2.5 appearance-none focus:ring-1 focus:ring-[#EA580C] cursor-pointer">
-                <option value="">All Store Locations</option>
+          <div class="pt-6 border-t border-orange-100/30 text-center text-[10px] font-bold font-mono text-orange-600 tracking-wider uppercase">
+            Live Connection Active with Firestore DB
+          </div>
+        </div>
+
+        <!-- VIEW: STORE SELECT -->
+        <div id="view-store-select" class="view-panel space-y-6 hidden">
+          <div class="space-y-1">
+            <h2 class="text-2xl font-bold tracking-tight">Location & Checklist</h2>
+            <p class="text-xs text-neutral-500">Pick a store name and select focus category.</p>
+          </div>
+
+          <div class="space-y-6">
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Select Store</label>
+              <select id="select-store-input" class="w-full text-sm font-medium text-neutral-800 bg-neutral-50/80 border border-orange-200 rounded-2xl px-4 py-3.5 appearance-none focus:bg-white cursor-pointer">
+                <!-- Dynamic -->
               </select>
             </div>
 
-            <!-- Filter Categories/Items dropdown match -->
-            <div class="relative">
-              <select id="filter-category-select" class="w-full bg-white text-xs font-medium text-neutral-800 border border-orange-100/40 rounded-xl px-3 py-2.5 appearance-none focus:ring-1 focus:ring-[#EA580C] cursor-pointer">
-                <option value="">All Item Names</option>
-              </select>
-              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-neutral-400">
-                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Inspector Name</label>
+              <input type="text" id="auditor-name-input" placeholder="e.g. John" class="w-full text-sm font-semibold text-neutral-800 bg-[#F3ECE3]/60 border border-orange-100/35 rounded-2xl px-4 py-3.5 focus:bg-white focus:ring-1 focus:ring-[#EA580C]">
+            </div>
+
+            <div class="space-y-3">
+              <label class="block text-xs font-bold text-neutral-500 uppercase tracking-wider">Checklist Mode</label>
+              <div class="grid grid-cols-1 gap-2.5">
+                <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
+                  <input type="radio" name="select-mode-radio" value="facility" checked class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] accent-[#EA580C]">
+                  <div class="space-y-0.5">
+                    <span class="block text-sm font-bold text-[#1E3A8A]">Facility Only</span>
+                    <p class="text-[11px] text-neutral-500">Validate exterior grounds, restrooms, and kitchen zones.</p>
+                  </div>
+                </label>
+                <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
+                  <input type="radio" name="select-mode-radio" value="equipment" class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] accent-[#EA580C]">
+                  <div class="space-y-0.5">
+                    <span class="block text-sm font-bold text-[#1E3A8A]">Equipment Only</span>
+                    <p class="text-[11px] text-neutral-500">Validate machinery, appliances, fryers, and brewers inside.</p>
+                  </div>
+                </label>
+                <label class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-orange-100/40 cursor-pointer hover:bg-orange-50/25 transition">
+                  <input type="radio" name="select-mode-radio" value="both" class="w-4 h-4 text-[#EA580C] focus:ring-[#EA580C] accent-[#EA580C]">
+                  <div class="space-y-0.5">
+                    <span class="block text-sm font-bold text-[#1E3A8A]">Both Checklists</span>
+                    <p class="text-[11px] text-neutral-500">Sequential run starting with Facility and proceeding to Equipment.</p>
+                  </div>
+                </label>
               </div>
             </div>
 
-            <!-- Filter Status Tags -->
-            <div class="grid grid-cols-2 gap-2 select-none w-full">
-              <button data-action="set-filter-tag" data-val="" id="filter-tag-all" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">All</button>
-              <button data-action="set-filter-tag" data-val="Good" id="filter-tag-good" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">Good</button>
-              <button data-action="set-filter-tag" data-val="Acceptable" id="filter-tag-acceptable" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">Acceptable</button>
-              <button data-action="set-filter-tag" data-val="Bad" id="filter-tag-bad" class="text-xs font-bold py-2.5 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition w-full text-center flex items-center justify-center cursor-pointer">Bad</button>
+            <button data-action="begin-inspection" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold text-sm py-4 rounded-2xl transition active:scale-95 flex items-center justify-center gap-2 mt-2 cursor-pointer">
+              <span>Start Checklist</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- VIEW: FACILITY INSPECTION -->
+        <div id="view-facility" class="view-panel space-y-6 hidden">
+          <div class="flex items-center justify-between pb-2 border-b border-orange-100/40">
+            <div>
+              <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Active Audit</span>
+              <h2 class="text-xl font-extrabold text-[#1E3A8A]">Facility Checklist</h2>
+            </div>
+            <button data-action="cancel-inspection" class="text-neutral-550 hover:text-[#991B1B] text-xs font-semibold px-3 py-1.5 rounded-xl border border-neutral-200 bg-white shadow-xs hover:bg-neutral-50 transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Cancel
+            </button>
+          </div>
+
+          <div id="facility-items-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+          <div class="pt-4">
+            <button data-action="next-facility" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-4 rounded-2xl transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+              <span>Confirm & Continue</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- VIEW: EQUIPMENT INSPECTION -->
+        <div id="view-equipment" class="view-panel space-y-6 hidden">
+          <div class="flex items-center justify-between pb-2 border-b border-orange-100/40">
+            <div>
+              <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Active Audit</span>
+              <h2 class="text-xl font-extrabold text-[#1E3A8A]">Equipment Checklist</h2>
+            </div>
+            <button data-action="cancel-inspection" class="text-neutral-550 hover:text-[#991B1B] text-xs font-semibold px-3 py-1.5 rounded-xl border border-neutral-200 bg-white shadow-xs hover:bg-neutral-50 transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Cancel
+            </button>
+          </div>
+
+          <div id="equipment-items-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+          <div id="equipment-finish-container" class="pt-4">
+            <button data-action="finish-equipment" class="w-full bg-[#EA580C] hover:bg-[#C2410C] text-white font-semibold py-4 rounded-2xl transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+              <span>Finish Checklist Audit</span>
+              <i data-lucide="check" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- VIEW: OVERVIEW SUMMARY -->
+        <div id="view-overview" class="view-panel space-y-6 hidden">
+          <div class="space-y-1">
+            <h2 class="text-2xl font-bold tracking-tight text-[#1E3A8A]">Inspections Record</h2>
+            <p class="text-xs text-neutral-500">Browse and filter historic checklists in the field.</p>
+          </div>
+
+          <!-- Total completion header -->
+          <div class="bg-gradient-to-br from-orange-50/60 to-stone-100/40 border border-orange-100/40 p-5 rounded-3xl space-y-3 flex flex-col shadow-sm">
+            <div class="flex justify-between items-center">
+              <span class="text-[10px] font-extrabold text-[#EA580C] uppercase tracking-widest">Live Check-In Status</span>
+              <span class="text-[11px] font-bold text-[#1E3A8A] bg-white px-3 py-1 rounded-full border border-orange-100/45" id="stats-complete-text">
+                Total Stores Complete: 0 / 0
+              </span>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs text-neutral-550">
+                <span class="font-bold text-slate-700">Completion rate</span>
+                <span class="font-extrabold text-[#EA580C] font-mono" id="stats-complete-percent">0%</span>
+              </div>
+              <div class="w-full bg-stone-250 h-2.5 rounded-full overflow-hidden">
+                <div id="stats-progress-bar" class="bg-gradient-to-r from-orange-500 to-[#EA580C] h-full transition-all duration-500" style="width: 0%"></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Filter Count -->
-        <div class="flex items-center justify-between text-xs px-1 text-neutral-500 font-medium select-none">
-          <span id="overview-count-label">Showing 0 matching instances</span>
-          <div id="overview-sync-indicator-container" class="flex items-center gap-1.5 text-[11px] text-green-600 font-bold bg-green-50/70 border border-green-100 py-1 px-3 rounded-full">
-            <span id="overview-status-dot-wrapper" class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span id="overview-status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            <span id="overview-status-text">Live Sync Active</span>
+          <!-- Stores Fleet Heatmap -->
+          <div class="bg-white border border-orange-100/60 p-5 rounded-3xl space-y-4 shadow-sm">
+            <div>
+              <h3 class="text-xs font-extrabold text-[#1E3A8A] uppercase tracking-widest flex items-center gap-1.5">
+                <i data-lucide="map-pin" class="w-4 h-4 text-[#EA580C]"></i> Store Fleet Heatmap
+              </h3>
+              <p class="text-[10px] text-neutral-400 mt-1">Tap a card to toggle filter focus on that store's records.</p>
+            </div>
+            <div id="overview-fleet-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+              <!-- Dynamic -->
+            </div>
           </div>
-        </div>
 
-        <!-- Injected Cards List -->
-        <div id="overview-cards-list" class="space-y-4"></div>
-      </div>
+          <!-- Quick search tag buttons -->
+          <div class="space-y-1.5">
+            <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Quick Filters:</div>
+            <div class="flex flex-nowrap overflow-x-auto gap-2 py-1 select-none no-scrollbar">
+              <button data-action="toggle-quick-filter" data-val="" id="quick-filter-all" class="shrink-0 text-xs font-bold px-4 py-1.5 rounded-full bg-slate-900 text-white transition cursor-pointer">All</button>
+              <button data-action="toggle-quick-filter" data-val="Acceptable" id="quick-filter-acceptable" class="shrink-0 text-xs font-semibold px-4 py-1.5 rounded-full bg-white text-neutral-600 border border-neutral-200 transition cursor-pointer">Acceptable</button>
+              <button data-action="toggle-quick-filter" data-val="Bad" id="quick-filter-bad" class="shrink-0 text-xs font-semibold px-4 py-1.5 rounded-full bg-white text-neutral-600 border border-neutral-200 transition cursor-pointer">Bad</button>
+            </div>
+          </div>
 
-      <!-- VIEW: SETTINGS -->
-      <div id="view-settings" class="view-panel space-y-6 hidden">
-        <div class="space-y-1">
-          <h2 class="text-2xl font-bold tracking-tight text-[#1E3A8A]">Database Settings</h2>
-          <p class="text-xs text-neutral-500 font-normal mt-0.5">Edit live configurations dynamically in real-time.</p>
-        </div>
-
-        <!-- Navigation Tabs inside settings -->
-        <div class="flex bg-stone-200/50 border border-orange-100/20 p-1 rounded-2xl gap-0.5 whitespace-nowrap overflow-x-auto select-none">
-          <button data-action="set-settings-tab" data-tab="stores" id="tab-stores" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition bg-white text-[#EA580C] shadow-xs flex items-center justify-center gap-2">Stores</button>
-          <button data-action="set-settings-tab" data-tab="facilities" id="tab-facilities" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-550 hover:text-[#1E3A8A] flex items-center justify-center gap-2">Facilities</button>
-          <button data-action="set-settings-tab" data-tab="equipment" id="tab-equipment" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-550 hover:text-[#1E3A8A] flex items-center justify-center gap-2">Equipment</button>
-        </div>
-
-        <!-- Add Element Control Interface -->
-        <div class="bg-stone-50/80 border border-orange-100/30 p-4 rounded-3xl space-y-2.5 shadow-sm">
-          <h3 id="settings-add-title" class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Add New Store Location</h3>
-          <div class="flex flex-col gap-2">
-            <div class="flex flex-col sm:flex-row gap-2">
-              <input type="text" id="settings-add-input" placeholder="e.g. 16031 Beebe Capps" class="flex-1 bg-white border border-orange-100/30 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-[#EA580C]">
-              <input type="text" id="settings-add-cluster" placeholder="Cluster Tag (Optional)" class="flex-1 bg-white border border-orange-100/30 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-[#EA580C]">
-              <button data-action="submit-settings-add" class="bg-[#EA580C] hover:bg-[#C2410C] text-white rounded-xl px-4 py-2 text-xs font-bold transition active:scale-95 flex items-center justify-center shrink-0">
-                Add
+          <!-- Filter panel -->
+          <div class="bg-stone-50 border border-orange-100/30 p-4 rounded-3xl space-y-3 shadow-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-[#1E3A8A] uppercase tracking-wider">Search Filters</span>
+              <button data-action="reset-filters" class="text-xs text-[#EA580C] font-semibold hover:underline flex items-center justify-center gap-1 cursor-pointer">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Clear Filters
               </button>
             </div>
-            <p id="settings-add-hint" class="text-[10px] text-neutral-400 mt-1">Format: [Store Number] [Store Name]</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <select id="filter-store-select" class="w-full bg-white text-xs font-medium text-neutral-800 border border-neutral-200 rounded-xl px-3 py-2.5 cursor-pointer">
+                <option value="">All Store Locations</option>
+              </select>
+              <select id="filter-category-select" class="w-full bg-white text-xs font-medium text-neutral-800 border border-neutral-200 rounded-xl px-3 py-2.5 cursor-pointer">
+                <option value="">All Item Names</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-4 gap-2 text-center select-none">
+              <button data-action="set-filter-tag" data-val="" id="filter-tag-all" class="text-xs font-bold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition cursor-pointer">All Tags</button>
+              <button data-action="set-filter-tag" data-val="Good" id="filter-tag-good" class="text-xs font-bold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition cursor-pointer">Good</button>
+              <button data-action="set-filter-tag" data-val="Acceptable" id="filter-tag-acceptable" class="text-xs font-bold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition cursor-pointer">Acceptable</button>
+              <button data-action="set-filter-tag" data-val="Bad" id="filter-tag-bad" class="text-xs font-bold py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition cursor-pointer">Bad</button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs text-neutral-500 px-1 font-medium select-none">
+            <span id="overview-count-label">Showing 0 matching instances</span>
+            <div id="overview-sync-indicator-container" class="flex items-center gap-1.5 text-xs text-green-600 font-bold bg-green-50 border border-green-100 py-1 px-3 rounded-full">
+              <span id="overview-status-dot-wrapper" class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span id="overview-status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span id="overview-status-text">Live Sync Active</span>
+            </div>
+          </div>
+
+          <div id="overview-cards-list" class="space-y-4"></div>
+        </div>
+
+        <!-- VIEW: SETTINGS -->
+        <div id="view-settings" class="view-panel space-y-6 hidden">
+          <div class="space-y-1">
+            <h2 class="text-2xl font-bold tracking-tight text-[#1E3A8A]">Database Settings</h2>
+            <p class="text-xs text-neutral-500">Configure checklist assets and locations in real-time.</p>
+          </div>
+
+          <div class="flex bg-stone-200/50 border border-orange-100/20 p-1 rounded-2xl gap-0.5 select-none">
+            <button data-action="set-settings-tab" data-tab="stores" id="tab-stores" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition bg-white text-[#EA580C] shadow-xs flex items-center justify-center gap-2 cursor-pointer">Stores</button>
+            <button data-action="set-settings-tab" data-tab="facilities" id="tab-facilities" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-500 hover:text-neutral-900 flex items-center justify-center gap-2 cursor-pointer">Facilities</button>
+            <button data-action="set-settings-tab" data-tab="equipment" id="tab-equipment" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl transition text-neutral-500 hover:text-neutral-900 flex items-center justify-center gap-2 cursor-pointer">Equipment</button>
+          </div>
+
+          <!-- Sort Control for Stores (Dynamic Show/Hide) -->
+          <div id="settings-store-sort-container" class="hidden flex items-center justify-between bg-stone-50 border border-orange-100/20 p-3 rounded-2xl select-none animate-fade-in shadow-xs">
+            <span class="text-xs font-extrabold text-neutral-600 uppercase tracking-widest flex items-center gap-1">
+              <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-[#EA580C]"></i> Sort Arrangement
+            </span>
+            <div class="flex bg-stone-200/50 p-1 rounded-xl gap-0.5 shadow-2xs border border-stone-200/10">
+              <button id="sort-cluster-btn" data-action="set-store-sort" data-sort="cluster" class="px-3.5 py-1.5 text-[10px] font-bold rounded-lg transition-all focus:outline-none">
+                By Cluster
+              </button>
+              <button id="sort-alpha-btn" data-action="set-store-sort" data-sort="alphabetical" class="px-3.5 py-1.5 text-[10px] font-bold rounded-lg transition-all focus:outline-none">
+                Alphabetically
+              </button>
+            </div>
+          </div>
+
+          <!-- Add Element Block -->
+          <div class="bg-stone-50 border border-orange-100/30 p-4 rounded-3xl space-y-2.5 shadow-xs">
+            <h3 id="settings-add-title" class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Add New Store Location</h3>
+            <div class="flex flex-col gap-2">
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input type="text" id="settings-add-input" placeholder="e.g. 16031 Beebe Capps" class="flex-1 bg-white border border-orange-100/30 rounded-xl px-3 py-2.5 text-xs focus:ring-1 focus:ring-[#EA580C]">
+                <input type="text" id="settings-add-cluster" placeholder="Cluster Tag (Optional)" class="flex-1 bg-white border border-orange-100/30 rounded-xl px-3 py-2.5 text-xs focus:ring-1 focus:ring-[#EA580C]">
+                <button data-action="submit-settings-add" class="bg-[#EA580C] hover:bg-[#C2410C] text-white rounded-xl px-4 py-2.5 text-xs font-bold transition active:scale-95 flex items-center justify-center shrink-0 cursor-pointer shadow-sm">
+                  Add Item
+                </button>
+              </div>
+              <p id="settings-add-hint" class="text-[10px] text-neutral-400 mt-1">Format: [Store Number] [Store Name]</p>
+            </div>
+          </div>
+
+          <!-- Quick batch utility bar -->
+          <div id="settings-items-utility-container" class="hidden flex flex-col sm:flex-row items-center justify-between gap-3 bg-stone-50 border border-orange-100/20 p-3.5 rounded-2xl shadow-2xs">
+            <span class="text-xs font-extrabold text-[#1E3A8A] uppercase tracking-widest flex items-center gap-1 leading-none select-none">
+              <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-[#EA580C]"></i> Bulk Ordering Tools
+            </span>
+            <div class="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
+              <button data-action="toggle-batch-editor" class="flex-1 sm:flex-initial bg-[#EA580C]/10 text-[#EA580C] hover:bg-[#EA580C]/15 border border-[#EA580C]/20 font-bold text-[11px] px-3.5 py-2 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <i data-lucide="arrow-up-down" class="w-3.5 h-3.5"></i> ⚡ Quick Batch Reorder
+              </button>
+              <button data-action="sort-items-alphabetical" class="flex-1 sm:flex-initial bg-neutral-100 border border-neutral-250 text-neutral-700 hover:bg-neutral-200 hover:text-neutral-900 font-bold text-[11px] px-3.5 py-2 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <i data-lucide="sort-asc" class="w-3.5 h-3.5"></i> Auto Group A-Z
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Bulk Batch Reorder Editor (TextArea panel) -->
+          <div id="settings-batch-reorder-container" class="hidden bg-[#FFFDFB] border border-orange-200/50 p-5 rounded-3xl space-y-3.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-extrabold text-[#1E3A8A] uppercase tracking-widest flex items-center gap-1.5 leading-none">
+                <i data-lucide="arrow-up-down" class="w-4 h-4 text-[#EA580C]"></i> Quick Batch Reorder
+              </h3>
+              <p class="text-[10px] text-neutral-450 font-semibold">Change lines or paste item list. Empty lines are ignored.</p>
+            </div>
+            <textarea id="settings-batch-reorder-textarea" rows="8" class="w-full text-xs font-bold font-mono bg-white border border-orange-200 rounded-2xl p-4 focus:ring-2 focus:ring-[#EA580C] leading-relaxed" placeholder="Line 1&#10;Line 2&#10;Line 3"></textarea>
+            <div class="flex gap-2 font-bold">
+              <button data-action="apply-batch-reorder" class="flex-1 bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs py-3 rounded-xl transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+                <i data-lucide="check-circle" class="w-4 h-4"></i> Save Order Sequence
+              </button>
+              <button data-action="toggle-batch-editor" class="px-4 py-3 border border-neutral-200 text-neutral-600 bg-neutral-50 hover:bg-neutral-100 text-xs rounded-xl transition active:scale-[0.97] cursor-pointer">
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-2" id="settings-managed-items-list">
+            <!-- Dynamic list of items -->
           </div>
         </div>
 
-        <!-- Current items managed list -->
-        <div class="space-y-1.5" id="settings-managed-items-list">
-          <!-- Dynamically populated list items with delete triggers -->
+      </main>
+
+      <!-- Global Overlay Loader with blur -->
+      <div id="global-overlay" class="fixed inset-0 bg-neutral-950/20 backdrop-blur-xs z-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-3xl shadow-xl flex flex-col items-center gap-3 text-center max-w-xs mx-4">
+          <div class="spinner"></div>
+          <div class="space-y-1">
+            <h4 class="font-bold text-sm text-neutral-900" id="overlay-title">Processing request</h4>
+            <p class="text-xs text-neutral-500" id="overlay-subtitle">Writing dynamic database updates...</p>
+          </div>
         </div>
       </div>
 
-    </main>
-
-    <!-- Global Upload / Load State Overlay with premium minimal blur -->
-    <div id="global-overlay" class="fixed inset-0 bg-neutral-950/20 backdrop-blur-xs z-50 flex items-center justify-center hidden">
-      <div class="bg-white p-6 rounded-3xl shadow-xl flex flex-col items-center gap-3.5 text-center max-w-xs mx-4">
-        <div class="spinner"></div>
-        <div class="space-y-1">
-          <h4 class="font-bold text-sm text-neutral-900" id="overlay-title">Uploading media</h4>
-          <p class="text-xs text-neutral-500" id="overlay-subtitle">Uploading image to cloud repository...</p>
+      <!-- General confirm Modal -->
+      <div id="custom-confirm-modal" class="fixed inset-0 bg-neutral-950/40 backdrop-blur-xs z-50 flex items-center justify-center hidden select-none">
+        <div class="bg-white p-6 rounded-3xl shadow-xl flex flex-col gap-4 text-center max-w-xs mx-4 border border-orange-100/30">
+          <div class="mx-auto bg-amber-50 rounded-full p-3.5 w-12 h-12 flex items-center justify-center text-[#EA580C]">
+            <i data-lucide="help-circle" class="w-6 h-6"></i>
+          </div>
+          <div class="space-y-1">
+            <h4 class="font-bold text-sm text-neutral-900" id="confirm-modal-title">Are you sure?</h4>
+            <p class="text-xs text-neutral-500 leading-relaxed" id="confirm-modal-message">Do you want to proceed with this operation?</p>
+          </div>
+          <div class="flex gap-2 font-semibold mt-1">
+            <button id="confirm-modal-btn-cancel" class="flex-1 py-2 rounded-xl border border-neutral-200 text-neutral-600 bg-neutral-50 hover:bg-neutral-100 text-xs transition cursor-pointer">
+              Cancel
+            </button>
+            <button id="confirm-modal-btn-yes" class="flex-1 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs transition cursor-pointer">
+              Yes, proceed
+            </button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Beautiful custom confirm modal to bypass window.confirm iframe restrictions -->
-    <div id="custom-confirm-modal" class="fixed inset-0 bg-neutral-950/40 backdrop-blur-xs z-50 flex items-center justify-center hidden select-none">
-      <div class="bg-white p-6 rounded-3xl shadow-xl flex flex-col gap-4 text-center max-w-xs mx-4 border border-orange-100/30">
-        <div class="mx-auto bg-amber-50 rounded-full p-3.5 w-12 h-12 flex items-center justify-center text-[#EA580C]">
-          <i data-lucide="help-circle" class="w-6 h-6"></i>
-        </div>
-        <div class="space-y-1">
-          <h4 class="font-bold text-sm text-neutral-900" id="confirm-modal-title">Are you sure?</h4>
-          <p class="text-xs text-neutral-500 leading-relaxed" id="confirm-modal-message">Do you really want to proceed with this action?</p>
-        </div>
-        <div class="flex gap-2.5 font-semibold mt-1">
-          <button id="confirm-modal-btn-cancel" class="flex-1 py-2 rounded-xl border border-neutral-200 text-neutral-600 bg-neutral-50 hover:bg-neutral-100 text-xs transition cursor-pointer">
-            Cancel
+      <!-- Lightbox view -->
+      <div id="lightbox-modal" class="fixed inset-0 bg-neutral-950/95 z-50 flex flex-col items-center justify-center p-6 hidden">
+        <div class="relative w-full max-w-lg flex flex-col items-center gap-4">
+          <button data-action="close-lightbox" class="absolute -top-12 right-0 bg-white/10 hover:bg-white/20 p-2 text-white rounded-full transition flex items-center justify-center cursor-pointer">
+            <i data-lucide="x" class="w-5 h-5"></i>
           </button>
-          <button id="confirm-modal-btn-yes" class="flex-1 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs transition cursor-pointer">
-            Yes, exit
-          </button>
+          <img id="lightbox-image" class="max-h-[70vh] rounded-2xl shadow-2xl object-contain w-full" src="" alt="Zoomed view">
+          <p id="lightbox-caption" class="text-xs text-neutral-300 bg-white/10 px-4 py-2 rounded-full text-center max-w-[90%]"></p>
         </div>
       </div>
-    </div>
 
-    <!-- Clickable Magnified Image LightboxModal -->
-    <div id="lightbox-modal" class="fixed inset-0 bg-neutral-950/90 z-50 flex flex-col items-center justify-center p-6 hidden">
-      <div class="relative w-full max-w-lg flex flex-col items-center gap-4">
-        <button data-action="close-lightbox" class="absolute -top-12 right-0 bg-white/10 hover:bg-white/20 p-2.5 rounded-full text-white transition flex items-center justify-center gap-1.5">
-          <i data-lucide="x" class="w-5 h-5"></i>
+      <!-- IOS Navigation Bottom Hub -->
+      <nav class="md:hidden flex h-16 items-center justify-around absolute bottom-0 left-0 right-0 z-30 bg-[#1E3A8A] border-t border-white/5 px-2 select-none">
+        <button data-action="route" data-route="home" class="flex flex-col items-center gap-1 text-orange-400 font-bold transition justify-center" id="nav-btn-home">
+          <i data-lucide="home" class="w-5 h-5"></i>
+          <span class="text-[10px]">Home</span>
         </button>
-        <img id="lightbox-image" class="max-h-[70vh] rounded-2xl shadow-2xl object-contain w-full" src="" alt="Lightboxed image">
-        <p id="lightbox-caption" class="text-xs text-neutral-300 bg-white/10 px-4 py-2.5 rounded-full text-center tracking-medium max-w-[85%] leading-relaxed"></p>
-      </div>
+        <button data-action="route" data-route="store-select" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-store-select">
+          <i data-lucide="plus-circle" class="w-5 h-5"></i>
+          <span class="text-[10px]">Inspect</span>
+        </button>
+        <button data-action="route" data-route="overview" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-overview">
+          <i data-lucide="search" class="w-5 h-5"></i>
+          <span class="text-[10px]">Overview</span>
+        </button>
+        <button data-action="route" data-route="settings" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-settings">
+          <i data-lucide="sliders" class="w-5 h-5"></i>
+          <span class="text-[10px]">Settings</span>
+        </button>
+      </nav>
     </div>
+  </div>
 
-    <!-- IOS Global Bottom Sticky Fixed Navigation Hub -->
-    <nav class="md:hidden flex h-16 items-center justify-around absolute bottom-0 left-0 right-0 z-30 bg-[#1E3A8A] border-t border-white/5 px-2 select-none">
-      <button data-action="route" data-route="home" class="flex flex-col items-center gap-1 text-orange-400 font-bold transition justify-center" id="nav-btn-home">
-        <i data-lucide="home" class="w-5 h-5"></i>
-        <span class="text-[10px]">Home</span>
-      </button>
-
-      <button data-action="route" data-route="store-select" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-store-select">
-        <i data-lucide="plus-circle" class="w-5 h-5"></i>
-        <span class="text-[10px]">Inspect</span>
-      </button>
-
-      <button data-action="route" data-route="overview" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-overview">
-        <i data-lucide="search" class="w-5 h-5"></i>
-        <span class="text-[10px]">Overview</span>
-      </button>
-
-      <button data-action="route" data-route="settings" class="flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center" id="nav-btn-settings">
-        <i data-lucide="sliders" class="w-5 h-5"></i>
-        <span class="text-[10px]">Settings</span>
-      </button>
-    </nav>
-  </div></div>
-
-  <!-- Toast Feed notifications -->
   <div id="toast-feed" class="fixed top-4 right-4 left-4 md:left-auto md:w-80 flex flex-col gap-2 z-50 pointer-events-none"></div>
 
-  <!-- CORE SCRIPTS -->
+  <!-- MODULE SCRIPTS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import {
@@ -525,7 +529,7 @@
       onSnapshot
     } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-    // Standard live Firebase Connection (as configured)
+    // Firebase Credentials
     const firebaseConfig = {
       apiKey: "AIzaSyDNHaXUqUn32rLaCMcdA7WNcm0LemJ206c",
       authDomain: "bkacquisition-checklist.firebaseapp.com",
@@ -547,107 +551,82 @@
       console.error("Firebase Initialization failed", e);
     }
 
-    // --- DYNAMIC OFFLINE/ONLINE CONNECTION HANDLER ---
     function updateOnlineStatus() {
       const isOnline = navigator.onLine;
       const sidebarDot = document.getElementById("sidebar-status-dot");
       const sidebarText = document.getElementById("sidebar-status-text");
       const overviewContainer = document.getElementById("overview-sync-indicator-container");
-      const overviewDotWrapper = document.getElementById("overview-status-dot-wrapper");
       const overviewDot = document.getElementById("overview-status-dot");
       const overviewText = document.getElementById("overview-status-text");
 
       if (isOnline) {
-        if (sidebarDot) {
-          sidebarDot.className = "w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-md shadow-green-500/50";
-        }
-        if (sidebarText) {
-          sidebarText.innerText = "Live Connection Active";
-        }
+        if (sidebarDot) sidebarDot.className = "w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-md";
+        if (sidebarText) sidebarText.innerText = "Live Connection Active";
         if (overviewContainer) {
-          overviewContainer.className = "flex items-center gap-1.5 text-[11px] text-green-600 font-bold bg-green-50/70 border border-green-100 py-1 px-3 rounded-full shrink-0 select-none";
+          overviewContainer.className = "flex items-center gap-1.5 text-xs text-green-600 font-bold bg-green-50 border border-green-100 py-1 px-3 rounded-full shrink-0 select-none";
         }
-        if (overviewDotWrapper) {
-          overviewDotWrapper.className = "relative flex h-2 w-2";
-        }
-        if (overviewDot) {
-          overviewDot.className = "relative inline-flex rounded-full h-2 w-2 bg-green-500";
-        }
-        if (overviewText) {
-          overviewText.innerText = "Live Sync Active";
-        }
+        if (overviewDot) overviewDot.className = "relative inline-flex rounded-full h-2 w-2 bg-green-500";
+        if (overviewText) overviewText.innerText = "Live Sync Active";
       } else {
-        if (sidebarDot) {
-          sidebarDot.className = "w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse shadow-md shadow-amber-500/50";
-        }
-        if (sidebarText) {
-          sidebarText.innerText = "Offline (Cached Mode)";
-        }
+        if (sidebarDot) sidebarDot.className = "w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse shadow-md";
+        if (sidebarText) sidebarText.innerText = "Offline (Cached Mode)";
         if (overviewContainer) {
-          overviewContainer.className = "flex items-center gap-1.5 text-[11px] text-amber-600 font-bold bg-amber-50/70 border border-amber-100 py-1 px-3 rounded-full shrink-0 select-none animate-pulse";
+          overviewContainer.className = "flex items-center gap-1.5 text-xs text-amber-600 font-bold bg-amber-50 border border-amber-100 py-1 px-3 rounded-full shrink-0 select-none animate-pulse";
         }
-        if (overviewDotWrapper) {
-          overviewDotWrapper.className = "relative flex h-2 w-2";
-        }
-        if (overviewDot) {
-          overviewDot.className = "relative inline-flex rounded-full h-2 w-2 bg-amber-550";
-        }
-        if (overviewText) {
-          overviewText.innerText = "Offline Queue Active";
-        }
+        if (overviewDot) overviewDot.className = "relative inline-flex rounded-full h-2 w-2 bg-amber-600";
+        if (overviewText) overviewText.innerText = "Offline Queue Active";
       }
     }
     window.addEventListener("online", updateOnlineStatus);
     window.addEventListener("offline", updateOnlineStatus);
     window.updateOnlineStatus = updateOnlineStatus;
 
-    // --- GLOBAL SYSTEM STATE OBJECT ---
+    // GLOBAL SYSTEM STATE
     window.state = {
       stores: [],
       facilityCategories: [],
       equipmentList: [],
       inspections: [],
       
-      // Inspection state
+      // Inspection details
       selectedStore: '',
       selectedMode: 'facility', // 'facility', 'equipment', 'both'
       currentView: 'home',
-      activeDocId: '', // Live collaborative sync ID
-
-      // Ratings responses mapped in-memory during flow
-      // key: category/equipment name => { rating: 'Good'|'Acceptable'|'Bad', comment: '', photos: [{ url, tag: 'Good'..., caption: '' }], quantity?: 1 }
+      activeDocId: '',
       facilityAnswers: {},
       equipmentAnswers: {},
       activeEquipmentIndex: 0,
       
-      // Settings managed state
-      settingsTab: 'stores', // 'stores', 'facilities', 'equipment'
+      // Settings management state
+      settingsTab: 'stores',
+      editingStoreId: null,
+      confirmDeleteId: null, // Inline delete verification ID for any item
+
+      // Stores ordering filter settings
+      storeSortMode: 'cluster', // 'cluster' or 'alphabetical'
       
-      // Fast filters cache
+      // Dashboard filter caches
       filterStore: '',
       filterCategory: '',
-      filterTag: '', // 'Good', 'Acceptable', 'Bad' or ''
+      filterTag: '',
     };
 
-    // --- TOAST ALERTS ---
     function sendNotification(message, type = 'info') {
       const container = document.getElementById('toast-feed');
       const toast = document.createElement('div');
-      
       let bgStyle = "bg-neutral-900 border-neutral-800 text-white";
       let icon = "info";
       
       if (type === 'success') {
-        bgStyle = "bg-white border-neutral-100 text-green-600 shadow-xl";
+        bgStyle = "bg-white border-neutral-100 text-green-650 shadow-xl";
         icon = "check-circle";
       } else if (type === 'error') {
         bgStyle = "bg-rose-900 border-rose-800 text-white shadow-xl";
         icon = "alert-circle";
       }
       
-      toast.className = `flex items-center gap-3 px-4 py-3 border.5 rounded-2xl text-xs font-semibold pointer-events-auto transform transition duration-300 translate-y-3 opacity-0 shadow-lg ${bgStyle}`;
+      toast.className = `flex items-center gap-3 px-4 py-3 border rounded-2xl text-xs font-semibold pointer-events-auto transform transition duration-300 translate-y-3 opacity-0 shadow-lg ${bgStyle}`;
       toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i><span class="flex-1">${message}</span>`;
-      
       container.appendChild(toast);
       
       setTimeout(() => {
@@ -658,11 +637,10 @@
       setTimeout(() => {
         toast.classList.add('translate-y-3', 'opacity-0');
         setTimeout(() => toast.remove(), 300);
-      }, 3000);
+      }, 3200);
     }
     window.sendNotification = sendNotification;
 
-    // --- OVERLAY TRIGGERS ---
     function presentOverlay(title, subtitle) {
       document.getElementById('overlay-title').innerText = title;
       document.getElementById('overlay-subtitle').innerText = subtitle;
@@ -672,13 +650,12 @@
       document.getElementById('global-overlay').classList.add('hidden');
     }
 
-    // --- CUSTOM CONFIRM MODAL CONTROLLER ---
     let pendingConfirmYesCallback = null;
     let pendingConfirmCancelCallback = null;
 
     function showCustomConfirm(title, message, onYes, onCancel) {
       document.getElementById('confirm-modal-title').innerText = title || "Are you sure?";
-      document.getElementById('confirm-modal-message').innerText = message || "Do you really want to proceed with this action?";
+      document.getElementById('confirm-modal-message').innerText = message || "Do you want to proceed?";
       document.getElementById('custom-confirm-modal').classList.remove('hidden');
       pendingConfirmYesCallback = onYes || null;
       pendingConfirmCancelCallback = onCancel || null;
@@ -688,23 +665,18 @@
 
     document.getElementById('confirm-modal-btn-cancel').addEventListener('click', () => {
       document.getElementById('custom-confirm-modal').classList.add('hidden');
-      if (pendingConfirmCancelCallback) {
-        pendingConfirmCancelCallback();
-      }
+      if (pendingConfirmCancelCallback) pendingConfirmCancelCallback();
       pendingConfirmYesCallback = null;
       pendingConfirmCancelCallback = null;
     });
 
     document.getElementById('confirm-modal-btn-yes').addEventListener('click', () => {
       document.getElementById('custom-confirm-modal').classList.add('hidden');
-      if (pendingConfirmYesCallback) {
-        pendingConfirmYesCallback();
-      }
+      if (pendingConfirmYesCallback) pendingConfirmYesCallback();
       pendingConfirmYesCallback = null;
       pendingConfirmCancelCallback = null;
     });
 
-    // --- FIRESTORE DATA ACQUISITION & WRITES ---
     function escapeHtml(text) {
       if (!text) return '';
       return text
@@ -715,7 +687,6 @@
         .replace(/'/g, "&#039;");
     }
 
-    // Color-coded pastels style generation based on cluster name
     function getClusterBadgeStyle(cluster) {
       if (!cluster) return '';
       let hash = 0;
@@ -723,36 +694,32 @@
         hash = cluster.charCodeAt(i) + ((hash << 5) - hash);
       }
       const hue = Math.abs(hash) % 360;
-      // Soft modern pastel style with deep contrasting text
       return `background-color: hsl(${hue}, 85%, 94%); color: hsl(${hue}, 85%, 28%); border: 1px solid hsl(${hue}, 60%, 82%);`;
     }
 
-    // Sort function: first by cluster tag (empty/no-cluster elements last), then by store name
+    // Sort function mapping
     function sortStores(storeList) {
+      if (window.state.storeSortMode === 'alphabetical') {
+        return [...storeList].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      }
       return [...storeList].sort((a, b) => {
         const clusterA = a.cluster || '';
         const clusterB = b.cluster || '';
         if (clusterA && !clusterB) return -1;
         if (!clusterA && clusterB) return 1;
-        if (clusterA !== clusterB) {
-          return clusterA.localeCompare(clusterB);
-        }
+        if (clusterA !== clusterB) return clusterA.localeCompare(clusterB);
         return (a.name || '').localeCompare(b.name || '');
       });
     }
 
     async function loadCollectionsFromCloud() {
-      // Fetch fresh configurations
       try {
         const storesSnap = await getDocs(collection(db, "stores"));
-        window.state.stores = sortStores(storesSnap.docs.map(doc => {
+        const rawStores = storesSnap.docs.map(doc => {
           const d = doc.data();
-          return {
-            id: doc.id,
-            name: d.name || '',
-            cluster: d.cluster || ''
-          };
-        }));
+          return { id: doc.id, name: d.name || '', cluster: d.cluster || '' };
+        });
+        window.state.stores = sortStores(rawStores);
         
         const facilitySnap = await getDocs(collection(db, "facilityCategories"));
         const rawFacilities = facilitySnap.docs.map(doc => {
@@ -765,9 +732,7 @@
           if (b.order !== null) return 1;
           return a.name.localeCompare(b.name);
         });
-        rawFacilities.forEach((item, index) => {
-          item.order = index;
-        });
+        rawFacilities.forEach((item, index) => { item.order = index; });
         window.state.facilityCategories = rawFacilities;
         
         const equipmentSnap = await getDocs(collection(db, "equipmentList"));
@@ -781,19 +746,16 @@
           if (b.order !== null) return 1;
           return a.name.localeCompare(b.name);
         });
-        rawEquipment.forEach((item, index) => {
-          item.order = index;
-        });
+        rawEquipment.forEach((item, index) => { item.order = index; });
         window.state.equipmentList = rawEquipment;
 
-        // Re-render related UI Components
         renderStoreSelections();
         renderSettingsItems();
         renderOverviewStoreFilters();
         renderOverviewItemFilters();
       } catch (err) {
-        console.error("Firestore read error:", err);
-        sendNotification("Database configuration failed to load. Check settings.", "error");
+        console.error("Firestore loading error:", err);
+        sendNotification("Database configuration failed to download. Check settings.", "error");
       }
     }
 
@@ -804,10 +766,8 @@
         inspectionsSnap.forEach((doc) => {
           temp.push({ id: doc.id, ...doc.data() });
         });
-        // Sort descending by timestamp
         window.state.inspections = temp.sort((a, b) => b.timestamp - a.timestamp);
         
-        // Count completed stores
         const completedStoresCount = new Set(window.state.inspections.map(i => i.store)).size;
         const totalStoresCount = window.state.stores.length || 1;
         const completionPercent = Math.min(100, Math.round((completedStoresCount / totalStoresCount) * 100));
@@ -816,15 +776,9 @@
         const completePercentEl = document.getElementById('stats-complete-percent');
         const progressBarEl = document.getElementById('stats-progress-bar');
         
-        if (completeTextEl) {
-          completeTextEl.innerText = `Total Stores Complete: ${completedStoresCount} / ${totalStoresCount}`;
-        }
-        if (completePercentEl) {
-          completePercentEl.innerText = `${completionPercent}%`;
-        }
-        if (progressBarEl) {
-          progressBarEl.style.width = `${completionPercent}%`;
-        }
+        if (completeTextEl) completeTextEl.innerText = `Total Stores Complete: ${completedStoresCount} / ${totalStoresCount}`;
+        if (completePercentEl) completePercentEl.innerText = `${completionPercent}%`;
+        if (progressBarEl) progressBarEl.style.width = `${completionPercent}%`;
 
         renderOverviewCardsList();
       } catch (err) {
@@ -833,7 +787,6 @@
       }
     }
 
-    // --- REALTIME AUTO-SAVE / CLOUD SYNC LOGIC ---
     let saveTimeout = null;
     let activeInspectionSubscription = null;
 
@@ -847,7 +800,7 @@
           timestamp: Date.now()
         });
       } catch (err) {
-        console.error("Failed saving to Firestore:", err);
+        console.error("Auto-sync error:", err);
       }
     }
 
@@ -863,19 +816,17 @@
       await pushChecklistUpdate();
     }
 
-    // --- UI RENDERERS ---
-
-    // 1. Populate Selection View
+    // WORKSPACE UI RENDERS
     function renderStoreSelections() {
       const select = document.getElementById('select-store-input');
+      if (!select) return;
       select.innerHTML = '';
       
       if (window.state.stores.length === 0) {
-        select.innerHTML = `<option value="">No stores set up. Edit under Settings tab.</option>`;
+        select.innerHTML = `<option value="">No stores configuration. Edit settings.</option>`;
         return;
       }
 
-      // Default option
       const defaultOpt = document.createElement('option');
       defaultOpt.value = "";
       defaultOpt.innerText = "Choose Store location...";
@@ -883,8 +834,8 @@
       defaultOpt.selected = !window.state.selectedStore;
       select.appendChild(defaultOpt);
 
-      const sortedStores = sortStores(window.state.stores);
-      sortedStores.forEach(store => {
+      const sorted = sortStores(window.state.stores);
+      sorted.forEach(store => {
         const opt = document.createElement('option');
         opt.value = store.name;
         opt.innerText = store.cluster ? `[${store.cluster}] ${store.name}` : store.name;
@@ -893,13 +844,12 @@
       });
     }
 
-    // Populate stores in Dashboard filters dropdown (Sorted by Cluster then Name)
     function renderOverviewStoreFilters() {
       const select = document.getElementById('filter-store-select');
+      if (!select) return;
       select.innerHTML = '<option value="">All Store Locations</option>';
-      
-      const sortedStores = sortStores(window.state.stores);
-      sortedStores.forEach(store => {
+      const sorted = sortStores(window.state.stores);
+      sorted.forEach(store => {
         const opt = document.createElement('option');
         opt.value = store.name;
         opt.innerText = store.cluster ? `[${store.cluster}] ${store.name}` : store.name;
@@ -907,22 +857,16 @@
       });
     }
 
-    // Populate items/categories in Dashboard filters dropdown (alphabetical order)
     function renderOverviewItemFilters() {
       const select = document.getElementById('filter-category-select');
       if (!select) return;
       select.innerHTML = '<option value="">All Item Names</option>';
       
-      // Get all unique names from facility categories and equipment lists
-      const itemNamesSet = new Set();
-      window.state.facilityCategories.forEach(c => {
-        if (c.name) itemNamesSet.add(c.name.trim());
-      });
-      window.state.equipmentList.forEach(e => {
-        if (e.name) itemNamesSet.add(e.name.trim());
-      });
+      const items = new Set();
+      window.state.facilityCategories.forEach(c => { if (c.name) items.add(c.name.trim()); });
+      window.state.equipmentList.forEach(e => { if (e.name) items.add(e.name.trim()); });
       
-      const sortedNames = Array.from(itemNamesSet).sort((a, b) => a.localeCompare(b));
+      const sortedNames = Array.from(items).sort((a, b) => a.localeCompare(b));
       sortedNames.forEach(name => {
         const opt = document.createElement('option');
         opt.value = name;
@@ -932,9 +876,9 @@
       });
     }
 
-    // 2. Render Settings tab list of options and management triggers
     function renderSettingsItems() {
       const container = document.getElementById('settings-managed-items-list');
+      if (!container) return;
       container.innerHTML = '';
 
       let list = [];
@@ -944,10 +888,41 @@
       const settingsHint = document.getElementById('settings-add-hint');
       const settingsCluster = document.getElementById('settings-add-cluster');
 
+      // Sort / Filter order containers
+      const sortContainer = document.getElementById('settings-store-sort-container');
+      if (sortContainer) {
+        if (window.state.settingsTab === 'stores') {
+          sortContainer.classList.remove('hidden');
+          const sortByClusterBtn = document.getElementById('sort-cluster-btn');
+          const sortByAlphaBtn = document.getElementById('sort-alpha-btn');
+          
+          if (window.state.storeSortMode === 'alphabetical') {
+            if (sortByClusterBtn) sortByClusterBtn.className = "px-3.5 py-1.5 text-[10px] font-bold rounded-lg transition-all text-neutral-500 hover:text-neutral-800 cursor-pointer";
+            if (sortByAlphaBtn) sortByAlphaBtn.className = "px-3.5 py-1.5 text-[10px] font-bold rounded-lg transition-all bg-white text-[#EA580C] shadow-xs cursor-pointer";
+          } else {
+            if (sortByClusterBtn) sortByClusterBtn.className = "px-3.5 py-1.5 text-[10px] font-bold rounded-lg transition-all bg-white text-[#EA580C] shadow-xs cursor-pointer";
+            if (sortByAlphaBtn) sortByAlphaBtn.className = "px-3.5 py-1.5 text-[10px] font-bold rounded-lg transition-all text-neutral-500 hover:text-neutral-800 cursor-pointer";
+          }
+        } else {
+          sortContainer.classList.add('hidden');
+        }
+      }
+
+      // Bulk Tools alignment
+      const itemsUtility = document.getElementById('settings-items-utility-container');
+      if (itemsUtility) {
+        if (window.state.settingsTab === 'stores') {
+          itemsUtility.classList.add('hidden');
+        } else {
+          itemsUtility.classList.remove('hidden');
+        }
+      }
+
       if (window.state.settingsTab === 'stores') {
         list = window.state.stores;
         targetCollection = 'stores';
-        inputAddLabel.innerText = "Add New Store Location";
+        container.className = "space-y-2";
+        if (inputAddLabel) inputAddLabel.innerText = "Add New Store Location";
         if (settingsInput) settingsInput.placeholder = "e.g. 16031 Beebe Capps";
         if (settingsCluster) settingsCluster.classList.remove('hidden');
         if (settingsHint) {
@@ -957,208 +932,221 @@
       } else if (window.state.settingsTab === 'facilities') {
         list = window.state.facilityCategories;
         targetCollection = 'facilityCategories';
-        inputAddLabel.innerText = "Add New Category";
+        container.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5";
+        if (inputAddLabel) inputAddLabel.innerText = "Add New Category";
         if (settingsInput) settingsInput.placeholder = "Type name here...";
         if (settingsCluster) settingsCluster.classList.add('hidden');
         if (settingsHint) settingsHint.classList.add('hidden');
       } else {
         list = window.state.equipmentList;
         targetCollection = 'equipmentList';
-        inputAddLabel.innerText = "Add New Equipment Item";
+        container.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5";
+        if (inputAddLabel) inputAddLabel.innerText = "Add New Equipment Item";
         if (settingsInput) settingsInput.placeholder = "Type name here...";
         if (settingsCluster) settingsCluster.classList.add('hidden');
         if (settingsHint) settingsHint.classList.add('hidden');
       }
 
       const activeTabBtn = document.getElementById(`tab-${window.state.settingsTab}`);
-      // Clear tab style
       ['tab-stores', 'tab-facilities', 'tab-equipment'].forEach(btnId => {
         const el = document.getElementById(btnId);
-        if (el) {
-          el.className = "flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition text-neutral-500 hover:text-neutral-900";
-        }
+        if (el) el.className = "flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition text-neutral-500 hover:text-neutral-900 cursor-pointer";
       });
       if (activeTabBtn) {
-        activeTabBtn.className = "flex-1 py-2 px-3 text-xs font-bold rounded-xl transition bg-white text-neutral-900 shadow-sm";
+        activeTabBtn.className = "flex-1 py-2 px-3 text-xs font-bold rounded-xl transition bg-white text-neutral-900 shadow-xs cursor-pointer";
       }
 
       if (list.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-xs text-neutral-400 font-medium">List database collection empty.</div>`;
+        container.innerHTML = `<div class="col-span-full p-8 text-center text-xs text-neutral-400 font-medium">This collection is empty. Add items above.</div>`;
         return;
       }
 
       list.forEach(item => {
         const row = document.createElement('div');
-        row.className = "flex items-center justify-between p-4 bg-neutral-50 rounded-2xl hover:bg-neutral-100/70 transition border-2 border-transparent select-none";
-        
-        if (targetCollection === 'stores') {
-          const isEditing = (window.state.editingStoreId === item.id);
-          if (isEditing) {
-            row.innerHTML = `
-              <div class="flex flex-col gap-1.5 flex-1 mr-4">
-                <input type="text" id="edit-store-input-${item.id}" value="${escapeHtml(item.name)}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-xs font-bold focus:ring-1 focus:ring-[#EA580C]" placeholder="Store Name">
-                <input type="text" id="edit-store-cluster-${item.id}" value="${escapeHtml(item.cluster || '')}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-[11px] focus:ring-1 focus:ring-[#EA580C]" placeholder="Cluster Tag (Optional)">
-              </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <button data-action="save-store-edit" data-id="${item.id}" class="text-xs text-green-600 hover:text-green-700 transition p-1.5 bg-green-50 rounded-lg hover:bg-green-100 flex items-center justify-center border border-green-100" title="Save">
-                  <i data-lucide="check" class="w-4 h-4"></i>
-                </button>
-                <button data-action="cancel-store-edit" class="text-xs text-neutral-400 hover:text-neutral-600 transition p-1.5 bg-neutral-100 rounded-lg hover:bg-neutral-200 flex items-center justify-center border border-neutral-200" title="Cancel">
-                  <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-              </div>
-            `;
-          } else {
-            row.innerHTML = `
-              <div class="flex flex-wrap items-center gap-2 flex-1 mr-4">
-                <span class="text-xs font-bold text-neutral-800">${escapeHtml(item.name)}</span>
-                ${item.cluster ? `
-                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider" style="${getClusterBadgeStyle(item.cluster)}">
-                    ${escapeHtml(item.cluster)}
-                  </span>
-                ` : ''}
-              </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <button data-action="start-store-edit" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-[#EA580C] transition p-1.5 hover:bg-orange-50 rounded-lg flex items-center justify-center" title="Edit Store">
-                  <i data-lucide="edit-2" class="w-4 h-4"></i>
-                </button>
-                <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-600 transition p-1.5 hover:bg-red-50 rounded-lg flex items-center justify-center" title="Delete">
-                  <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-              </div>
-            `;
-          }
-        } else {
-          // Facilities and Equipment lists with Drag Handle + Order / Chevron Shifting buttons
+        const isConfirmingDelete = (window.state.confirmDeleteId === item.id);
+
+        if (isConfirmingDelete) {
+          row.className = "col-span-full w-full select-none";
           row.innerHTML = `
-            <div class="flex items-center gap-2 flex-1 mr-4">
-              <i data-lucide="grip-vertical" class="w-4 h-4 text-neutral-300 shrink-0 cursor-grab active:cursor-grabbing hover:text-neutral-500 transition"></i>
-              <span class="text-xs font-bold text-neutral-800">${escapeHtml(item.name)}</span>
-            </div>
-            <div class="flex items-center gap-1 shrink-0">
-              <button data-action="reorder-item-up" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-900 transition p-1 flex items-center justify-center" title="Move Up">
-                <i data-lucide="chevron-up" class="w-4 h-4"></i>
-              </button>
-              <button data-action="reorder-item-down" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-900 transition p-1 flex items-center justify-center" title="Move Down">
-                <i data-lucide="chevron-down" class="w-4 h-4"></i>
-              </button>
-              <div class="w-px h-4 bg-neutral-200 mx-1.5"></div>
-              <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-600 transition p-1 flex items-center justify-center" title="Delete">
-                <i data-lucide="x" class="w-4 h-4"></i>
-              </button>
+            <div class="flex-1 bg-red-50/50 border border-red-250 p-4 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-3 animate-fade-in w-full">
+              <div class="space-y-1">
+                <span class="text-[10px] font-extrabold text-[#991B1B] uppercase tracking-widest flex items-center gap-1 leading-none">
+                  <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-red-650"></i> Core Deletion Protection
+                </span>
+                <p class="text-[11px] text-neutral-600 font-medium">
+                  To delete <strong>${escapeHtml(item.name)}</strong>, type the exact name below to authorize:
+                </p>
+              </div>
+              <div class="flex items-center gap-2 shrink-0 w-full md:w-auto">
+                <input type="text" id="delete-confirm-input-${item.id}" placeholder="Type exact name" class="bg-white border border-neutral-300 rounded-xl px-2.5 py-1.5 text-xs font-semibold w-full md:w-44 focus:ring-1 focus:ring-red-500">
+                <button data-action="confirm-delete-item-verification" data-collection="${targetCollection}" data-id="${item.id}" data-name="${escapeHtml(item.name)}" class="bg-red-650 hover:bg-red-700 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl transition active:scale-95 shrink-0 cursor-pointer">
+                  Delete
+                </button>
+                <button data-action="cancel-delete-item-verification" class="text-neutral-550 hover:text-neutral-700 bg-neutral-100 hover:bg-neutral-200 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-neutral-255 transition active:scale-95 shrink-0 cursor-pointer">
+                  Cancel
+                </button>
+              </div>
             </div>
           `;
+        } else {
+          row.className = "flex items-center justify-between p-4 bg-neutral-50 rounded-2xl hover:bg-neutral-100/70 transition border-2 border-transparent select-none";
+          
+          if (targetCollection === 'stores') {
+            const isEditing = (window.state.editingStoreId === item.id);
+            if (isEditing) {
+              row.innerHTML = `
+                <div class="flex flex-col gap-1.5 flex-1 mr-4 w-full">
+                  <input type="text" id="edit-store-input-${item.id}" value="${escapeHtml(item.name)}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-2 text-xs font-bold focus:ring-[#EA580C]" placeholder="Store Name">
+                  <input type="text" id="edit-store-cluster-${item.id}" value="${escapeHtml(item.cluster || '')}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-[11px] focus:ring-[#EA580C]" placeholder="Cluster Tag (Optional)">
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button data-action="save-store-edit" data-id="${item.id}" class="text-xs text-green-600 hover:text-green-700 transition p-1.5 bg-green-50 rounded-lg flex items-center justify-center border border-green-100 cursor-pointer" title="Save">
+                    <i data-lucide="check" class="w-4 h-4"></i>
+                  </button>
+                  <button data-action="cancel-store-edit" class="text-xs text-neutral-400 hover:text-neutral-600 transition p-1.5 bg-neutral-100 rounded-lg flex items-center justify-center border border-neutral-200 cursor-pointer" title="Cancel">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              `;
+            } else {
+              row.innerHTML = `
+                <div class="flex flex-wrap items-center gap-2 flex-1 mr-4">
+                  <span class="text-xs font-bold text-neutral-800">${escapeHtml(item.name)}</span>
+                  ${item.cluster ? `
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider" style="${getClusterBadgeStyle(item.cluster)}">
+                      ${escapeHtml(item.cluster)}
+                    </span>
+                  ` : ''}
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button data-action="start-store-edit" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-[#EA580C] transition p-1.5 hover:bg-orange-50 rounded-lg flex items-center justify-center cursor-pointer" title="Edit Store">
+                    <i data-lucide="edit-2" class="w-4 h-4"></i>
+                  </button>
+                  <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-700 transition p-1.5 hover:bg-red-50 rounded-lg flex items-center justify-center cursor-pointer" title="Delete">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              `;
+            }
+          } else {
+            row.innerHTML = `
+              <div class="flex items-center gap-2 flex-1 mr-4">
+                <i data-lucide="grip-vertical" class="w-4 h-4 text-neutral-300 shrink-0 cursor-grab active:cursor-grabbing hover:text-neutral-500 transition"></i>
+                <span class="text-xs font-bold text-neutral-800">${escapeHtml(item.name)}</span>
+              </div>
+              <div class="flex items-center gap-1 shrink-0">
+                <button data-action="reorder-item-up" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-950 transition p-1 cursor-pointer" title="Move Up">
+                  <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                </button>
+                <button data-action="reorder-item-down" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-950 transition p-1 cursor-pointer" title="Move Down">
+                  <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </button>
+                <div class="w-px h-4 bg-neutral-200 mx-1.5"></div>
+                <button data-action="delete-settings-item" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-red-700 transition p-1 cursor-pointer" title="Delete">
+                  <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+              </div>
+            `;
 
-          // Add drag and drop listeners
-          row.setAttribute('draggable', 'true');
-          row.classList.add('cursor-grab', 'active:cursor-grabbing');
+            row.setAttribute('draggable', 'true');
+            row.classList.add('cursor-grab', 'active:cursor-grabbing');
 
-          row.addEventListener('dragstart', (e) => {
-            draggedItemId = item.id;
-            draggedCollection = targetCollection;
-            row.style.opacity = '0.5';
-            row.style.backgroundColor = '#eff6ff'; // Soft blue highlight
-            row.style.borderColor = '#3b82f6';
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', item.id);
-          });
-
-          row.addEventListener('dragend', () => {
-            row.style.opacity = '';
-            row.style.backgroundColor = '';
-            row.style.borderColor = '';
-            // Make sure all sibling styles are cleaned up
-            Array.from(container.children).forEach(child => {
-              child.style.borderTopColor = 'transparent';
-              child.style.borderBottomColor = 'transparent';
+            row.addEventListener('dragstart', (e) => {
+              draggedItemId = item.id;
+              draggedCollection = targetCollection;
+              row.style.opacity = '0.5';
+              row.style.borderColor = '#EA580C';
+              e.dataTransfer.effectAllowed = 'move';
+              e.dataTransfer.setData('text/plain', item.id);
             });
-          });
 
-          row.addEventListener('dragover', (e) => {
-            if (draggedCollection !== targetCollection) return;
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-
-            const rect = row.getBoundingClientRect();
-            const relativeY = e.clientY - rect.top;
-            const isTopHalf = relativeY < (rect.height / 2);
-
-            Array.from(container.children).forEach(child => {
-              if (child !== row) {
+            row.addEventListener('dragend', () => {
+              row.style.opacity = '';
+              row.style.borderColor = '';
+              Array.from(container.children).forEach(child => {
                 child.style.borderTopColor = 'transparent';
                 child.style.borderBottomColor = 'transparent';
+              });
+            });
+
+            row.addEventListener('dragover', (e) => {
+              if (draggedCollection !== targetCollection) return;
+              e.preventDefault();
+              e.dataTransfer.dropEffect = 'move';
+
+              const rect = row.getBoundingClientRect();
+              const relativeY = e.clientY - rect.top;
+              const isTopHalf = relativeY < (rect.height / 2);
+
+              Array.from(container.children).forEach(child => {
+                if (child !== row) {
+                  child.style.borderTopColor = 'transparent';
+                  child.style.borderBottomColor = 'transparent';
+                }
+              });
+
+              if (isTopHalf) {
+                row.style.borderTopColor = '#EA580C';
+                row.style.borderBottomColor = 'transparent';
+              } else {
+                row.style.borderBottomColor = '#EA580C';
+                row.style.borderTopColor = 'transparent';
               }
             });
 
-            if (isTopHalf) {
-              row.style.borderTopColor = '#3b82f6';
-              row.style.borderBottomColor = 'transparent';
-            } else {
-              row.style.borderBottomColor = '#3b82f6';
+            row.addEventListener('dragleave', () => {
               row.style.borderTopColor = 'transparent';
-            }
-          });
+              row.style.borderBottomColor = 'transparent';
+            });
 
-          row.addEventListener('dragleave', () => {
-            row.style.borderTopColor = 'transparent';
-            row.style.borderBottomColor = 'transparent';
-          });
+            row.addEventListener('drop', async (e) => {
+              e.preventDefault();
+              row.style.borderTopColor = 'transparent';
+              row.style.borderBottomColor = 'transparent';
 
-          row.addEventListener('drop', async (e) => {
-            e.preventDefault();
-            row.style.borderTopColor = 'transparent';
-            row.style.borderBottomColor = 'transparent';
+              if (draggedCollection !== targetCollection || draggedItemId === item.id) return;
 
-            if (draggedCollection !== targetCollection || draggedItemId === item.id) return;
-
-            let currentList = [];
-            if (targetCollection === 'facilityCategories') {
-              currentList = [...window.state.facilityCategories];
-            } else if (targetCollection === 'equipmentList') {
-              currentList = [...window.state.equipmentList];
-            }
-
-            const fromIdx = currentList.findIndex(x => x.id === draggedItemId);
-            const toIdx = currentList.findIndex(x => x.id === item.id);
-            if (fromIdx === -1 || toIdx === -1) return;
-
-            const rect = row.getBoundingClientRect();
-            const relativeY = e.clientY - rect.top;
-            const isTopHalf = relativeY < (rect.height / 2);
-
-            const [draggedObj] = currentList.splice(fromIdx, 1);
-            let insertIdx = toIdx;
-            if (!isTopHalf) {
-              if (fromIdx < toIdx) {
-                insertIdx = toIdx;
-              } else {
-                insertIdx = toIdx + 1;
+              let currentList = [];
+              if (targetCollection === 'facilityCategories') {
+                currentList = [...window.state.facilityCategories];
+              } else if (targetCollection === 'equipmentList') {
+                currentList = [...window.state.equipmentList];
               }
-            } else {
-              if (fromIdx < toIdx) {
-                insertIdx = toIdx - 1;
+
+              const fromIdx = currentList.findIndex(x => x.id === draggedItemId);
+              const toIdx = currentList.findIndex(x => x.id === item.id);
+              if (fromIdx === -1 || toIdx === -1) return;
+
+              const rect = row.getBoundingClientRect();
+              const relativeY = e.clientY - rect.top;
+              const isTopHalf = relativeY < (rect.height / 2);
+
+              const [draggedObj] = currentList.splice(fromIdx, 1);
+              let insertIdx = toIdx;
+              if (!isTopHalf) {
+                insertIdx = (fromIdx < toIdx) ? toIdx : toIdx + 1;
               } else {
-                insertIdx = toIdx;
+                insertIdx = (fromIdx < toIdx) ? toIdx - 1 : toIdx;
               }
-            }
 
-            currentList.splice(insertIdx, 0, draggedObj);
+              currentList.splice(insertIdx, 0, draggedObj);
 
-            presentOverlay("Saving Drag Order", "Saving custom arrangement to Firestore database...");
-            try {
-              const promises = currentList.map((listItem, idx) => {
-                return updateDoc(doc(db, targetCollection, listItem.id), { order: idx });
-              });
-              await Promise.all(promises);
-              dismissOverlay();
-              sendNotification("Custom drag-and-drop order saved!", "success");
-              await loadCollectionsFromCloud();
-            } catch (err) {
-              console.error("Failed persisting drag order", err);
-              dismissOverlay();
-              sendNotification("Unable to save order in Firebase.", "error");
-            }
-          });
+              presentOverlay("Saving Drag Order", "Saving custom arrangement to Firestore...");
+              try {
+                const promises = currentList.map((listItem, idx) => {
+                  return updateDoc(doc(db, targetCollection, listItem.id), { order: idx });
+                });
+                await Promise.all(promises);
+                dismissOverlay();
+                sendNotification("Custom drag-and-drop order saved!", "success");
+                await loadCollectionsFromCloud();
+              } catch (err) {
+                console.error("Failed saving sorted list:", err);
+                dismissOverlay();
+                sendNotification("Unable to save custom order.", "error");
+              }
+            });
+          }
         }
         
         container.appendChild(row);
@@ -1167,18 +1155,15 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    // 3. Render Facility Inspections Scroll view
     function renderFacilityChecklist() {
       const container = document.getElementById('facility-items-list');
+      if (!container) return;
       container.innerHTML = '';
 
       if (window.state.facilityCategories.length === 0) {
         container.innerHTML = `
           <div class="col-span-full p-8 text-center text-neutral-400 space-y-3 flex flex-col items-center justify-center">
-            <p class="text-xs font-medium">Setup your Facility categories to begin.</p>
-            <button data-action="route" data-route="settings" class="text-xs bg-black text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 hover:bg-neutral-850 active:scale-95 transition">
-              <span>Go to Settings</span>
-            </button>
+            <p class="text-xs font-medium">Verify your configuration settings inside Settings to load lists.</p>
           </div>
         `;
         return;
@@ -1191,61 +1176,31 @@
         }
         const ans = window.state.facilityAnswers[cat];
 
-        // Comments are optional to provide a seamless UX
-        let commentFormHTML = '';
-        if (ans.rating === 'Acceptable') {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${cat} as Good?</label>
-              <textarea data-action="update-comment" data-item="${cat}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional observation details...">${ans.comment}</textarea>
-            </div>
-          `;
-        } else if (ans.rating === 'Bad') {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${cat} as Acceptable?</label>
-              <textarea data-action="update-comment" data-item="${cat}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional physical hazard details...">${ans.comment}</textarea>
-            </div>
-          `;
-        } else {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-400">Additional observation note (Optional)</label>
-              <textarea data-action="update-comment" data-item="${cat}" class="w-full text-xs bg-[#F3ECE3] rounded-xl p-2 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional comments...">${ans.comment}</textarea>
-            </div>
-          `;
-        }
+        let commentPlaceholder = "Optional comments & notes...";
+        if (ans.rating === 'Acceptable') commentPlaceholder = "Why didn't you rate this Good?";
+        else if (ans.rating === 'Bad') commentPlaceholder = "Why wasn't this Acceptable?";
 
-        // Photos gallery subview
         let photosHTML = '';
         if (ans.photos && ans.photos.length > 0) {
           photosHTML = `
-            <div class="grid grid-cols-2 gap-3 pt-3">
-              ${ans.photos.map((photo, pIdx) => {
-                let borderCol = "border-green-600 ring-green-600";
-                if (photo.tag === 'Acceptable') borderCol = "border-amber-500 ring-amber-500";
-                if (photo.tag === 'Bad') borderCol = "border-red-600 ring-red-600";
+            <div class="grid grid-cols-2 gap-2.5 pt-2.5">
+              ${ans.photos.map((p, pIdx) => {
+                let border = "border-green-600";
+                if (p.tag === 'Acceptable') border = "border-amber-500";
+                if (p.tag === 'Bad') border = "border-red-650";
 
                 return `
-                  <div class="bg-neutral-50 p-2.5 rounded-2xl relative border-2 ${borderCol} flex flex-col gap-2 shadow-sm">
-                    <!-- Delete photo button -->
-                    <button data-action="delete-photo" data-item="${cat}" data-idx="${pIdx}" class="absolute -top-2 -right-2 bg-neutral-900 border border-neutral-850 text-white rounded-full p-1 shadow hover:bg-red-600 transition z-10 w-6 h-6 flex items-center justify-center">
-                      <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                  <div class="bg-neutral-50 p-2 rounded-xl relative border-2 ${border} flex flex-col gap-1.5 shadow-2xs">
+                    <button data-action="delete-photo" data-item="${escapeHtml(cat)}" data-idx="${pIdx}" class="absolute -top-2 -right-2 bg-neutral-900 text-white rounded-full p-1 shadow hover:bg-red-600 transition z-10 w-5 h-5 flex items-center justify-center cursor-pointer">
+                      <i data-lucide="x" class="w-3 h-3"></i>
                     </button>
-                    
-                    <img src="${photo.url}" class="w-full h-24 object-cover rounded-xl cursor-zoom-in" data-action="open-lightbox" data-url="${photo.url}" data-caption="${photo.caption || ''}" alt="Thumbnail">
-                    
-                    <!-- Tag selection dropdown -->
-                    <div class="space-y-1">
-                      <select data-action="update-photo-tag" data-item="${cat}" data-idx="${pIdx}" class="w-full text-[10px] py-1 px-1.5 font-bold bg-white rounded-lg border border-neutral-100">
-                        <option value="Good" ${photo.tag === 'Good' ? 'selected' : ''}>Good</option>
-                        <option value="Acceptable" ${photo.tag === 'Acceptable' ? 'selected' : ''}>Acceptable</option>
-                        <option value="Bad" ${photo.tag === 'Bad' ? 'selected' : ''}>Bad</option>
-                      </select>
-                    </div>
-
-                    <!-- Caption input -->
-                    <input type="text" data-action="update-photo-caption" data-item="${cat}" data-idx="${pIdx}" placeholder="Caption note" value="${photo.caption || ''}" class="w-full text-[10px] bg-white border border-neutral-100 rounded-lg px-2 py-1">
+                    <img src="${p.url}" class="w-full h-20 object-cover rounded-lg cursor-zoom-in" data-action="open-lightbox" data-url="${p.url}" data-caption="${escapeHtml(p.caption || '')}" alt="Attached">
+                    <select data-action="update-photo-tag" data-item="${escapeHtml(cat)}" data-idx="${pIdx}" class="w-full text-[9px] py-0.5 px-1 font-bold bg-white rounded border border-neutral-150 cursor-pointer">
+                      <option value="Good" ${p.tag === 'Good' ? 'selected' : ''}>Good</option>
+                      <option value="Acceptable" ${p.tag === 'Acceptable' ? 'selected' : ''}>Acceptable</option>
+                      <option value="Bad" ${p.tag === 'Bad' ? 'selected' : ''}>Bad</option>
+                    </select>
+                    <input type="text" data-action="update-photo-caption" data-item="${escapeHtml(cat)}" data-idx="${pIdx}" placeholder="Caption note" value="${escapeHtml(p.caption || '')}" class="w-full text-[9px] bg-white border border-neutral-200 rounded px-1.5 py-0.5 font-medium">
                   </div>
                 `;
               }).join('')}
@@ -1254,35 +1209,23 @@
         }
 
         const card = document.createElement('div');
-        card.className = "bg-white p-3.5 rounded-2xl border border-orange-100/65 shadow-md shadow-orange-950/5 space-y-2";
+        card.className = "bg-white p-4 rounded-3xl border border-orange-100/65 shadow-xs space-y-3";
         card.innerHTML = `
           <div class="flex justify-between items-start">
-            <h3 class="text-sm font-bold text-slate-800 flex-1 pr-4 leading-tight">${cat}</h3>
-            <span class="text-[10px] font-bold text-orange-600 font-mono">${ans.photos ? ans.photos.length : 0}/6 Photos</span>
+            <h3 class="text-sm font-bold text-slate-800 flex-1 pr-2 leading-tight">${cat}</h3>
+            <span class="text-[9px] font-bold text-orange-650 font-mono shrink-0">${ans.photos ? ans.photos.length : 0}/6 Photos</span>
           </div>
-
-          <!-- Triple choice rating buttons -->
-          <div class="grid grid-cols-3 gap-2 select-none">
-            <button data-action="set-rating" data-item="${cat}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Good' ? 'bg-green-100 border-green-300 text-green-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Good</span>
-            </button>
-            <button data-action="set-rating" data-item="${cat}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Acceptable</span>
-            </button>
-            <button data-action="set-rating" data-item="${cat}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Bad</span>
-            </button>
+          <div class="grid grid-cols-3 gap-1.5 select-none text-center">
+            <button data-action="set-rating" data-item="${escapeHtml(cat)}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${ans.rating === 'Good' ? 'bg-green-150 border-green-300 text-green-700 font-bold' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 border-transparent'}">Good</button>
+            <button data-action="set-rating" data-item="${escapeHtml(cat)}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700 font-bold' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 border-transparent'}">Acceptable</button>
+            <button data-action="set-rating" data-item="${escapeHtml(cat)}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700 font-bold' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 border-transparent'}">Bad</button>
           </div>
-
-          <!-- Comment comment input details -->
-          ${commentFormHTML}
-
-          <!-- File upload always shown to trigger FIFO replacement when > 6 photos -->
-          <div class="space-y-2 select-none">
-            <label class="w-full flex items-center justify-center gap-2 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-2.5 rounded-2xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
-              <i data-lucide="camera" class="w-4 h-4 text-neutral-600"></i>
-              <span class="text-xs text-neutral-700 font-semibold font-sans">Upload Photo</span>
-              <input type="file" accept="image/*" capture="environment" class="hidden" data-action="upload-photo" data-item="${cat}">
+          <textarea data-action="update-comment" data-item="${escapeHtml(cat)}" class="w-full text-xs bg-[#F3ECE3]/65 hover:bg-[#EAE1D5]/65 border border-transparent rounded-xl p-2.5 h-12 resize-none focus:bg-white" placeholder="${commentPlaceholder}">${escapeHtml(ans.comment || '')}</textarea>
+          <div class="space-y-1">
+            <label class="w-full flex items-center justify-center gap-1.5 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-1.5 rounded-xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
+              <i data-lucide="camera" class="w-3.5 h-3.5 text-neutral-500"></i>
+              <span class="text-[11px] text-neutral-700 font-semibold">Upload Photo</span>
+              <input type="file" accept="image/*" class="hidden" data-action="upload-photo" data-item="${escapeHtml(cat)}">
             </label>
             ${photosHTML}
           </div>
@@ -1290,31 +1233,18 @@
         container.appendChild(card);
       });
 
-      // Show proceeding container only for split workflows
-      const nextContainer = document.getElementById('facility-next-step-container');
-      if (nextContainer) {
-        if (window.state.selectedMode === 'both') {
-          nextContainer.classList.remove('hidden');
-        } else {
-          nextContainer.classList.add('hidden');
-        }
-      }
-
       if (window.lucide) lucide.createIcons();
     }
 
-    // 4. Render Equipment Inspections Scroll view
     function renderEquipmentChecklist() {
       const container = document.getElementById('equipment-items-list');
+      if (!container) return;
       container.innerHTML = '';
 
       if (window.state.equipmentList.length === 0) {
         container.innerHTML = `
           <div class="col-span-full p-8 text-center text-neutral-400 space-y-3 flex flex-col items-center justify-center">
-            <p class="text-xs font-medium">Please define Equipment items in Settings first.</p>
-            <button data-action="route" data-route="settings" class="text-xs bg-black text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 hover:bg-neutral-850 active:scale-95 transition">
-              <span>Go to Settings</span>
-            </button>
+            <p class="text-xs font-medium">Verify your configuration equipment inside Settings first.</p>
           </div>
         `;
         return;
@@ -1327,61 +1257,31 @@
         }
         const ans = window.state.equipmentAnswers[eq];
 
-        // Comment section logic is optional
-        let commentFormHTML = '';
-        if (ans.rating === 'Acceptable') {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${eq} as Good?</label>
-              <textarea data-action="update-comment" data-item="${eq}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional observation details...">${ans.comment}</textarea>
-            </div>
-          `;
-        } else if (ans.rating === 'Bad') {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-600">Why didn't you rate ${eq} as Acceptable?</label>
-              <textarea data-action="update-comment" data-item="${eq}" class="w-full text-xs bg-[#F3ECE3] hover:bg-[#EAE1D5] rounded-xl p-2.5 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional physical hazard details...">${ans.comment}</textarea>
-            </div>
-          `;
-        } else {
-          commentFormHTML = `
-            <div class="space-y-1.5 pt-1">
-              <label class="block text-[11px] font-bold text-neutral-400">Additional observation note (Optional)</label>
-              <textarea data-action="update-comment" data-item="${eq}" class="w-full text-xs bg-[#F3ECE3] rounded-xl p-2 h-10 resize-none focus:bg-white focus:ring-1 focus:ring-[#EA580C]" placeholder="Optional comments...">${ans.comment}</textarea>
-            </div>
-          `;
-        }
+        let commentPlaceholder = "Optional comments & notes...";
+        if (ans.rating === 'Acceptable') commentPlaceholder = "Why didn't you rate this Good?";
+        else if (ans.rating === 'Bad') commentPlaceholder = "Why wasn't this Acceptable?";
 
-        // Photo upload list output structure
         let photosHTML = '';
         if (ans.photos && ans.photos.length > 0) {
           photosHTML = `
-            <div class="grid grid-cols-2 gap-3 pt-3">
-              ${ans.photos.map((photo, pIdx) => {
-                let borderCol = "border-green-600 ring-green-600";
-                if (photo.tag === 'Acceptable') borderCol = "border-amber-500 ring-amber-500";
-                if (photo.tag === 'Bad') borderCol = "border-red-600 ring-red-600";
+            <div class="grid grid-cols-2 gap-2.5 pt-2.5">
+              ${ans.photos.map((p, pIdx) => {
+                let border = "border-green-600";
+                if (p.tag === 'Acceptable') border = "border-amber-500";
+                if (p.tag === 'Bad') border = "border-red-650";
 
                 return `
-                  <div class="bg-neutral-50 p-2.5 rounded-2xl relative border-2 ${borderCol} flex flex-col gap-2 shadow-sm">
-                    <!-- Delete photo button -->
-                    <button data-action="delete-photo-equipment" data-item="${eq}" data-idx="${pIdx}" class="absolute -top-2 -right-2 bg-neutral-900 border border-neutral-850 text-white rounded-full p-1 shadow hover:bg-red-600 transition z-10 w-6 h-6 flex items-center justify-center">
-                      <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                  <div class="bg-neutral-50 p-2 rounded-xl relative border-2 ${border} flex flex-col gap-1.5 shadow-2xs">
+                    <button data-action="delete-photo-equipment" data-item="${escapeHtml(eq)}" data-idx="${pIdx}" class="absolute -top-2 -right-2 bg-neutral-900 text-white rounded-full p-1 shadow hover:bg-red-650 transition z-10 w-5 h-5 flex items-center justify-center cursor-pointer">
+                      <i data-lucide="x" class="w-3 h-3"></i>
                     </button>
-                    
-                    <img src="${photo.url}" class="w-full h-24 object-cover rounded-xl cursor-zoom-in" data-action="open-lightbox" data-url="${photo.url}" data-caption="${photo.caption || ''}" alt="Thumbnail">
-                    
-                    <!-- Tag select -->
-                    <div class="space-y-1">
-                      <select data-action="update-photo-tag-equipment" data-item="${eq}" data-idx="${pIdx}" class="w-full text-[10px] py-1 px-1.5 font-bold bg-white rounded-lg border border-neutral-100">
-                        <option value="Good" ${photo.tag === 'Good' ? 'selected' : ''}>Good</option>
-                        <option value="Acceptable" ${photo.tag === 'Acceptable' ? 'selected' : ''}>Acceptable</option>
-                        <option value="Bad" ${photo.tag === 'Bad' ? 'selected' : ''}>Bad</option>
-                      </select>
-                    </div>
-
-                    <!-- Caption input info -->
-                    <input type="text" data-action="update-photo-caption-equipment" data-item="${eq}" data-idx="${pIdx}" placeholder="Caption note" value="${photo.caption || ''}" class="w-full text-[10px] bg-white border border-neutral-100 rounded-lg px-2 py-1">
+                    <img src="${p.url}" class="w-full h-20 object-cover rounded-lg cursor-zoom-in" data-action="open-lightbox" data-url="${p.url}" data-caption="${escapeHtml(p.caption || '')}" alt="Attached">
+                    <select data-action="update-photo-tag-equipment" data-item="${escapeHtml(eq)}" data-idx="${pIdx}" class="w-full text-[9px] py-0.5 px-1 font-bold bg-white rounded border border-neutral-150 cursor-pointer">
+                      <option value="Good" ${p.tag === 'Good' ? 'selected' : ''}>Good</option>
+                      <option value="Acceptable" ${p.tag === 'Acceptable' ? 'selected' : ''}>Acceptable</option>
+                      <option value="Bad" ${p.tag === 'Bad' ? 'selected' : ''}>Bad</option>
+                    </select>
+                    <input type="text" data-action="update-photo-caption-equipment" data-item="${escapeHtml(eq)}" data-idx="${pIdx}" placeholder="Caption note" value="${escapeHtml(p.caption || '')}" class="w-full text-[9px] bg-white border border-neutral-200 rounded px-1.5 py-0.5 font-medium">
                   </div>
                 `;
               }).join('')}
@@ -1390,42 +1290,29 @@
         }
 
         const card = document.createElement('div');
-        card.className = "bg-white p-3.5 rounded-2xl border border-orange-100/65 shadow-md shadow-orange-950/5 space-y-2";
+        card.className = "bg-white p-4 rounded-3xl border border-orange-100/65 shadow-xs space-y-3";
         card.innerHTML = `
           <div class="flex items-start justify-between">
-            <h3 class="text-sm font-bold text-slate-800 flex-1 pr-3 leading-tight">${eq}</h3>
-            <span class="text-[10px] font-bold text-orange-600 font-mono">${ans.photos ? ans.photos.length : 0}/3 Photos</span>
+            <h3 class="text-sm font-bold text-slate-800 flex-1 pr-2 leading-tight">${eq}</h3>
+            <span class="text-[9px] font-bold text-orange-650 font-mono shrink-0">${ans.photos ? ans.photos.length : 0}/3 Photos</span>
           </div>
-
-          <!-- Quantity input selection -->
-          <div class="grid grid-cols-2 gap-2 items-center">
-            <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider">Unit Quantity (Count)</span>
-            <select data-action="update-equipment-quantity" data-item="${eq}" class="w-full text-xs font-bold bg-neutral-50 px-3 py-1.5 rounded-xl cursor-pointer">
-              ${[1,2,3,4,5,6,7,8,9,10].map(n => `<option value="${n}" ${ans.quantity == n ? 'selected' : ''}>${n}</option>`).join('')}
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[10px] font-extrabold text-neutral-400 uppercase tracking-widest">Quantity Checked</span>
+            <select data-action="update-equipment-quantity" data-item="${escapeHtml(eq)}" class="bg-neutral-50 border border-neutral-200 text-xs font-bold px-2 py-1 rounded-xl cursor-pointer">
+              ${[1,2,3,4,5,6,7,8,9,10].map(n => `<option value="${n}" ${ans.quantity == n ? 'selected' : ''}>${n} Units</option>`).join('')}
             </select>
           </div>
-
-          <!-- Rating assessment choice buttons -->
-          <div class="grid grid-cols-3 gap-2 select-none">
-            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Good' ? 'bg-green-100 border-green-300 text-green-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Good</span>
-            </button>
-            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Acceptable</span>
-            </button>
-            <button data-action="set-equipment-rating" data-item="${eq}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition flex items-center justify-center gap-1.5 ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 border-transparent'}">
-              <span>Bad</span>
-            </button>
+          <div class="grid grid-cols-3 gap-1.5 select-none text-center">
+            <button data-action="set-equipment-rating" data-item="${escapeHtml(eq)}" data-val="Good" class="py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${ans.rating === 'Good' ? 'bg-green-150 border-green-300 text-green-700 font-bold' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 border-transparent'}">Good</button>
+            <button data-action="set-equipment-rating" data-item="${escapeHtml(eq)}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700 font-bold' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 border-transparent'}">Acceptable</button>
+            <button data-action="set-equipment-rating" data-item="${escapeHtml(eq)}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700 font-bold' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 border-transparent'}">Bad</button>
           </div>
-
-          ${commentFormHTML}
-
-          <!-- Photo uploads zone -->
-          <div class="space-y-2 select-none">
-            <label class="w-full flex items-center justify-center gap-2 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-2.5 rounded-2xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
-              <i data-lucide="camera" class="w-4 h-4 text-neutral-600"></i>
-              <span class="text-xs text-neutral-700 font-semibold font-sans">Upload Photo</span>
-              <input type="file" accept="image/*" capture="environment" class="hidden" data-action="upload-photo-equipment" data-item="${eq}">
+          <textarea data-action="update-comment" data-item="${escapeHtml(eq)}" class="w-full text-xs bg-[#F3ECE3]/65 hover:bg-[#EAE1D5]/65 border border-transparent rounded-xl p-2.5 h-12 resize-none focus:bg-white" placeholder="${commentPlaceholder}">${escapeHtml(ans.comment || '')}</textarea>
+          <div class="space-y-1">
+            <label class="w-full flex items-center justify-center gap-1.5 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-1.5 rounded-xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
+              <i data-lucide="camera" class="w-3.5 h-3.5 text-neutral-500"></i>
+              <span class="text-[11px] text-neutral-700 font-semibold">Upload Photo</span>
+              <input type="file" accept="image/*" class="hidden" data-action="upload-photo-equipment" data-item="${escapeHtml(eq)}">
             </label>
             ${photosHTML}
           </div>
@@ -1433,18 +1320,10 @@
         container.appendChild(card);
       });
 
-      // Update finish helper container if mode is both or single equipment
-      const finishContainer = document.getElementById('equipment-finish-container');
-      if (finishContainer) {
-        finishContainer.classList.remove('hidden');
-      }
-
       if (window.lucide) lucide.createIcons();
     }
 
-    // Helper to calculate store health status and completion percentages for Fleet Grid
     function getStoreStatus(storeName) {
-      // Find latest inspection
       const insp = window.state.inspections.find(i => i.store === storeName);
       if (!insp) {
         return {
@@ -1454,7 +1333,7 @@
           badCount: 0,
           acceptableCount: 0,
           goodCount: 0,
-          healthClass: 'bg-white border-neutral-200 text-neutral-400'
+          healthClass: 'bg-white border-neutral-200 text-neutral-450 hover:bg-neutral-50/50'
         };
       }
 
@@ -1486,63 +1365,42 @@
       }
 
       let expectedCount = 0;
-      if (insp.mode === 'facility') {
-        expectedCount = window.state.facilityCategories.length;
-      } else if (insp.mode === 'equipment') {
-        expectedCount = window.state.equipmentList.length;
-      } else {
-        expectedCount = window.state.facilityCategories.length + window.state.equipmentList.length;
-      }
+      if (insp.mode === 'facility') expectedCount = window.state.facilityCategories.length;
+      else if (insp.mode === 'equipment') expectedCount = window.state.equipmentList.length;
+      else expectedCount = window.state.facilityCategories.length + window.state.equipmentList.length;
       if (expectedCount === 0) expectedCount = 1;
 
       const percent = Math.min(100, Math.round((ratedCount / expectedCount) * 100));
 
-      let healthClass = 'bg-white border-neutral-200';
+      let healthClass = 'bg-white border-neutral-200 hover:bg-neutral-55';
       if (ratedCount > 0) {
         const badPercent = (badCount / ratedCount) * 100;
         const acceptablePercent = (acceptableCount / ratedCount) * 100;
 
-        if (badPercent > 10) {
-          healthClass = 'bg-red-50/80 border-red-300 hover:bg-red-100/30';
-        } else if (acceptablePercent > 20) {
-          healthClass = 'bg-amber-50/80 border-amber-300 hover:bg-amber-100/30';
-        } else {
-          healthClass = 'bg-green-50/80 border-green-300 hover:bg-green-100/30';
-        }
+        if (badPercent > 10) healthClass = 'bg-red-50/80 border-red-300 hover:bg-red-100/30';
+        else if (acceptablePercent > 20) healthClass = 'bg-amber-50/80 border-amber-300 hover:bg-amber-100/30';
+        else healthClass = 'bg-green-50/80 border-green-300 hover:bg-green-100/30';
       }
 
-      return {
-        percent,
-        ratedCount,
-        expectedCount,
-        badCount,
-        acceptableCount,
-        goodCount,
-        healthClass
-      };
+      return { percent, ratedCount, expectedCount, badCount, acceptableCount, goodCount, healthClass };
     }
 
-    // Render Store Fleet Heatmap status grid
     function renderOverviewFleetGrid() {
       const grid = document.getElementById('overview-fleet-grid');
       if (!grid) return;
       grid.innerHTML = '';
 
       if (!window.state.stores || window.state.stores.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full py-4 text-center text-xs text-neutral-400 font-medium">
-            Define stores in Settings to initialize Fleet Heatmap
-          </div>
-        `;
+        grid.innerHTML = `<div class="col-span-full py-4 text-center text-xs text-neutral-400 font-medium">No stores configured. Setup stores in settings list.</div>`;
         return;
       }
 
-      window.state.stores.forEach(S => {
+      const sorted = sortStores(window.state.stores);
+      sorted.forEach(S => {
         const status = getStoreStatus(S.name);
         const isSelected = (window.state.filterStore === S.name);
-        
         const tile = document.createElement('button');
-        tile.className = `relative p-3 rounded-2xl border text-left flex flex-col justify-between h-20 transition active:scale-[0.97] cursor-pointer overflow-hidden ${status.healthClass} ${isSelected ? 'ring-2 ring-[#EA580C] border-transparent shadow-md' : 'shadow-2xs'}`;
+        tile.className = `relative p-3 rounded-2xl border text-left flex flex-col justify-between h-20 transition active:scale-[0.97] cursor-pointer overflow-hidden ${status.healthClass} ${isSelected ? 'ring-2 ring-[#EA580C] border-transparent shadow shadow-orange-950/10' : ''}`;
         tile.setAttribute('data-action', 'filter-by-store-tile');
         tile.setAttribute('data-store', S.name);
 
@@ -1551,7 +1409,7 @@
             <div class="flex items-center gap-1.5 justify-between">
               <h4 class="text-xs font-bold text-neutral-800 truncate flex-1 min-w-0">${escapeHtml(S.name)}</h4>
               ${S.cluster ? `
-                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[7.5px] font-extrabold uppercase tracking-wider shrink-0" style="${getClusterBadgeStyle(S.cluster)}">
+                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[7.5px] font-extrabold uppercase shrink-0" style="${getClusterBadgeStyle(S.cluster)}">
                   ${escapeHtml(S.cluster)}
                 </span>
               ` : ''}
@@ -1559,7 +1417,7 @@
             <p class="text-[9px] text-neutral-450 font-bold font-mono">${status.ratedCount}/${status.expectedCount} Checked</p>
           </div>
           <div class="flex items-center justify-between pb-1 z-10">
-            <span class="text-[10px] font-extrabold font-mono text-neutral-700">${status.percent}%</span>
+            <span class="text-[9px] font-extrabold font-mono text-neutral-700">${status.percent}%</span>
             ${status.ratedCount === 0 ? `
               <span class="text-[8px] font-extrabold text-neutral-450 uppercase">Empty</span>
             ` : status.badCount > 0 ? `
@@ -1570,7 +1428,6 @@
               <span class="text-[8px] font-extrabold text-green-600 uppercase">Good</span>
             `}
           </div>
-          <!-- Visual progress bar -->
           <div class="absolute bottom-0 left-0 right-0 h-1 bg-neutral-200/40">
             <div class="bg-[#EA580C] h-full transition-all duration-300" style="width: ${status.percent}%"></div>
           </div>
@@ -1579,97 +1436,66 @@
       });
     }
 
-    // 5. Render Overview Dashboard List with deep filter matching
     function renderOverviewCardsList() {
-      // Re-populate store fleet grid with any rating status computations
       renderOverviewFleetGrid();
-
       const container = document.getElementById('overview-cards-list');
+      if (!container) return;
       container.innerHTML = '';
 
       if (window.state.inspections.length === 0) {
-        container.innerHTML = `
-          <div class="p-8 text-center text-xs text-neutral-400 font-medium">
-            No audit records created. Use "Inspect" navigation below to run.
-          </div>
-        `;
+        container.innerHTML = `<div class="p-8 text-center text-xs text-neutral-400 font-medium">No inspections performed yet. Use Inspect tab below.</div>`;
         document.getElementById('overview-count-label').innerText = "Showing 0 matching instances";
         return;
       }
 
       let matchCount = 0;
-
-      // Filter settings logic inside state:
       const selStore = window.state.filterStore;
       const selCatQuery = window.state.filterCategory.toLowerCase().trim();
       const selTag = window.state.filterTag;
 
-      // Update badge filters states
       ['all', 'good', 'acceptable', 'bad'].forEach(tag => {
         const el = document.getElementById(`filter-tag-${tag}`);
-        if (el) {
-          el.className = "text-xs font-bold px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition";
-        }
+        if (el) el.className = "text-xs font-bold py-2 rounded-xl bg-white border border-neutral-250 text-neutral-700 hover:bg-neutral-50 transition cursor-pointer";
       });
+      
       const activeTerm = selTag === "" ? "all" : selTag.toLowerCase();
       const activeFilterTagEl = document.getElementById(`filter-tag-${activeTerm}`);
       if (activeFilterTagEl) {
-        if (activeTerm === 'all') {
-          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-blue-600 text-white border border-transparent transition shadow-sm";
-        } else if (activeTerm === 'good') {
-          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-green-600 text-white border border-transparent transition shadow-sm";
-        } else if (activeTerm === 'acceptable') {
-          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-amber-500 text-white border border-transparent transition shadow-sm";
-        } else if (activeTerm === 'bad') {
-          activeFilterTagEl.className = "text-xs font-bold px-4 py-2 rounded-xl bg-red-600 text-white border border-transparent transition shadow-sm";
-        }
+        if (activeTerm === 'all') activeFilterTagEl.className = "text-xs font-bold py-2 rounded-xl bg-[#1E3A8A] text-white border border-transparent transition shadow-sm cursor-pointer";
+        else if (activeTerm === 'good') activeFilterTagEl.className = "text-xs font-bold py-2 rounded-xl bg-green-650 text-white border border-transparent transition shadow-sm cursor-pointer";
+        else if (activeTerm === 'acceptable') activeFilterTagEl.className = "text-xs font-bold py-2 rounded-xl bg-amber-500 text-white border border-transparent transition shadow-sm cursor-pointer";
+        else if (activeTerm === 'bad') activeFilterTagEl.className = "text-xs font-bold py-2 rounded-xl bg-red-650 text-white border border-transparent transition shadow-sm cursor-pointer";
       }
 
-      // Update quick toggle buttons active states
       ['all', 'acceptable', 'bad'].forEach(tag => {
         const el = document.getElementById(`quick-filter-${tag}`);
         if (el) {
           if ((selTag === "" && tag === 'all') || (selTag.toLowerCase() === tag)) {
-            el.className = "text-[11px] font-bold px-3.5 py-1.5 rounded-full bg-neutral-900 text-white border border-neutral-950 transition shadow-xs";
+            el.className = "shrink-0 text-xs font-bold px-4 py-1.5 rounded-full bg-slate-900 text-white border border-transparent transition shadow-xs cursor-pointer";
           } else {
-            el.className = "text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-50 transition";
+            el.className = "shrink-0 text-xs font-semibold px-4 py-1.5 rounded-full bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-50 transition cursor-pointer";
           }
         }
       });
 
-      // Loop through all documents and extract entries matching filter criteria
       window.state.inspections.forEach((insp) => {
-        // Store name filter match
         if (selStore && insp.store !== selStore) return;
 
-        // Inspections contain facility and/or equipment objects
-        // Parse facility answers
         if (insp.facility) {
           Object.keys(insp.facility).forEach((categoryName) => {
             const data = insp.facility[categoryName];
-            
-            // Text matching category name
             if (selCatQuery && !categoryName.toLowerCase().includes(selCatQuery)) return;
-
-            // Status tag filtering
             if (selTag && data.rating !== selTag) return;
-
             matchCount++;
             container.appendChild(createOverviewCardHTML(insp, 'Facility', categoryName, data));
           });
         }
 
-        // Parse equipment answers
         if (insp.equipment) {
           Object.keys(insp.equipment).forEach((equipName) => {
             const data = insp.equipment[equipName];
-
-            // Text matching equipment name
             if (selCatQuery && !equipName.toLowerCase().includes(selCatQuery)) return;
-
-            // Status tag filtering
             if (selTag && data.rating !== selTag) return;
-
             matchCount++;
             container.appendChild(createOverviewCardHTML(insp, 'Equipment', equipName, data));
           });
@@ -1684,23 +1510,23 @@
       const card = document.createElement('div');
       card.className = "bg-white p-5 rounded-3xl border border-neutral-100 shadow-sm space-y-3";
       
-      let ratingPillColor = "bg-green-50 text-green-700 border-green-200";
-      if (data.rating === 'Acceptable') ratingPillColor = "bg-amber-50 text-amber-700 border-amber-200";
-      if (data.rating === 'Bad') ratingPillColor = "bg-red-50 text-red-700 border-red-200";
+      let ratingPillColor = "bg-green-50 text-green-700 border-green-200 animate-pulse";
+      if (data.rating === 'Acceptable') ratingPillColor = "bg-amber-50 text-amber-750 border-amber-200";
+      if (data.rating === 'Bad') ratingPillColor = "bg-red-50 text-red-750 border-red-200";
 
       let photosRow = '';
       if (data.photos && data.photos.length > 0) {
         photosRow = `
-          <div class="flex gap-2.5 overflow-x-auto py-1 whitespace-nowrap scrollbar-none">
+          <div class="flex gap-2.5 overflow-x-auto py-1 whitespace-nowrap no-scrollbar">
             ${data.photos.map(p => {
-              let borderCol = "border-green-600 ring-green-600/20";
-              if (p.tag === 'Acceptable') borderCol = "border-amber-500 ring-amber-500/20";
-              if (p.tag === 'Bad') borderCol = "border-red-600 ring-red-600/20";
+              let border = "border-green-600 ring-green-600/10";
+              if (p.tag === 'Acceptable') border = "border-amber-500 ring-amber-500/10";
+              if (p.tag === 'Bad') border = "border-red-600 ring-red-650/10";
 
               return `
                 <div class="relative inline-block shrink-0">
-                  <img src="${p.url}" data-action="open-lightbox" data-url="${p.url}" data-caption="${p.caption || ''}" class="w-16 h-16 object-cover rounded-xl border-2 ${borderCol} ring-2 cursor-zoom-in" alt="photo thumbnail">
-                  <span class="absolute bottom-1 right-1 px-1.5 bg-black/75 text-white rounded text-[8px] font-bold tracking-wider">${p.tag.toUpperCase()}</span>
+                  <img src="${p.url}" data-action="open-lightbox" data-url="${p.url}" data-caption="${escapeHtml(p.caption || '')}" class="w-16 h-16 object-cover rounded-xl border-2 ${border} ring-2 cursor-zoom-in" alt="photo thumbnail">
+                  <span class="absolute bottom-1 right-1 px-1 bg-black/75 text-white rounded text-[7px] font-bold">${p.tag.toUpperCase()}</span>
                 </div>
               `;
             }).join('')}
@@ -1712,114 +1538,91 @@
         <div class="flex justify-between items-start">
           <div class="space-y-0.5">
             <h3 class="text-sm font-bold text-neutral-900">${targetName}</h3>
-            <div class="flex items-center gap-1.5 text-[11px] text-neutral-400 font-medium">
-              <span>${insp.store}</span>
+            <div class="flex flex-wrap items-center gap-1 text-[11px] text-neutral-400 font-medium">
+              <span class="text-neutral-800 font-semibold">${escapeHtml(insp.store)}</span>
               ${insp.auditorName ? `<span>• Checked by: <strong>${escapeHtml(insp.auditorName)}</strong></span>` : ''}
               <span>•</span>
               <span>${insp.dateString}</span>
             </div>
           </div>
-          <div class="flex flex-col items-end gap-1">
-            <span class="text-[9px] font-bold tracking-wider text-neutral-400 uppercase">${typeTag}</span>
-            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full border ${ratingPillColor}">${data.rating}</span>
+          <div class="flex flex-col items-end gap-1 shrink-0">
+            <span class="text-[8px] font-extrabold tracking-wider text-neutral-400 uppercase">${typeTag}</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${ratingPillColor}">${data.rating || 'No Rating'}</span>
           </div>
         </div>
-
         ${data.comment ? `
-          <div class="bg-neutral-50 px-3.5 py-3 rounded-2xl text-[11px] text-neutral-700 leading-relaxed border border-neutral-100">
-            <p class="font-semibold text-neutral-500 mb-0.5">Observation details</p>
-            ${data.comment}
+          <div class="bg-neutral-50 px-3.5 py-3 rounded-2xl text-[11px] text-neutral-600 leading-relaxed border border-neutral-100">
+            <p class="font-extrabold text-neutral-450 uppercase text-[8px] mb-0.5">Observation details</p>
+            ${escapeHtml(data.comment)}
           </div>
         ` : ''}
-
         ${data.quantity ? `
-          <div class="text-[10px] text-neutral-400 font-medium">Quantity units check: <span class="text-neutral-800 font-bold">${data.quantity}</span></div>
+          <div class="text-[10px] text-neutral-400 font-bold font-mono">Quantity unit audit: <span class="text-neutral-800 font-extrabold">${data.quantity}</span></div>
         ` : ''}
-
         ${photosRow}
       `;
       return card;
     }
 
-    // Navigation View Route Manager
     function navigate(viewName) {
       window.state.currentView = viewName;
-
-      // Set titles based on view context
       const titleEl = document.getElementById('header-title');
       const subtitleEl = document.getElementById('header-subtitle');
+      
       if (viewName === 'home') {
-        titleEl.innerText = "Inspections";
-        subtitleEl.innerText = "Standard Portal";
+        if (titleEl) titleEl.innerText = "Operations Portal";
+        if (subtitleEl) subtitleEl.innerText = "Welcome Back Inspector";
       } else if (viewName === 'store-select') {
-        titleEl.innerText = "Location Info";
-        subtitleEl.innerText = "Checklist Target Select";
+        if (titleEl) titleEl.innerText = "Location Info";
+        if (subtitleEl) subtitleEl.innerText = "Checklist Target Selection";
       } else if (viewName === 'facility') {
-        titleEl.innerText = "Facility Checklist";
-        subtitleEl.innerText = "Exterior/Interior Physical Run";
+        if (titleEl) titleEl.innerText = "Facility Checklist";
+        if (subtitleEl) subtitleEl.innerText = "Exterior/Interior Physical Walkthrough";
       } else if (viewName === 'equipment') {
-        titleEl.innerText = "Equipment Wizard";
-        subtitleEl.innerText = `Step ${window.state.activeEquipmentIndex + 1} item review`;
+        if (titleEl) titleEl.innerText = "Equipment Checklist";
+        if (subtitleEl) subtitleEl.innerText = "Machinery & Electrical Unit Checks";
       } else if (viewName === 'overview') {
-        titleEl.innerText = "Audit History";
-        subtitleEl.innerText = "Fast-Filtered Field Reports";
+        if (titleEl) titleEl.innerText = "Field Reports";
+        if (subtitleEl) subtitleEl.innerText = "Filter & Search Audit History";
       } else if (viewName === 'settings') {
-        titleEl.innerText = "Control Settings";
-        subtitleEl.innerText = "Checklist & Locations Database";
+        if (titleEl) titleEl.innerText = "Settings Configuration";
+        if (subtitleEl) subtitleEl.innerText = "Edit Store Locations & Active Checklists";
       }
 
-      // Hide home navigation button if we are on home
       const homeBtn = document.getElementById('header-home-btn');
-      if (viewName === 'home') {
-        homeBtn.classList.add('hidden');
-      } else {
-        homeBtn.classList.remove('hidden');
+      if (homeBtn) {
+        if (viewName === 'home') homeBtn.classList.add('hidden');
+        else homeBtn.classList.remove('hidden');
       }
 
-      // Render view panel visibility
       document.querySelectorAll('.view-panel').forEach(v => v.classList.add('hidden'));
       const activePanel = document.getElementById(`view-${viewName}`);
       if (activePanel) activePanel.classList.remove('hidden');
 
-      // Update Navigation bar buttons (both mobile bottom nav and desktop side-rail)
       ['home', 'store-select', 'overview', 'settings'].forEach(route => {
         const btn = document.getElementById(`nav-btn-${route}`);
         if (btn) {
-          if (route === viewName) {
-            btn.className = "flex flex-col items-center gap-1 text-orange-400 font-bold transition";
-          } else {
-            btn.className = "flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition";
-          }
+          if (route === viewName) btn.className = "flex flex-col items-center gap-1 text-orange-400 font-bold transition justify-center";
+          else btn.className = "flex flex-col items-center gap-1 text-[#D9E2EC]/70 hover:text-white transition justify-center";
         }
 
         const deskBtn = document.getElementById(`nav-desk-btn-${route}`);
         if (deskBtn) {
-          if (route === viewName) {
-            deskBtn.className = "w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-white bg-[#EA580C] font-bold shadow-md shadow-orange-950/25 transition";
-          } else {
-            deskBtn.className = "w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold";
-          }
+          if (route === viewName) deskBtn.className = "w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-white bg-[#EA580C] font-bold shadow-md transition";
+          else deskBtn.className = "w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-2xl text-[#D9E2EC] hover:text-white hover:bg-white/10 transition font-semibold";
         }
       });
 
-      // Special initializers per route load context
-      if (viewName === 'store-select') {
-        renderStoreSelections();
-      } else if (viewName === 'facility') {
-        renderFacilityChecklist();
-      } else if (viewName === 'equipment') {
-        renderEquipmentWizardItem();
-      } else if (viewName === 'overview') {
-        loadInspectionsHistory();
-      } else if (viewName === 'settings') {
-        renderSettingsItems();
-      }
+      if (viewName === 'store-select') renderStoreSelections();
+      else if (viewName === 'facility') renderFacilityChecklist();
+      else if (viewName === 'equipment') renderEquipmentChecklist();
+      else if (viewName === 'overview') loadInspectionsHistory();
+      else if (viewName === 'settings') renderSettingsItems();
 
       window.scrollTo(0, 0);
     }
     window.navigate = navigate;
 
-    // Trigger Initial Hash location matching standard hash route patterns
     function syncHash() {
       const hash = window.location.hash.replace('#', '');
       if (['home', 'store-select', 'facility', 'equipment', 'overview', 'settings'].includes(hash)) {
@@ -1831,8 +1634,7 @@
     window.addEventListener('hashchange', syncHash);
     window.addEventListener('DOMContentLoaded', syncHash);
 
-
-    // --- CRITICAL EVENT DELEGATION SYSTEM ---
+    // CRITICAL EVENT DELEGATION
     document.addEventListener('click', async (e) => {
       const target = e.target.closest('[data-action]');
       if (!target) return;
@@ -1842,18 +1644,27 @@
       const valAttr = target.getAttribute('data-val');
       const idxAttr = target.getAttribute('data-idx');
 
-      // Route Navigation
       if (action === 'route') {
         const rValue = target.getAttribute('data-route');
         window.location.hash = `#${rValue}`;
       }
 
-      // Go Home button
       if (action === 'go-home') {
         window.location.hash = '#home';
       }
 
-      // Filter by Store Tile drill-down
+      // Settings Stores Sorting Order Toggle
+      if (action === 'set-store-sort') {
+        const sortingVal = target.getAttribute('data-sort');
+        window.state.storeSortMode = sortingVal;
+        window.state.stores = sortStores(window.state.stores);
+        renderSettingsItems();
+        renderStoreSelections();
+        renderOverviewStoreFilters();
+        renderOverviewCardsList();
+        sendNotification(`Stores ordered ${sortingVal === 'alphabetical' ? 'alphabetically' : 'by cluster'}`, "success");
+      }
+
       if (action === 'filter-by-store-tile') {
         const storeName = target.getAttribute('data-store');
         const storeSel = document.getElementById('filter-store-select');
@@ -1861,7 +1672,7 @@
         if (window.state.filterStore === storeName) {
           window.state.filterStore = '';
           if (storeSel) storeSel.value = '';
-          sendNotification("Store drill-down filter cleared", "info");
+          sendNotification("Drill-down filter cleared", "info");
         } else {
           window.state.filterStore = storeName;
           if (storeSel) storeSel.value = storeName;
@@ -1870,7 +1681,6 @@
         renderOverviewCardsList();
       }
 
-      // Start inspection
       if (action === 'begin-inspection') {
         const storeVal = document.getElementById('select-store-input').value;
         const auditorNameInput = document.getElementById('auditor-name-input');
@@ -1879,12 +1689,11 @@
         const modeVal = modeRadio ? modeRadio.value : 'facility';
 
         if (!storeVal) {
-          sendNotification("Select store name to start inspection", "error");
+          sendNotification("Choose store location name to start checklist", "error");
           return;
         }
-
         if (!auditorNameVal) {
-          sendNotification("Please type your First Name for accountability", "error");
+          sendNotification("Typing inspector name is required for accountability", "error");
           if (auditorNameInput) auditorNameInput.focus();
           return;
         }
@@ -1894,18 +1703,15 @@
         window.state.facilityAnswers = {};
         window.state.equipmentAnswers = {};
 
-        presentOverlay("Initializing Session", "Connecting database snapshot sync...");
-
+        presentOverlay("Initializing checklist", "Syncing database snapshot with Firestore...");
         try {
-          const todayDateStr = new Date().toLocaleDateString('en-US', {
-            month: 'short', day: 'numeric', year: 'numeric'
-          });
-          
+          const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
           const querySnap = await getDocs(collection(db, "inspections"));
           let existingDoc = null;
+          
           querySnap.forEach((doc) => {
             const d = doc.data();
-            if (d.store === storeVal && d.dateOnly === todayDateStr) {
+            if (d.store === storeVal && d.dateOnly === todayStr) {
               existingDoc = { id: doc.id, ...d };
             }
           });
@@ -1919,13 +1725,12 @@
             window.state.activeDocId = existingDoc.id;
             window.state.facilityAnswers = existingDoc.facility || {};
             window.state.equipmentAnswers = existingDoc.equipment || {};
-            // Update auditor name for accountability on existing doc
             await updateDoc(doc(db, "inspections", existingDoc.id), { auditorName: auditorNameVal });
           } else {
             const payload = {
               store: storeVal,
               auditorName: auditorNameVal,
-              dateOnly: todayDateStr,
+              dateOnly: todayStr,
               dateString: new Date().toLocaleDateString('en-US', {
                 month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
               }),
@@ -1936,8 +1741,6 @@
             };
             const docRef = await addDoc(collection(db, "inspections"), payload);
             window.state.activeDocId = docRef.id;
-            window.state.facilityAnswers = {};
-            window.state.equipmentAnswers = {};
           }
 
           const docRef = doc(db, "inspections", window.state.activeDocId);
@@ -1971,16 +1774,13 @@
                 });
               }
 
-              if (window.state.currentView === 'facility') {
-                renderFacilityChecklist();
-              } else if (window.state.currentView === 'equipment') {
-                renderEquipmentChecklist();
-              }
+              if (window.state.currentView === 'facility') renderFacilityChecklist();
+              else if (window.state.currentView === 'equipment') renderEquipmentChecklist();
             }
           });
 
           dismissOverlay();
-          sendNotification(existingDoc ? "Linked to active inspection session" : "Started new live inspection", "success");
+          sendNotification(existingDoc ? "Linked to active inspection record" : "Inbound new live session initialized", "success");
 
           if (modeVal === 'facility' || modeVal === 'both') {
             window.location.hash = '#facility';
@@ -1990,17 +1790,15 @@
         } catch (err) {
           console.error("Firestore setup error:", err);
           dismissOverlay();
-          sendNotification("Failed to connect live session: " + err.message, "error");
+          sendNotification("Failed checking database connectivity: " + err.message, "error");
         }
       }
 
-      // Cancel / Exit inspection
       if (action === 'cancel-inspection') {
         showCustomConfirm(
-          "Exit session?",
-          "Current entries are auto-saved in the cloud. Do you want to exit to Home?",
+          "Exit inspection session?",
+          "Checklist progress is synchronized instantly in the cloud. Do you want to return to Home?",
           () => {
-            // Unsubscribe
             if (activeInspectionSubscription) {
               activeInspectionSubscription();
               activeInspectionSubscription = null;
@@ -2013,197 +1811,172 @@
         );
       }
 
-      // Set facility rating
       if (action === 'set-rating') {
-        const currentAns = window.state.facilityAnswers[itemAttr];
-        currentAns.rating = valAttr;
-        renderFacilityChecklist();
-        triggerCloudSave();
+        const curr = window.state.facilityAnswers[itemAttr];
+        if (curr) {
+          curr.rating = valAttr;
+          renderFacilityChecklist();
+          triggerCloudSave();
+        }
       }
 
-      // Delete facility photo with auto-saving to cloud
       if (action === 'delete-photo') {
         showCustomConfirm(
-          "Remove photo?",
-          "Are you sure you want to remove this photo attachment?",
+          "Remove photo attachment?",
+          "Are you sure you want to delete this photographic observation?",
           () => {
             const idx = parseInt(idxAttr);
-            window.state.facilityAnswers[itemAttr].photos.splice(idx, 1);
-            renderFacilityChecklist();
-            triggerCloudSave();
-            sendNotification("Photo removed", "info");
+            if (window.state.facilityAnswers[itemAttr]) {
+              window.state.facilityAnswers[itemAttr].photos.splice(idx, 1);
+              renderFacilityChecklist();
+              triggerCloudSave();
+              sendNotification("Observation photo removed", "info");
+            }
           }
         );
       }
 
-      // Next / Continue inside Facility Checklist
       if (action === 'next-facility') {
         await saveImmediately();
         if (window.state.selectedMode === 'both') {
           window.location.hash = '#equipment';
         } else {
-          sendNotification("Inspection complete and synchronized!", "success");
+          sendNotification("Audit complete and synced with server", "success");
           window.location.hash = '#overview';
         }
       }
 
-      // Set equipment ratings
       if (action === 'set-equipment-rating') {
-        const currentAns = window.state.equipmentAnswers[itemAttr];
-        currentAns.rating = valAttr;
-        renderEquipmentChecklist();
-        triggerCloudSave();
+        const curr = window.state.equipmentAnswers[itemAttr];
+        if (curr) {
+          curr.rating = valAttr;
+          renderEquipmentChecklist();
+          triggerCloudSave();
+        }
       }
 
-      // Delete Equipment Photo
       if (action === 'delete-photo-equipment') {
         showCustomConfirm(
-          "Remove photo?",
-          "Are you sure you want to remove this photo attachment?",
+          "Remove photo attachment?",
+          "Are you sure you want to delete this photographic observation?",
           () => {
             const idx = parseInt(idxAttr);
-            window.state.equipmentAnswers[itemAttr].photos.splice(idx, 1);
-            renderEquipmentChecklist();
-            triggerCloudSave();
-            sendNotification("Photo removed", "info");
+            if (window.state.equipmentAnswers[itemAttr]) {
+              window.state.equipmentAnswers[itemAttr].photos.splice(idx, 1);
+              renderEquipmentChecklist();
+              triggerCloudSave();
+              sendNotification("Observation photo removed", "info");
+            }
           }
         );
       }
 
-      // Finish whole equipment list
       if (action === 'finish-equipment') {
         await saveImmediately();
-        sendNotification("Inspection complete and synchronized!", "success");
+        sendNotification("Audit complete and synced with server", "success");
         window.location.hash = '#overview';
       }
 
-      // Open Lightbox magnifying image preview
       if (action === 'open-lightbox') {
         const url = target.getAttribute('data-url');
         const caption = target.getAttribute('data-caption');
-        document.getElementById('lightbox-image').src = url;
-        document.getElementById('lightbox-caption').innerText = caption || "No optional observation caption set-up";
-        document.getElementById('lightbox-modal').classList.remove('hidden');
+        const zoomImg = document.getElementById('lightbox-image');
+        const zoomCap = document.getElementById('lightbox-caption');
+        if (zoomImg) zoomImg.src = url;
+        if (zoomCap) zoomCap.innerText = caption || "No caption remarks set";
+        const lBox = document.getElementById('lightbox-modal');
+        if (lBox) lBox.classList.remove('hidden');
       }
 
-      // Hide Lightbox Modal
       if (action === 'close-lightbox') {
-        document.getElementById('lightbox-modal').classList.add('hidden');
+        const lBox = document.getElementById('lightbox-modal');
+        if (lBox) lBox.classList.add('hidden');
       }
 
-      // Settings navigation Tab change
       if (action === 'set-settings-tab') {
-        const tabValue = target.getAttribute('data-tab');
-        window.state.settingsTab = tabValue;
-        window.state.editingStoreId = null; // Clear edit mode when changing settings tabs
+        window.state.settingsTab = target.getAttribute('data-tab');
+        window.state.editingStoreId = null;
+        window.state.confirmDeleteId = null; // Reset inline deletion states
         renderSettingsItems();
       }
 
-      // Start store editing
       if (action === 'start-store-edit') {
-        const id = target.getAttribute('data-id');
-        window.state.editingStoreId = id;
+        window.state.editingStoreId = target.getAttribute('data-id');
         renderSettingsItems();
       }
 
-      // Cancel store editing
       if (action === 'cancel-store-edit') {
         window.state.editingStoreId = null;
         renderSettingsItems();
       }
 
-      // Save store editing to Firestore
       if (action === 'save-store-edit') {
         const id = target.getAttribute('data-id');
         const input = document.getElementById(`edit-store-input-${id}`);
         const clusterInput = document.getElementById(`edit-store-cluster-${id}`);
         const newVal = input ? input.value.trim() : '';
-        const newCluster = clusterInput ? clusterInput.value.trim() : '';
+        const newClust = clusterInput ? clusterInput.value.trim() : '';
+
         if (!newVal) {
-          sendNotification("Store name cannot be empty", "error");
+          sendNotification("Store identity name cannot be blank", "error");
           return;
         }
 
-        presentOverlay("Saving Store Details", "Updating document in Firestore...");
+        presentOverlay("Saving details", "Updating Firestore record...");
         try {
-          await updateDoc(doc(db, "stores", id), {
-            name: newVal,
-            cluster: newCluster
-          });
+          await updateDoc(doc(db, "stores", id), { name: newVal, cluster: newClust });
           window.state.editingStoreId = null;
           dismissOverlay();
-          sendNotification("Store details updated", "success");
+          sendNotification("Store configurations updated successfully", "success");
           await loadCollectionsFromCloud();
-        } catch(err) {
-          console.error("Store update failed", err);
+        } catch (err) {
+          console.error("Editing store fails", err);
           dismissOverlay();
-          sendNotification("Could not save store details", "error");
+          sendNotification("Unable to overwrite store details.", "error");
         }
       }
 
-      // Reorder items up / down in Facilities or Equipment lists
       if (action === 'reorder-item-up' || action === 'reorder-item-down') {
         const coll = target.getAttribute('data-collection');
         const id = target.getAttribute('data-id');
+        let list = (coll === 'facilityCategories') ? [...window.state.facilityCategories] : [...window.state.equipmentList];
+        const idx = list.findIndex(x => x.id === id);
         
-        let list = [];
-        if (coll === 'facilityCategories') {
-          list = [...window.state.facilityCategories];
-        } else if (coll === 'equipmentList') {
-          list = [...window.state.equipmentList];
-        } else {
-          return;
-        }
-        
-        const idx = list.findIndex(item => item.id === id);
         if (idx === -1) return;
-        
-        if (action === 'reorder-item-up') {
-          if (idx === 0) {
-            sendNotification("Item is already at the top", "info");
-            return;
-          }
-          const temp = list[idx];
-          list[idx] = list[idx - 1];
-          list[idx - 1] = temp;
-        } else {
-          if (idx === list.length - 1) {
-            sendNotification("Item is already at the bottom", "info");
-            return;
-          }
-          const temp = list[idx];
-          list[idx] = list[idx + 1];
-          list[idx + 1] = temp;
-        }
-        
-        presentOverlay("Saving Custom Order", "Updating sequence in cloud database...");
+        if (action === 'reorder-item-up' && idx === 0) return;
+        if (action === 'reorder-item-down' && idx === list.length - 1) return;
+
+        const neighborShift = (action === 'reorder-item-up') ? -1 : 1;
+        const temp = list[idx];
+        list[idx] = list[idx + neighborShift];
+        list[idx + neighborShift] = temp;
+
+        presentOverlay("Arranging list", "Adjusting cloud priority sequence...");
         try {
           const promises = list.map((item, index) => {
             return updateDoc(doc(db, coll, item.id), { order: index });
           });
           await Promise.all(promises);
-          
           dismissOverlay();
-          sendNotification("Custom list order saved!", "success");
+          sendNotification("Assigned order sequence updated!", "success");
           await loadCollectionsFromCloud();
         } catch (err) {
-          console.error("Failed persisting order", err);
+          console.error("Order persist failed", err);
           dismissOverlay();
-          sendNotification("Unable to persist order in cloud database.", "error");
+          sendNotification("Failed storing order.", "error");
         }
       }
 
-      // Add settings item Submission trigger
       if (action === 'submit-settings-add') {
         const input = document.getElementById('settings-add-input');
-        const val = input.value.trim();
-        if (!val) {
-          sendNotification("Configuration entry text is blank", "error");
+        const rawVal = input ? input.value.trim() : '';
+        if (!rawVal) {
+          sendNotification("Configuration details input cannot be empty", "error");
           return;
         }
 
         let collectionName = '';
-        let listLength = 0;
+        let listSize = 0;
         let clusterVal = '';
         if (window.state.settingsTab === 'stores') {
           collectionName = 'stores';
@@ -2211,145 +1984,249 @@
           clusterVal = clusterInput ? clusterInput.value.trim() : '';
         } else if (window.state.settingsTab === 'facilities') {
           collectionName = 'facilityCategories';
-          listLength = window.state.facilityCategories.length;
+          listSize = window.state.facilityCategories.length;
         } else {
           collectionName = 'equipmentList';
-          listLength = window.state.equipmentList.length;
+          listSize = window.state.equipmentList.length;
         }
 
-        presentOverlay("Writing Live DB", "Updating records inside Firestore...");
+        presentOverlay("Storing Configuration", "Saving setup to cloud collection...");
         try {
-          const docId = val.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
-          const docData = { name: val };
+          const safeId = rawVal.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
+          const docDraft = { name: rawVal };
           if (window.state.settingsTab === 'stores') {
-            docData.cluster = clusterVal;
+            docDraft.cluster = clusterVal;
           } else {
-            docData.order = listLength;
+            docDraft.order = listSize;
           }
-          await setDoc(doc(db, collectionName, docId), docData);
+
+          await setDoc(doc(db, collectionName, safeId), docDraft);
+          if (input) input.value = '';
+          const cIn = document.getElementById('settings-add-cluster');
+          if (cIn) cIn.value = '';
           
-          input.value = '';
-          const clusterIn = document.getElementById('settings-add-cluster');
-          if (clusterIn) clusterIn.value = '';
           dismissOverlay();
-          sendNotification("Configuration item stored safely!", "success");
-          
-          // Re-retrieve lists and redraw UI
+          sendNotification("New checklist metadata created", "success");
           await loadCollectionsFromCloud();
         } catch (err) {
-          console.error("Firebase update failed", err);
+          console.error("Add config error:", err);
           dismissOverlay();
-          sendNotification("Security Rule Reject: Unable to store settings.", "error");
+          sendNotification("Rules exception: verify database setup permissions.", "error");
         }
       }
 
-      // Delete settings item
+      // Deleting item handling with protective confirmation typing verification
       if (action === 'delete-settings-item') {
-        const coll = target.getAttribute('data-collection');
         const id = target.getAttribute('data-id');
-        
-        showCustomConfirm(
-          "Delete config item?",
-          "Are you sure you want to remove this definition item permanently from the Firestore checklist?",
-          async () => {
-            presentOverlay("Deleting configuration item", "Updating remote collections...");
-            try {
-              await deleteDoc(doc(db, coll, id));
-              dismissOverlay();
-              sendNotification("Configuration item deleted", "success");
-              await loadCollectionsFromCloud();
-            } catch(err) {
-              console.error("Settings deletion failed", err);
-              dismissOverlay();
-              sendNotification("Unable to process deletion.", "error");
-            }
-          }
-        );
+        window.state.confirmDeleteId = id;
+        renderSettingsItems();
+        sendNotification("Confirm deletion permanently in safety confirmation bubble", "info");
       }
 
-      // Dashboard filters reset
+      // Double authorization deletion trigger
+      if (action === 'confirm-delete-item-verification') {
+        const id = target.getAttribute('data-id');
+        const coll = target.getAttribute('data-collection');
+        const nameVal = target.getAttribute('data-name');
+        const confirmInput = document.getElementById(`delete-confirm-input-${id}`);
+        const typedVal = confirmInput ? confirmInput.value.trim() : '';
+
+        if (typedVal.toLowerCase() !== nameVal.toLowerCase()) {
+          sendNotification("Authorization failed! Exact item name must match.", "error");
+          if (confirmInput) {
+            confirmInput.classList.add('border-red-500', 'ring-red-200');
+            confirmInput.focus();
+          }
+          return;
+        }
+
+        presentOverlay("Processing deletion Authorization", "Executing permanent deletion locks...");
+        try {
+          await deleteDoc(doc(db, coll, id));
+          window.state.confirmDeleteId = null;
+          dismissOverlay();
+          sendNotification("Configuration asset permanently deleted successfully!", "success");
+          await loadCollectionsFromCloud();
+        } catch (err) {
+          console.error("Removal error:", err);
+          dismissOverlay();
+          sendNotification("Database security rules error.", "error");
+        }
+      }
+
+      if (action === 'cancel-delete-item-verification') {
+        window.state.confirmDeleteId = null;
+        renderSettingsItems();
+        sendNotification("Asset deletion request cancelled", "info");
+      }
+
+      if (action === 'toggle-batch-editor') {
+        const editor = document.getElementById('settings-batch-reorder-container');
+        if (editor) {
+          const isHidden = editor.classList.contains('hidden');
+          if (isHidden) {
+            editor.classList.remove('hidden');
+            // Auto populate with current list line by line
+            const coll = (window.state.settingsTab === 'facilities') ? 'facilityCategories' : 'equipmentList';
+            const currentList = (coll === 'facilityCategories') ? window.state.facilityCategories : window.state.equipmentList;
+            const textLines = currentList.map(item => item.name).join('\n');
+            const textArea = document.getElementById('settings-batch-reorder-textarea');
+            if (textArea) {
+              textArea.value = textLines;
+              textArea.focus();
+            }
+            sendNotification("Batch reorder editor opened. One item per line.", "info");
+          } else {
+            editor.classList.add('hidden');
+          }
+        }
+      }
+
+      if (action === 'sort-items-alphabetical') {
+        const coll = (window.state.settingsTab === 'facilities') ? 'facilityCategories' : 'equipmentList';
+        const currentList = (coll === 'facilityCategories') ? [...window.state.facilityCategories] : [...window.state.equipmentList];
+        
+        if (currentList.length === 0) {
+          sendNotification("No assets to sort yet.", "error");
+          return;
+        }
+
+        currentList.sort((a, b) => a.name.localeCompare(b.name));
+        presentOverlay("Auto Alphabetizing", "Synchronized group ordering to Firestore...");
+        try {
+          const promises = currentList.map((item, index) => {
+            return updateDoc(doc(db, coll, item.id), { order: index });
+          });
+          await Promise.all(promises);
+          dismissOverlay();
+          sendNotification("Assets successfully ordered alphabetically!", "success");
+          await loadCollectionsFromCloud();
+        } catch (err) {
+          console.error("Auto sort err:", err);
+          dismissOverlay();
+          sendNotification("Database update failed.", "error");
+        }
+      }
+
+      if (action === 'apply-batch-reorder') {
+        const coll = (window.state.settingsTab === 'facilities') ? 'facilityCategories' : 'equipmentList';
+        const currentList = (coll === 'facilityCategories') ? window.state.facilityCategories : window.state.equipmentList;
+        const textArea = document.getElementById('settings-batch-reorder-textarea');
+        if (!textArea) return;
+
+        const lines = textArea.value.split('\n').map(line => line.trim()).filter(line => line !== '');
+        if (lines.length === 0) {
+          sendNotification("Please enter at least one item name.", "error");
+          return;
+        }
+
+        const processedIds = new Set();
+        const itemsToWrite = [];
+
+        // 1. Process specified lines
+        lines.forEach((line, idx) => {
+          const match = currentList.find(x => x.name.trim().toLowerCase() === line.toLowerCase());
+          if (match) {
+            itemsToWrite.push({ id: match.id, name: match.name, order: idx });
+            processedIds.add(match.id);
+          } else {
+            // Create brand-new on the fly
+            const safeId = line.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
+            const uniqId = safeId + "_" + Math.random().toString(36).substring(2, 6);
+            itemsToWrite.push({ id: uniqId, name: line, order: idx });
+          }
+        });
+
+        // 2. Safely append any items left unmentioned at the end to prevent data loss
+        let appendIdx = lines.length;
+        currentList.forEach(item => {
+          if (!processedIds.has(item.id)) {
+            itemsToWrite.push({ id: item.id, name: item.name, order: appendIdx });
+            appendIdx++;
+          }
+        });
+
+        presentOverlay("Synchronizing Sequence", "Writing ordered list structure to Firebase...");
+        try {
+          const promises = itemsToWrite.map(item => {
+            return setDoc(doc(db, coll, item.id), { name: item.name, order: item.order });
+          });
+          await Promise.all(promises);
+          dismissOverlay();
+          sendNotification("All sequence lines synced to Firebase!", "success");
+          
+          const editor = document.getElementById('settings-batch-reorder-container');
+          if (editor) editor.classList.add('hidden');
+
+          await loadCollectionsFromCloud();
+        } catch (err) {
+          console.error("Batch sync failed:", err);
+          dismissOverlay();
+          sendNotification("Sync failed. Check connection & permissions.", "error");
+        }
+      }
+
       if (action === 'reset-filters') {
-        const storeSel = document.getElementById('filter-store-select');
-        if (storeSel) storeSel.value = "";
-        const catSel = document.getElementById('filter-category-select');
-        if (catSel) catSel.value = "";
+        const stS = document.getElementById('filter-store-select');
+        const catS = document.getElementById('filter-category-select');
+        if (stS) stS.value = "";
+        if (catS) catS.value = "";
         
         window.state.filterStore = "";
         window.state.filterCategory = "";
         window.state.filterTag = "";
         renderOverviewCardsList();
-        sendNotification("All search filter parameters cleared", "info");
+        sendNotification("All search criteria cleared", "success");
       }
 
-      // Dashboard Tag filters
       if (action === 'set-filter-tag') {
         window.state.filterTag = valAttr;
         renderOverviewCardsList();
       }
 
-      // Quick toggle filters
       if (action === 'toggle-quick-filter') {
         window.state.filterTag = valAttr || "";
         renderOverviewCardsList();
       }
-
-      // Manual sync/refresh Dashboard
-      if (action === 'refresh-overview') {
-        presentOverlay("Syncing records", "Synchronizing checklists list with cloud...");
-        await loadInspectionsHistory();
-        dismissOverlay();
-        sendNotification("Records database synchronized", "success");
-      }
     });
 
-    // Delegating INPUT and CHANGE events to state updates to avoid missing any on-the-fly typing changes
+    // Delegating live observation updates
     document.addEventListener('input', (e) => {
       const target = e.target.closest('[data-action]');
       if (!target) return;
       const action = target.getAttribute('data-action');
-      const item = target.getAttribute('data-item');
-      const idxAttr = target.getAttribute('data-idx');
+      const itemName = target.getAttribute('data-item');
+      const pIdx = parseInt(target.getAttribute('data-idx'));
 
-      // Update facility text comments
       if (action === 'update-comment') {
-        if (window.state.facilityAnswers[item]) {
-          window.state.facilityAnswers[item].comment = e.target.value;
-        } else if (window.state.equipmentAnswers[item]) {
-          window.state.equipmentAnswers[item].comment = e.target.value;
-        }
+        if (window.state.facilityAnswers[itemName]) window.state.facilityAnswers[itemName].comment = e.target.value;
+        else if (window.state.equipmentAnswers[itemName]) window.state.equipmentAnswers[itemName].comment = e.target.value;
         triggerCloudSave();
       }
 
-      // Update facility photos captions
       if (action === 'update-photo-caption') {
-        const idx = parseInt(idxAttr);
-        if (window.state.facilityAnswers[item] && window.state.facilityAnswers[item].photos[idx]) {
-          window.state.facilityAnswers[item].photos[idx].caption = e.target.value;
+        if (window.state.facilityAnswers[itemName] && window.state.facilityAnswers[itemName].photos[pIdx]) {
+          window.state.facilityAnswers[itemName].photos[pIdx].caption = e.target.value;
+          triggerCloudSave();
         }
-        triggerCloudSave();
       }
 
-      // Update equipment photo caption notes
       if (action === 'update-photo-caption-equipment') {
-        const idx = parseInt(idxAttr);
-        if (window.state.equipmentAnswers[item] && window.state.equipmentAnswers[item].photos[idx]) {
-          window.state.equipmentAnswers[item].photos[idx].caption = e.target.value;
+        if (window.state.equipmentAnswers[itemName] && window.state.equipmentAnswers[itemName].photos[pIdx]) {
+          window.state.equipmentAnswers[itemName].photos[pIdx].caption = e.target.value;
+          triggerCloudSave();
         }
-        triggerCloudSave();
       }
-
     });
 
     document.addEventListener('change', async (e) => {
       const target = e.target.closest('[data-action]');
       
-      // Update store filters drop-down changes inside overview card
       if (e.target.id === 'filter-store-select') {
         window.state.filterStore = e.target.value;
         renderOverviewCardsList();
       }
 
-      // Update category/item name filters drop-down changes inside overview card
       if (e.target.id === 'filter-category-select') {
         window.state.filterCategory = e.target.value;
         renderOverviewCardsList();
@@ -2357,147 +2234,118 @@
 
       if (!target) return;
       const action = target.getAttribute('data-action');
-      const item = target.getAttribute('data-item');
-      const idxAttr = target.getAttribute('data-idx');
+      const itemStr = target.getAttribute('data-item');
+      const pIdx = parseInt(target.getAttribute('data-idx'));
 
-      // Update facility photo tag updates
       if (action === 'update-photo-tag') {
-        const idx = parseInt(idxAttr);
-        if (window.state.facilityAnswers[item] && window.state.facilityAnswers[item].photos[idx]) {
-          window.state.facilityAnswers[item].photos[idx].tag = e.target.value;
+        if (window.state.facilityAnswers[itemStr] && window.state.facilityAnswers[itemStr].photos[pIdx]) {
+          window.state.facilityAnswers[itemStr].photos[pIdx].tag = e.target.value;
           renderFacilityChecklist();
           triggerCloudSave();
         }
       }
 
-      // Update equipment photo tag updates
       if (action === 'update-photo-tag-equipment') {
-        const idx = parseInt(idxAttr);
-        if (window.state.equipmentAnswers[item] && window.state.equipmentAnswers[item].photos[idx]) {
-          window.state.equipmentAnswers[item].photos[idx].tag = e.target.value;
+        if (window.state.equipmentAnswers[itemStr] && window.state.equipmentAnswers[itemStr].photos[pIdx]) {
+          window.state.equipmentAnswers[itemStr].photos[pIdx].tag = e.target.value;
           renderEquipmentChecklist();
           triggerCloudSave();
         }
       }
 
-      // Update equipment units count dropdown inside state
       if (action === 'update-equipment-quantity') {
-        if (window.state.equipmentAnswers[item]) {
-          window.state.equipmentAnswers[item].quantity = parseInt(e.target.value);
+        if (window.state.equipmentAnswers[itemStr]) {
+          window.state.equipmentAnswers[itemStr].quantity = parseInt(e.target.value);
           triggerCloudSave();
         }
       }
 
-      // --- HANDLE DYNAMIC PHOTO FILE TRANSMISSIONS WITH FIFO ---
+      // PHOTOGRAPH FIFO MEDIA TRANSMISSIONS
       if (action === 'upload-photo') {
         const file = e.target.files[0];
         if (!file) return;
 
-        presentOverlay("Compressing media", "Securing ImgBB visual upload link...");
-        const formData = new FormData();
-        formData.append("image", file);
+        presentOverlay("Processing Media", "Uploading photo attachment package...");
+        const payload = new FormData();
+        payload.append("image", file);
 
         try {
           const resp = await fetch("https://api.imgbb.com/1/upload?key=b733862d15744e2bfaa4329d122f4ba0", {
             method: "POST",
-            body: formData
+            body: payload
           });
           const res = await resp.json();
           dismissOverlay();
 
           if (resp.ok && res && res.data && res.data.display_url) {
             const url = res.data.display_url;
-            const ans = window.state.facilityAnswers[item];
+            const ans = window.state.facilityAnswers[itemStr];
             
-            let substituted = false;
-            // Limit 6 with FIFO deletion
+            let substitution = false;
             if (ans.photos.length >= 6) {
               ans.photos.shift();
-              substituted = true;
+              substitution = true;
             }
 
-            ans.photos.push({
-              url: url,
-              tag: ans.rating || 'Good',
-              caption: ''
-            });
-
+            ans.photos.push({ url: url, tag: ans.rating || 'Good', caption: '' });
             renderFacilityChecklist();
             triggerCloudSave();
-
-            if (substituted) {
-              sendNotification("Photo updated", "success");
-            } else {
-              sendNotification("Attachment uploaded successfully!", "success");
-            }
+            
+            sendNotification(substitution ? "FIFO Photo array limit rotated" : "Observation photo uploaded safely!", "success");
           } else {
-            sendNotification("Storage host response could not be loaded. Verify key setup.", "error");
+            sendNotification("Storage host reject: configuration validation failed.", "error");
           }
         } catch (err) {
-          console.error("Photo upload error", err);
+          console.error("Upload error", err);
           dismissOverlay();
-          sendNotification("Storage submission error. Verify server state.", "error");
+          sendNotification("Storage host unreachable. Check client connectivity.", "error");
         }
       }
 
-      // Equipment Photo Uploading with 3-photo FIFO
       if (action === 'upload-photo-equipment') {
         const file = e.target.files[0];
         if (!file) return;
 
-        presentOverlay("Uploading Photo", "Pushing equipment photo check...");
-        const formData = new FormData();
-        formData.append("image", file);
+        presentOverlay("Processing Media", "Uploading photo attachment package...");
+        const payload = new FormData();
+        payload.append("image", file);
 
         try {
           const resp = await fetch("https://api.imgbb.com/1/upload?key=b733862d15744e2bfaa4329d122f4ba0", {
             method: "POST",
-            body: formData
+            body: payload
           });
           const res = await resp.json();
           dismissOverlay();
 
           if (resp.ok && res && res.data && res.data.display_url) {
             const url = res.data.display_url;
-            const ans = window.state.equipmentAnswers[item];
+            const ans = window.state.equipmentAnswers[itemStr];
             
-            let substituted = false;
-            // Limit 3 with FIFO deletion
+            let substitution = false;
             if (ans.photos.length >= 3) {
               ans.photos.shift();
-              substituted = true;
+              substitution = true;
             }
 
-            ans.photos.push({
-              url: url,
-              tag: ans.rating || 'Good',
-              caption: ''
-            });
-
+            ans.photos.push({ url: url, tag: ans.rating || 'Good', caption: '' });
             renderEquipmentChecklist();
             triggerCloudSave();
 
-            if (substituted) {
-              sendNotification("Photo updated", "success");
-            } else {
-              sendNotification("Attachment uploaded successfully!", "success");
-            }
+            sendNotification(substitution ? "FIFO Photo array rotating 3 items" : "Observation photo uploaded safely!", "success");
           } else {
-            sendNotification("ImgBB rejected upload connection", "error");
+            sendNotification("Storage host reject: configuration failure.", "error");
           }
         } catch (err) {
-          console.error("Photo upload error", err);
+          console.error("Upload error", err);
           dismissOverlay();
-          sendNotification("Equipment upload fails. Confirm file structure.", "error");
+          sendNotification("Storage host unreachable. Check client connectivity.", "error");
         }
       }
     });
 
-    // Boot system and list collections
     loadCollectionsFromCloud();
-    if (typeof updateOnlineStatus === 'function') {
-      updateOnlineStatus();
-    }
+    updateOnlineStatus();
 
   </script>
 </body>
