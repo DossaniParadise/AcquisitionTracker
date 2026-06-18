@@ -526,7 +526,8 @@
       deleteDoc,
       setDoc,
       getDoc,
-      onSnapshot
+      onSnapshot,
+      setLogLevel
     } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     // Firebase Credentials
@@ -543,6 +544,7 @@
     let draggedItemId = null;
     let draggedCollection = null;
     try {
+      setLogLevel('error');
       app = initializeApp(firebaseConfig);
       db = initializeFirestore(app, {
         localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
@@ -981,18 +983,17 @@
             <div class="flex-1 bg-red-50/50 border border-red-250 p-4 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-3 animate-fade-in w-full">
               <div class="space-y-1">
                 <span class="text-[10px] font-extrabold text-[#991B1B] uppercase tracking-widest flex items-center gap-1 leading-none">
-                  <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-red-650"></i> Core Deletion Protection
+                  <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-red-650"></i> Permanent Deletion
                 </span>
                 <p class="text-[11px] text-neutral-600 font-medium">
-                  To delete <strong>${escapeHtml(item.name)}</strong>, type the exact name below to authorize:
+                  Are you sure you want to delete <strong>${escapeHtml(item.name)}</strong>? This action cannot be undone.
                 </p>
               </div>
               <div class="flex items-center gap-2 shrink-0 w-full md:w-auto">
-                <input type="text" id="delete-confirm-input-${item.id}" placeholder="Type exact name" class="bg-white border border-neutral-300 rounded-xl px-2.5 py-1.5 text-xs font-semibold w-full md:w-44 focus:ring-1 focus:ring-red-500">
-                <button data-action="confirm-delete-item-verification" data-collection="${targetCollection}" data-id="${item.id}" data-name="${escapeHtml(item.name)}" class="bg-red-650 hover:bg-red-700 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl transition active:scale-95 shrink-0 cursor-pointer">
-                  Delete
+                <button data-action="confirm-delete-item-verification" data-collection="${targetCollection}" data-id="${item.id}" class="bg-red-650 hover:bg-red-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition active:scale-95 shrink-0 cursor-pointer">
+                  Yes, Delete
                 </button>
-                <button data-action="cancel-delete-item-verification" class="text-neutral-550 hover:text-neutral-700 bg-neutral-100 hover:bg-neutral-200 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-neutral-255 transition active:scale-95 shrink-0 cursor-pointer">
+                <button data-action="cancel-delete-item-verification" class="text-neutral-550 hover:text-neutral-700 bg-neutral-100 hover:bg-neutral-200 text-xs font-bold px-4 py-2.5 rounded-xl border border-neutral-255 transition active:scale-[0.97] shrink-0 cursor-pointer">
                   Cancel
                 </button>
               </div>
@@ -1004,10 +1005,11 @@
           if (targetCollection === 'stores') {
             const isEditing = (window.state.editingStoreId === item.id);
             if (isEditing) {
+              const currentStore = window.state.stores.find(s => s.id === item.id) || item;
               row.innerHTML = `
                 <div class="flex flex-col gap-1.5 flex-1 mr-4 w-full">
-                  <input type="text" id="edit-store-input-${item.id}" value="${escapeHtml(item.name)}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-2 text-xs font-bold focus:ring-[#EA580C]" placeholder="Store Name">
-                  <input type="text" id="edit-store-cluster-${item.id}" value="${escapeHtml(item.cluster || '')}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-[11px] focus:ring-[#EA580C]" placeholder="Cluster Tag (Optional)">
+                  <input type="text" id="edit-store-input-${item.id}" value="${escapeHtml(currentStore.name)}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-2 text-xs font-bold focus:ring-[#EA580C]" placeholder="Store Name">
+                  <input type="text" id="edit-store-cluster-${item.id}" value="${escapeHtml(currentStore.cluster || '')}" class="w-full bg-white border border-neutral-200 rounded-xl px-3 py-1.5 text-[11px] focus:ring-[#EA580C]" placeholder="Cluster Tag (Optional)">
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
                   <button data-action="save-store-edit" data-id="${item.id}" class="text-xs text-green-600 hover:text-green-700 transition p-1.5 bg-green-50 rounded-lg flex items-center justify-center border border-green-100 cursor-pointer" title="Save">
@@ -1041,8 +1043,7 @@
           } else {
             row.innerHTML = `
               <div class="flex items-center gap-2 flex-1 mr-4">
-                <i data-lucide="grip-vertical" class="w-4 h-4 text-neutral-300 shrink-0 cursor-grab active:cursor-grabbing hover:text-neutral-500 transition"></i>
-                <span class="text-xs font-bold text-neutral-800">${escapeHtml(item.name)}</span>
+                <span class="text-xs font-bold text-neutral-850">${escapeHtml(item.name)}</span>
               </div>
               <div class="flex items-center gap-1 shrink-0">
                 <button data-action="reorder-item-up" data-collection="${targetCollection}" data-id="${item.id}" class="text-xs text-neutral-400 hover:text-neutral-950 transition p-1 cursor-pointer" title="Move Up">
@@ -1057,105 +1058,6 @@
                 </button>
               </div>
             `;
-
-            row.setAttribute('draggable', 'true');
-            row.classList.add('cursor-grab', 'active:cursor-grabbing');
-
-            row.addEventListener('dragstart', (e) => {
-              draggedItemId = item.id;
-              draggedCollection = targetCollection;
-              row.style.opacity = '0.5';
-              row.style.borderColor = '#EA580C';
-              e.dataTransfer.effectAllowed = 'move';
-              e.dataTransfer.setData('text/plain', item.id);
-            });
-
-            row.addEventListener('dragend', () => {
-              row.style.opacity = '';
-              row.style.borderColor = '';
-              Array.from(container.children).forEach(child => {
-                child.style.borderTopColor = 'transparent';
-                child.style.borderBottomColor = 'transparent';
-              });
-            });
-
-            row.addEventListener('dragover', (e) => {
-              if (draggedCollection !== targetCollection) return;
-              e.preventDefault();
-              e.dataTransfer.dropEffect = 'move';
-
-              const rect = row.getBoundingClientRect();
-              const relativeY = e.clientY - rect.top;
-              const isTopHalf = relativeY < (rect.height / 2);
-
-              Array.from(container.children).forEach(child => {
-                if (child !== row) {
-                  child.style.borderTopColor = 'transparent';
-                  child.style.borderBottomColor = 'transparent';
-                }
-              });
-
-              if (isTopHalf) {
-                row.style.borderTopColor = '#EA580C';
-                row.style.borderBottomColor = 'transparent';
-              } else {
-                row.style.borderBottomColor = '#EA580C';
-                row.style.borderTopColor = 'transparent';
-              }
-            });
-
-            row.addEventListener('dragleave', () => {
-              row.style.borderTopColor = 'transparent';
-              row.style.borderBottomColor = 'transparent';
-            });
-
-            row.addEventListener('drop', async (e) => {
-              e.preventDefault();
-              row.style.borderTopColor = 'transparent';
-              row.style.borderBottomColor = 'transparent';
-
-              if (draggedCollection !== targetCollection || draggedItemId === item.id) return;
-
-              let currentList = [];
-              if (targetCollection === 'facilityCategories') {
-                currentList = [...window.state.facilityCategories];
-              } else if (targetCollection === 'equipmentList') {
-                currentList = [...window.state.equipmentList];
-              }
-
-              const fromIdx = currentList.findIndex(x => x.id === draggedItemId);
-              const toIdx = currentList.findIndex(x => x.id === item.id);
-              if (fromIdx === -1 || toIdx === -1) return;
-
-              const rect = row.getBoundingClientRect();
-              const relativeY = e.clientY - rect.top;
-              const isTopHalf = relativeY < (rect.height / 2);
-
-              const [draggedObj] = currentList.splice(fromIdx, 1);
-              let insertIdx = toIdx;
-              if (!isTopHalf) {
-                insertIdx = (fromIdx < toIdx) ? toIdx : toIdx + 1;
-              } else {
-                insertIdx = (fromIdx < toIdx) ? toIdx - 1 : toIdx;
-              }
-
-              currentList.splice(insertIdx, 0, draggedObj);
-
-              presentOverlay("Saving Drag Order", "Saving custom arrangement to Firestore...");
-              try {
-                const promises = currentList.map((listItem, idx) => {
-                  return updateDoc(doc(db, targetCollection, listItem.id), { order: idx });
-                });
-                await Promise.all(promises);
-                dismissOverlay();
-                sendNotification("Custom drag-and-drop order saved!", "success");
-                await loadCollectionsFromCloud();
-              } catch (err) {
-                console.error("Failed saving sorted list:", err);
-                dismissOverlay();
-                sendNotification("Unable to save custom order.", "error");
-              }
-            });
           }
         }
         
@@ -1230,12 +1132,16 @@
             <button data-action="set-rating" data-item="${escapeHtml(cat)}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700 font-bold' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 border-transparent'}">Acceptable</button>
             <button data-action="set-rating" data-item="${escapeHtml(cat)}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700 font-bold' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 border-transparent'}">Bad</button>
           </div>
+          <div class="flex items-center justify-between text-[11px] font-bold text-neutral-500 uppercase tracking-widest px-1 pt-1">
+            <span>Comments & Notes</span>
+            ${(ans.rating === 'Acceptable' || ans.rating === 'Bad') ? `<span class="text-red-500 font-extrabold normal-case text-xs animate-pulse">(Required)</span>` : ''}
+          </div>
           <textarea data-action="update-comment" data-item="${escapeHtml(cat)}" class="w-full text-xs bg-[#F3ECE3]/65 hover:bg-[#EAE1D5]/65 border border-transparent rounded-xl p-2.5 h-12 resize-none focus:bg-white" placeholder="${commentPlaceholder}">${escapeHtml(ans.comment || '')}</textarea>
           <div class="space-y-1">
             <label class="w-full flex items-center justify-center gap-1.5 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-1.5 rounded-xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
               <i data-lucide="camera" class="w-3.5 h-3.5 text-neutral-500"></i>
-              <span class="text-[11px] text-neutral-700 font-semibold">Upload Photo</span>
-              <input type="file" accept="image/*" class="hidden" data-action="upload-photo" data-item="${escapeHtml(cat)}">
+              <span class="text-[11px] text-neutral-700 font-semibold">Upload Photo(s)</span>
+              <input type="file" accept="image/*" class="hidden" data-action="upload-photo" data-item="${escapeHtml(cat)}" multiple>
             </label>
             ${photosHTML}
           </div>
@@ -1317,12 +1223,16 @@
             <button data-action="set-equipment-rating" data-item="${escapeHtml(eq)}" data-val="Acceptable" class="py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${ans.rating === 'Acceptable' ? 'bg-amber-100 border-amber-300 text-amber-700 font-bold' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 border-transparent'}">Acceptable</button>
             <button data-action="set-equipment-rating" data-item="${escapeHtml(eq)}" data-val="Bad" class="py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${ans.rating === 'Bad' ? 'bg-red-100 border-red-300 text-red-700 font-bold' : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 border-transparent'}">Bad</button>
           </div>
+          <div class="flex items-center justify-between text-[11px] font-bold text-neutral-500 uppercase tracking-widest px-1 pt-1">
+            <span>Comments & Notes</span>
+            ${(ans.rating === 'Acceptable' || ans.rating === 'Bad') ? `<span class="text-red-500 font-extrabold normal-case text-xs animate-pulse">(Required)</span>` : ''}
+          </div>
           <textarea data-action="update-comment" data-item="${escapeHtml(eq)}" class="w-full text-xs bg-[#F3ECE3]/65 hover:bg-[#EAE1D5]/65 border border-transparent rounded-xl p-2.5 h-12 resize-none focus:bg-white" placeholder="${commentPlaceholder}">${escapeHtml(ans.comment || '')}</textarea>
           <div class="space-y-1">
             <label class="w-full flex items-center justify-center gap-1.5 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-1.5 rounded-xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
               <i data-lucide="camera" class="w-3.5 h-3.5 text-neutral-500"></i>
-              <span class="text-[11px] text-neutral-700 font-semibold">Upload Photo</span>
-              <input type="file" accept="image/*" class="hidden" data-action="upload-photo-equipment" data-item="${escapeHtml(eq)}">
+              <span class="text-[11px] text-neutral-700 font-semibold">Upload Photo(s)</span>
+              <input type="file" accept="image/*" class="hidden" data-action="upload-photo-equipment" data-item="${escapeHtml(eq)}" multiple>
             </label>
             ${photosHTML}
           </div>
@@ -2027,32 +1937,20 @@
         }
       }
 
-      // Deleting item handling with protective confirmation typing verification
+      // Deleting item handling with simple confirmation
       if (action === 'delete-settings-item') {
         const id = target.getAttribute('data-id');
         window.state.confirmDeleteId = id;
         renderSettingsItems();
-        sendNotification("Confirm deletion permanently in safety confirmation bubble", "info");
+        sendNotification("Please confirm permanent deletion", "info");
       }
 
       // Double authorization deletion trigger
       if (action === 'confirm-delete-item-verification') {
         const id = target.getAttribute('data-id');
         const coll = target.getAttribute('data-collection');
-        const nameVal = target.getAttribute('data-name');
-        const confirmInput = document.getElementById(`delete-confirm-input-${id}`);
-        const typedVal = confirmInput ? confirmInput.value.trim() : '';
 
-        if (typedVal.toLowerCase() !== nameVal.toLowerCase()) {
-          sendNotification("Authorization failed! Exact item name must match.", "error");
-          if (confirmInput) {
-            confirmInput.classList.add('border-red-500', 'ring-red-200');
-            confirmInput.focus();
-          }
-          return;
-        }
-
-        presentOverlay("Processing deletion Authorization", "Executing permanent deletion locks...");
+        presentOverlay("Processing deletion", "Executing permanent deletion locks...");
         try {
           await deleteDoc(doc(db, coll, id));
           window.state.confirmDeleteId = null;
@@ -2149,21 +2047,18 @@
           }
         });
 
-        // 2. Safely append any items left unmentioned at the end to prevent data loss
-        let appendIdx = lines.length;
-        currentList.forEach(item => {
-          if (!processedIds.has(item.id)) {
-            itemsToWrite.push({ id: item.id, name: item.name, order: appendIdx });
-            appendIdx++;
-          }
-        });
+        // 2. Any existing item not in processedIds is deleted from Firebase to reflect deletions
+        const itemsToDelete = currentList.filter(item => !processedIds.has(item.id));
 
-        presentOverlay("Synchronizing Sequence", "Writing ordered list structure to Firebase...");
+        presentOverlay("Synchronizing Sequence", "Updating items and removing deleted configurations...");
         try {
-          const promises = itemsToWrite.map(item => {
+          const writePromises = itemsToWrite.map(item => {
             return setDoc(doc(db, coll, item.id), { name: item.name, order: item.order });
           });
-          await Promise.all(promises);
+          const deletePromises = itemsToDelete.map(item => {
+            return deleteDoc(doc(db, coll, item.id));
+          });
+          await Promise.all([...writePromises, ...deletePromises]);
           dismissOverlay();
           sendNotification("All sequence lines synced to Firebase!", "success");
           
@@ -2211,6 +2106,19 @@
       const pIdx = parseInt(target.getAttribute('data-idx'));
 
       if (action === 'update-comment') {
+        const val = e.target.value.trim();
+        const ans = window.state.facilityAnswers[itemName] || window.state.equipmentAnswers[itemName];
+        if (ans) {
+          if (ans.rating === 'Acceptable' || ans.rating === 'Bad') {
+            if (val) {
+              e.target.classList.remove('ring-2', 'ring-red-500', 'border-red-500');
+            } else {
+              e.target.classList.add('ring-2', 'ring-red-500', 'border-red-500');
+            }
+          } else {
+            e.target.classList.remove('ring-2', 'ring-red-500', 'border-red-500');
+          }
+        }
         if (window.state.facilityAnswers[itemName]) window.state.facilityAnswers[itemName].comment = e.target.value;
         else if (window.state.equipmentAnswers[itemName]) window.state.equipmentAnswers[itemName].comment = e.target.value;
         triggerCloudSave();
@@ -2227,6 +2135,30 @@
         if (window.state.equipmentAnswers[itemName] && window.state.equipmentAnswers[itemName].photos[pIdx]) {
           window.state.equipmentAnswers[itemName].photos[pIdx].caption = e.target.value;
           triggerCloudSave();
+        }
+      }
+    });
+
+    // Scroll-Away required comment validation on focusout
+    document.addEventListener('focusout', (e) => {
+      const target = e.target.closest('[data-action]');
+      if (!target) return;
+      const action = target.getAttribute('data-action');
+      if (action === 'update-comment') {
+        const itemName = target.getAttribute('data-item');
+        const ans = window.state.facilityAnswers[itemName] || window.state.equipmentAnswers[itemName];
+        if (ans) {
+          if (ans.rating === 'Acceptable' || ans.rating === 'Bad') {
+            const val = e.target.value.trim();
+            if (!val) {
+              sendNotification(`Comment is required for ${itemName}`, "error");
+              e.target.classList.add('ring-2', 'ring-red-500', 'border-red-500');
+            } else {
+              e.target.classList.remove('ring-2', 'ring-red-500', 'border-red-500');
+            }
+          } else {
+            e.target.classList.remove('ring-2', 'ring-red-500', 'border-red-500');
+          }
         }
       }
     });
@@ -2274,84 +2206,110 @@
 
       // PHOTOGRAPH FIFO MEDIA TRANSMISSIONS
       if (action === 'upload-photo') {
-        const file = e.target.files[0];
-        if (!file) return;
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
 
-        presentOverlay("Processing Media", "Uploading photo attachment package...");
-        const payload = new FormData();
-        payload.append("image", file);
+        const ans = window.state.facilityAnswers[itemStr];
+        if (!ans) return;
+
+        const maxPhotos = 6;
+        const remainingSlots = maxPhotos - (ans.photos ? ans.photos.length : 0);
+
+        if (remainingSlots <= 0) {
+          sendNotification(`Maximum of ${maxPhotos} photos reached for this item.`, "error");
+          return;
+        }
+
+        const filesToUpload = Array.from(files).slice(0, remainingSlots);
+        presentOverlay("Processing Media", `Uploading ${filesToUpload.length} photo(s) concurrently...`);
 
         try {
-          const resp = await fetch("https://api.imgbb.com/1/upload?key=b733862d15744e2bfaa4329d122f4ba0", {
-            method: "POST",
-            body: payload
-          });
-          const res = await resp.json();
-          dismissOverlay();
-
-          if (resp.ok && res && res.data && res.data.display_url) {
-            const url = res.data.display_url;
-            const ans = window.state.facilityAnswers[itemStr];
-            
-            let substitution = false;
-            if (ans.photos.length >= 6) {
-              ans.photos.shift();
-              substitution = true;
+          const promises = filesToUpload.map(async (file) => {
+            const payload = new FormData();
+            payload.append("image", file);
+            const resp = await fetch("https://api.imgbb.com/1/upload?key=b733862d15744e2bfaa4329d122f4ba0", {
+              method: "POST",
+              body: payload
+            });
+            if (!resp.ok) {
+              throw new Error("ImgBB upload failed with status " + resp.status);
             }
+            const res = await resp.json();
+            if (res && res.data && res.data.display_url) {
+              return res.data.display_url;
+            } else {
+              throw new Error("ImgBB structure unexpected");
+            }
+          });
 
+          const urls = await Promise.all(promises);
+          if (!ans.photos) ans.photos = [];
+          urls.forEach(url => {
             ans.photos.push({ url: url, tag: ans.rating || 'Good', caption: '' });
-            renderFacilityChecklist();
-            triggerCloudSave();
-            
-            sendNotification(substitution ? "FIFO Photo array limit rotated" : "Observation photo uploaded safely!", "success");
-          } else {
-            sendNotification("Storage host reject: configuration validation failed.", "error");
-          }
-        } catch (err) {
-          console.error("Upload error", err);
+          });
+
+          renderFacilityChecklist();
+          triggerCloudSave();
           dismissOverlay();
-          sendNotification("Storage host unreachable. Check client connectivity.", "error");
+          sendNotification(`Successfully uploaded ${urls.length} photo(s) concurrently!`, "success");
+        } catch (err) {
+          console.error("Concurrent upload error", err);
+          dismissOverlay();
+          sendNotification("Storage host unreachable or failed upload. Please check connectivity.", "error");
         }
       }
 
       if (action === 'upload-photo-equipment') {
-        const file = e.target.files[0];
-        if (!file) return;
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
 
-        presentOverlay("Processing Media", "Uploading photo attachment package...");
-        const payload = new FormData();
-        payload.append("image", file);
+        const ans = window.state.equipmentAnswers[itemStr];
+        if (!ans) return;
+
+        const maxPhotos = 3;
+        const remainingSlots = maxPhotos - (ans.photos ? ans.photos.length : 0);
+
+        if (remainingSlots <= 0) {
+          sendNotification(`Maximum of ${maxPhotos} photos reached for this item.`, "error");
+          return;
+        }
+
+        const filesToUpload = Array.from(files).slice(0, remainingSlots);
+        presentOverlay("Processing Media", `Uploading ${filesToUpload.length} photo(s) concurrently...`);
 
         try {
-          const resp = await fetch("https://api.imgbb.com/1/upload?key=b733862d15744e2bfaa4329d122f4ba0", {
-            method: "POST",
-            body: payload
-          });
-          const res = await resp.json();
-          dismissOverlay();
-
-          if (resp.ok && res && res.data && res.data.display_url) {
-            const url = res.data.display_url;
-            const ans = window.state.equipmentAnswers[itemStr];
-            
-            let substitution = false;
-            if (ans.photos.length >= 3) {
-              ans.photos.shift();
-              substitution = true;
+          const promises = filesToUpload.map(async (file) => {
+            const payload = new FormData();
+            payload.append("image", file);
+            const resp = await fetch("https://api.imgbb.com/1/upload?key=b733862d15744e2bfaa4329d122f4ba0", {
+              method: "POST",
+              body: payload
+            });
+            if (!resp.ok) {
+              throw new Error("ImgBB upload failed with status " + resp.status);
             }
+            const res = await resp.json();
+            if (res && res.data && res.data.display_url) {
+              return res.data.display_url;
+            } else {
+              throw new Error("ImgBB structure unexpected");
+            }
+          });
 
+          const urls = await Promise.all(promises);
+          if (!ans.photos) ans.photos = [];
+          urls.forEach(url => {
             ans.photos.push({ url: url, tag: ans.rating || 'Good', caption: '' });
-            renderEquipmentChecklist();
-            triggerCloudSave();
+          });
 
-            sendNotification(substitution ? "FIFO Photo array rotating 3 items" : "Observation photo uploaded safely!", "success");
-          } else {
-            sendNotification("Storage host reject: configuration failure.", "error");
-          }
-        } catch (err) {
-          console.error("Upload error", err);
+          renderEquipmentChecklist();
+          triggerCloudSave();
           dismissOverlay();
-          sendNotification("Storage host unreachable. Check client connectivity.", "error");
+          sendNotification(`Successfully uploaded ${urls.length} photo(s) concurrently!`, "success");
+        } catch (err) {
+          console.error("Concurrent upload error", err);
+          dismissOverlay();
+          sendNotification("Storage host unreachable or failed upload. Please check connectivity.", "error");
         }
       }
     });
