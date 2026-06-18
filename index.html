@@ -1137,12 +1137,19 @@
             ${(ans.rating === 'Acceptable' || ans.rating === 'Bad') ? `<span class="text-red-500 font-extrabold normal-case text-xs animate-pulse">(Required)</span>` : ''}
           </div>
           <textarea data-action="update-comment" data-item="${escapeHtml(cat)}" class="w-full text-xs bg-[#F3ECE3]/65 hover:bg-[#EAE1D5]/65 border border-transparent rounded-xl p-2.5 h-12 resize-none focus:bg-white" placeholder="${commentPlaceholder}">${escapeHtml(ans.comment || '')}</textarea>
-          <div class="space-y-1">
-            <label class="w-full flex items-center justify-center gap-1.5 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-1.5 rounded-xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
-              <i data-lucide="camera" class="w-3.5 h-3.5 text-neutral-500"></i>
-              <span class="text-[11px] text-neutral-700 font-semibold">Upload Photo(s)</span>
-              <input type="file" accept="image/*" class="hidden" data-action="upload-photo" data-item="${escapeHtml(cat)}" multiple>
-            </label>
+          <div class="space-y-1.5">
+            <div class="grid grid-cols-2 gap-1.5">
+              <label class="flex items-center justify-center gap-1.5 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-1.5 rounded-xl bg-neutral-50/50 hover:bg-neutral-100/50 transition truncate">
+                <i data-lucide="camera" class="w-3.5 h-3.5 text-neutral-500 shrink-0"></i>
+                <span class="text-[11px] text-neutral-700 font-bold leading-none">Take Photo</span>
+                <input type="file" accept="image/*" capture="environment" class="hidden" data-action="upload-photo" data-item="${escapeHtml(cat)}">
+              </label>
+              <label class="flex items-center justify-center gap-1.5 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-1.5 rounded-xl bg-neutral-50/50 hover:bg-neutral-100/50 transition truncate">
+                <i data-lucide="image" class="w-3.5 h-3.5 text-neutral-500 shrink-0"></i>
+                <span class="text-[11px] text-neutral-700 font-bold leading-none">Upload Photos</span>
+                <input type="file" accept="image/*" class="hidden" data-action="upload-photo" data-item="${escapeHtml(cat)}" multiple>
+              </label>
+            </div>
             ${photosHTML}
           </div>
         `;
@@ -1228,12 +1235,19 @@
             ${(ans.rating === 'Acceptable' || ans.rating === 'Bad') ? `<span class="text-red-500 font-extrabold normal-case text-xs animate-pulse">(Required)</span>` : ''}
           </div>
           <textarea data-action="update-comment" data-item="${escapeHtml(eq)}" class="w-full text-xs bg-[#F3ECE3]/65 hover:bg-[#EAE1D5]/65 border border-transparent rounded-xl p-2.5 h-12 resize-none focus:bg-white" placeholder="${commentPlaceholder}">${escapeHtml(ans.comment || '')}</textarea>
-          <div class="space-y-1">
-            <label class="w-full flex items-center justify-center gap-1.5 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-1.5 rounded-xl bg-neutral-50/50 hover:bg-neutral-100/50 transition">
-              <i data-lucide="camera" class="w-3.5 h-3.5 text-neutral-500"></i>
-              <span class="text-[11px] text-neutral-700 font-semibold">Upload Photo(s)</span>
-              <input type="file" accept="image/*" class="hidden" data-action="upload-photo-equipment" data-item="${escapeHtml(eq)}" multiple>
-            </label>
+          <div class="space-y-1.5">
+            <div class="grid grid-cols-2 gap-1.5">
+              <label class="flex items-center justify-center gap-1.5 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-1.5 rounded-xl bg-neutral-50/50 hover:bg-neutral-100/50 transition truncate">
+                <i data-lucide="camera" class="w-3.5 h-3.5 text-neutral-500 shrink-0"></i>
+                <span class="text-[11px] text-neutral-700 font-bold leading-none">Take Photo</span>
+                <input type="file" accept="image/*" capture="environment" class="hidden" data-action="upload-photo-equipment" data-item="${escapeHtml(eq)}">
+              </label>
+              <label class="flex items-center justify-center gap-1.5 cursor-pointer border border-dashed border-neutral-200 hover:border-neutral-400 py-1.5 rounded-xl bg-neutral-50/50 hover:bg-neutral-100/50 transition truncate">
+                <i data-lucide="image" class="w-3.5 h-3.5 text-neutral-500 shrink-0"></i>
+                <span class="text-[11px] text-neutral-700 font-bold leading-none">Upload Photos</span>
+                <input type="file" accept="image/*" class="hidden" data-action="upload-photo-equipment" data-item="${escapeHtml(eq)}" multiple>
+              </label>
+            </div>
             ${photosHTML}
           </div>
         `;
